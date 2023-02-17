@@ -26,5 +26,21 @@
             </intent-filter>
         </activity>
     </application>
-
+    <!--used to access Pinnacle service-->
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <!--used to obtain Wi-Fi environment information-->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
+    <!--used to scan Wi-Fi Access Points-->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
+    <!--used to access device current Latitude and Longitude-->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <!--used to access device physical activities-->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
+    <!--used to access device physical activities running Android 9 and below-->
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
+    <!--used to read saved SDK UUID-->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!--used to keep SDK UUID for future usage-->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 </manifest>
