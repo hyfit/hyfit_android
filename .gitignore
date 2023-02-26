@@ -16,3 +16,4 @@ local.properties
 /app/libs/*
 Pinnacle_Android_SDK_v1-5-2.arr
 /app/libs/Pinnacle_Android_SDK_v1-5-2.aar
+/app/src/main/res/values/strings.xml

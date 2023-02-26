@@ -6,13 +6,18 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:gravity="center"
+        android:orientation="vertical"
         tools:context=".pinnacle.PinnacleActivity">
     <TextView
-            android:text="initialize Pinnacle SDK..."
+            android:text="wait!!!!\n initialize Pinnacle SDK..."
             android:textSize="28sp"
             android:layout_width="wrap_content"
             android:gravity="center"
-            android:layout_height="wrap_content" android:id="@+id/textView" android:layout_weight="1"
+            android:layout_height="614dp" android:id="@+id/textView" android:layout_weight="1"
             tools:ignore="MissingConstraints"/>
+<!--    <Button-->
+<!--            android:text="calculate"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content" android:id="@+id/calButton" android:layout_weight="1"/>-->
 
 </LinearLayout>

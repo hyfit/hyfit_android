@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">hyfit_android</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="api_key">AIzaSyAmMwF0fd5d3lmjRwXYDYSaMANsustThEc</string>
 </resources>
