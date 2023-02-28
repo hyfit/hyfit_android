@@ -6,11 +6,13 @@
 Pinnacle_Android_SDK_v1-5-2.arr
 /app/libs/Pinnacle_Android_SDK_v1-5-2.aar
 
+
 ### Android ###
 # Gradle files
 .gradle/
 build/
-
+AndroidManifest.xml
+/app/manifests/AndroidManifest.xml
 # Local configuration file (sdk path, etc)
 local.properties
 

@@ -25,10 +25,8 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.CalcButton.setOnClickListener {
-            startActivity(Intent(this@MainActivity, PinnacleActivity::class.java))
-        }
-        // permission
+
+        // permission code
         if ((ActivityCompat.checkSelfPermission(
                 this,
                 Manifest.permission.ACCESS_FINE_LOCATION
@@ -37,10 +35,6 @@ class MainActivity : AppCompatActivity() {
                 this,
                 Manifest.permission.ACTIVITY_RECOGNITION
             ) != PackageManager.PERMISSION_GRANTED)
-//                (ActivityCompat.checkSelfPermission(
-//                this,
-//                Manifest.permission.ACCESS_SURFACE_FLINGER
-//            ) != PackageManager.PERMISSION_GRANTED)
         ) {
             ActivityCompat.requestPermissions(
                 this,
@@ -51,6 +45,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    // permission code
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,

@@ -10,11 +10,11 @@
         tools:context=".MainActivity">
 
 
-    <Button
-            android:text="click"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content" android:id="@+id/CalcButton" tools:layout_editor_absoluteY="330dp"
-            tools:layout_editor_absoluteX="158dp"/>
+<!--    <Button-->
+<!--            android:text="click"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content" android:id="@+id/CalcButton" tools:layout_editor_absoluteY="330dp"-->
+<!--            tools:layout_editor_absoluteX="158dp"/>-->
 
     <!--    <TextView-->
 <!--            android:text="TextView"-->

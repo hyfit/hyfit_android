@@ -109,9 +109,9 @@ class MapsActivity :AppCompatActivity(),OnMapReadyCallback, Observer {
         mMap.addMarker(MarkerOptions().position(firstLocation).title("Marker in nextNav"))
         mMap.moveCamera(CameraUpdateFactory.newLatLng(firstLocation))
     }
-        override fun onStart() {
+    override fun onStart() {
         super.onStart()
-            mapFragment.onStart()
+        mapFragment.onStart()
     }
 
     override fun onStop() {
