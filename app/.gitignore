@@ -12,9 +12,9 @@ Pinnacle_Android_SDK_v1-5-2.arr
 .gradle/
 build/
 AndroidManifest.xml
-/app/manifests/AndroidManifest.xml
 # Local configuration file (sdk path, etc)
 local.properties
+android/app/src/main/AndroidManifest.xml
 
 # Log/OS Files
 *.log
