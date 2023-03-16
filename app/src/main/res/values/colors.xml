@@ -7,4 +7,11 @@
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="navBack">#fafbfc</color>
+    <color name="navClick">#24629b</color>
+    <color name="navNot">#c9c9c9</color>
+    <color name="main">#f3f3f3</color>
+    <color name="goal_building">#4c24629b</color>
+    <color name="goal_mountain">#4c519b24</color>
+    <color name="goal_end">#c2c2c2</color>
 </resources>

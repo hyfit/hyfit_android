@@ -2,22 +2,14 @@ package com.example.hyfit_android
 
 
 import android.Manifest
-import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.location.*
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.hyfit_android.databinding.ActivityMainBinding
-import com.example.hyfit_android.pinnacle.PinnacleActivity
-import java.io.IOException
-import java.util.*
-import kotlin.properties.Delegates
+import com.example.hyfit_android.goal.GoalFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding
     val PERMISSIONS_REQUEST_LOCATION = 1000
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -25,6 +17,41 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        // 임시 jwt
+        val spf = getSharedPreferences("auth", MODE_PRIVATE)
+        val editor = spf.edit()
+
+        editor.putString("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJka2R1ZDIwM0BuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjc4OTY5Mzg2LCJleHAiOjE2Nzg5NzExODZ9.hc4DZSQLjZEZyNLGNsL8lJGH6fjV3qlu59MEjKQoZJs")
+        editor.apply()
+        // BottomNavigationView 초기화
+        binding.navigationView.selectedItemId = R.id.MainFragment
+        binding.navigationView.setOnNavigationItemSelectedListener { menuItem ->
+            when (menuItem.itemId) {
+                R.id.GoalFragment -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container, GoalFragment()).commit()
+                    true
+                }
+                R.id.ReportFragment -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ReportFragment()).commit()
+                    true
+                }
+                R.id.MainFragment -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+                    true
+                }
+                R.id.CommunityFragment -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container, CommunityFragment()).commit()
+                    true
+                }
+                R.id.SetFragment -> {
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SetFragment()).commit()
+                    true
+                }
+                else -> false
+            }
+        }
+        // 초기 fragment 설정
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
 
         // permission code
         if ((ActivityCompat.checkSelfPermission(
@@ -61,5 +88,8 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
+
+
+
 }
 
