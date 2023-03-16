@@ -57,6 +57,11 @@ class MainActivity : AppCompatActivity() {
             if (grantResults.size > 0) {
                 for (grant in grantResults) {
                     if (grant != PackageManager.PERMISSION_GRANTED) System.exit(0)
+                    else {
+                        binding.MoveButton.setOnClickListener{
+                            startActivity(Intent(this@MainActivity, PinnacleActivity::class.java))
+                        }
+                    }
                 }
             }
         }

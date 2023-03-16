@@ -10,17 +10,10 @@
         tools:context=".MainActivity">
 
 
-<!--    <Button-->
-<!--            android:text="click"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content" android:id="@+id/CalcButton" tools:layout_editor_absoluteY="330dp"-->
-<!--            tools:layout_editor_absoluteX="158dp"/>-->
-
-    <!--    <TextView-->
-<!--            android:text="TextView"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textSize="28sp"-->
-<!--            android:id="@+id/myLocation" android:layout_weight="1"/>-->
+    <Button
+            android:text="click here move to community main page"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/MoveButton" />
 
 </LinearLayout>
