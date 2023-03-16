@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto" xmlns:tools="http://schemas.android.com/tools"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#f3f3f3"
+>
+
+    <ImageView
+            android:id="@+id/process1"
+            android:layout_width="268dp"
+            android:layout_height="20dp"
+            android:src="@drawable/process4_1"
+            android:layout_alignParentEnd="true" android:layout_alignParentStart="true"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.497" app:layout_constraintVertical_bias="0.087"/>
+    <TextView
+            android:id="@+id/signup"
+            android:layout_below="@+id/process1"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:text="Sign up"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="normal"
+            android:textSize="24sp"
+            android:textColor="#000000"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/process1" android:layout_marginTop="52dp"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.861"/>
+
+    <TextView
+            android:id="@+id/email"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Email"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0"
+            app:layout_constraintTop_toBottomOf="@+id/process1" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.098"
+            android:layout_marginTop="122dp"/>
+    <EditText
+            android:id="@+id/textEmail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textEmailAddress"
+            android:fontFamily="sans-serif-light"
+            android:ems="13"
+            android:hint="ex) hyfit1234@hyfit.com"
+            android:textColorHint="#929292"
+            app:layout_constraintTop_toBottomOf="@+id/process1" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="184.5dp"
+            app:layout_constraintHorizontal_bias="0.266" android:minHeight="48dp"/>
+    <EditText
+            android:id="@+id/PasswordAgain"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:fontFamily="sans-serif-light"
+            android:ems="13"
+            android:hint=" check your password"
+            android:textColorHint="#929292"
+            app:layout_constraintTop_toBottomOf="@+id/process1" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="532dp"
+            app:layout_constraintHorizontal_bias="0.266" android:minHeight="48dp"/>
+    <EditText
+            android:id="@+id/textPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="textPassword"
+            android:fontFamily="sans-serif-light"
+            android:ems="13"
+            android:hint=" at least 6 characters"
+            android:textColorHint="#929292"
+            app:layout_constraintTop_toBottomOf="@+id/process1" app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="360dp"
+            app:layout_constraintHorizontal_bias="0.266" android:minHeight="48dp"/>
+
+    <TextView
+            android:id="@+id/password"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Password"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0"
+            app:layout_constraintTop_toBottomOf="@+id/process1" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.106"
+            android:layout_marginTop="300dp"/>
+    <TextView
+            android:id="@+id/passwordcheck"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Type your password again"
+            android:textStyle="normal"
+            android:textSize="14sp"
+            android:textColor="#000000"
+            android:fontFamily="sans-serif-medium"
+            android:letterSpacing="0"
+            app:layout_constraintTop_toBottomOf="@+id/process1" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.15"
+            android:layout_marginTop="480dp"/>
+
+    <TextView
+        android:id="@+id/correction"
+        android:textColor="@color/red"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="170dp"
+        android:text="Incorrect password"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.134"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.625" />
+
+    <ImageView
+        android:id="@+id/joinNext"
+        android:layout_width="310dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="630dp"
+        android:src="@drawable/rectangle_11"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/process1"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/joinTextNext"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="642dp"
+        android:fontFamily="sans-serif"
+        android:gravity="end"
+        android:letterSpacing="0"
+        android:text="Next"
+        android:textColor="#24629b"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/joinNext"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/process1"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/prev"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" app:layout_constraintBottom_toTopOf="@+id/process1"
+            app:layout_constraintTop_toTopOf="parent" app:layout_constraintHorizontal_bias="0.041"
+            app:layout_constraintVertical_bias="0.528"/>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

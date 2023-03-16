@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.pinnacle.PinnacleActivity
 import java.io.IOException
@@ -24,6 +25,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        binding.goJoin.setOnClickListener {
+            val intent=Intent(this, JoinActivity1::class.java)
+            startActivity(intent)
+        }
 
 
         // permission code
