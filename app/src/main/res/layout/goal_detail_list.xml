@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+                                                   android:gravity="center_vertical"                   android:layout_height="110dp"
+                                                   android:orientation="vertical"
+                                                   android:background="@drawable/ic_rectangle_39"
+        android:id="@+id/goal_layout"                                  xmlns:app="http://schemas.android.com/apk/res-auto"
+>
+
+<!--    <ImageView-->
+<!--            android:id="@+id/goal_backImage"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/ic_goal_rectangle" tools:ignore="MissingConstraints"-->
+<!--            tools:layout_editor_absoluteY="0dp" tools:layout_editor_absoluteX="-37dp"/>-->
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:includeFontPadding="false"
+            android:src="@drawable/ic_goal_index"
+            app:layout_constraintStart_toStartOf="parent"
+
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="20dp" app:layout_constraintHorizontal_bias="0.078"/>
+
+    <!--    <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:padding="10dp"-->
+<!--            android:src="@drawable/ic_detail"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent"-->
+<!--            android:layout_marginTop="20dp"-->
+<!--            app:layout_constraintHorizontal_bias="0.929"-->
+<!--            app:layout_constraintVertical_bias="0.507"/>-->
+
+    <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="60dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintHorizontal_bias="0.0">
+        <TextView
+                android:id="@+id/goal_place_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:text="에베레스트"
+                android:textSize="15sp"
+                android:includeFontPadding="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"/>
+        <TextView
+                android:id="@+id/goal_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:background="#f3f3f3"
+                android:text="87%"
+                android:textSize="15sp"
+                android:includeFontPadding="false"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="@id/goal_place_title"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginLeft="10dp"
+         app:layout_constraintHorizontal_bias="0.0"/>
+
+
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:background="#f3f3f3"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginTop="52dp"
+            android:layout_marginBottom="20dp"
+            app:layout_constraintHorizontal_bias="0.0">
+        <TextView
+                android:id="@+id/goal_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="살빼자"
+
+                android:layout_marginTop="10dp"
+                android:textColor="#949494"
+                android:layout_marginLeft="20dp"/>
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
