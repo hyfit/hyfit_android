@@ -1,46 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          xmlns:tools="http://schemas.android.com/tools"
-          package="com.example.hyfit_android">
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.example.hyfit_android">
+    <!-- used to access Pinnacle service -->
+    <uses-permission android:name="android.permission.INTERNET" /> <!-- used to obtain Wi-Fi environment information -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" /> <!-- used to scan Wi-Fi Access Points -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- used to access device current Latitude and Longitude -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- used to access device physical activities -->
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" /> <!-- used to access device physical activities running Android 9 and below -->
+    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" /> <!-- used to read saved SDK UUID -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- used to keep SDK UUID for future usage -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permissin.ACCESS_SURFACE_FLINGER" />
 
     <application
-            android:allowBackup="true"
-            android:dataExtractionRules="@xml/data_extraction_rules"
-            android:fullBackupContent="@xml/backup_rules"
-            android:icon="@mipmap/ic_launcher"
-            android:label="@string/app_name"
-            android:roundIcon="@mipmap/ic_launcher_round"
-            android:supportsRtl="true"
-            android:theme="@style/Theme.Hyfit_android"
-            tools:targetApi="31">
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:requestLegacyExternalStorage="true"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Hyfit_android"
+        tools:targetApi="31">
         <activity
-                android:name=".pinnacle.PinnacleActivity"
-                android:exported="true"/>
+            android:name=".Join.JoinActivity4"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
         <activity
-                android:name=".MainActivity"
-                android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
+            android:name=".Join.JoinActivity3"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <activity
+            android:name=".Join.JoinActivity2"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
+        <activity
+            android:name=".Join.JoinActivity1"
+            android:exported="false">
+            <meta-data
+                android:name="android.app.lib_name"
+                android:value="" />
+        </activity>
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyAmMwF0fd5d3lmjRwXYDYSaMANsustThEc" />
+
+        <activity
+            android:name=".MapsActivity"
+            android:exported="true"
+            android:label="@string/title_activity_maps" />
+        <activity
+            android:name=".pinnacle.PinnacleActivity"
+            android:exported="true" />
+        <activity
+            android:name=".MainActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
-    <!--used to access Pinnacle service-->
-    <uses-permission android:name="android.permission.INTERNET"/>
-    <!--used to obtain Wi-Fi environment information-->
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE"/>
-    <!--used to scan Wi-Fi Access Points-->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE"/>
-    <!--used to access device current Latitude and Longitude-->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
-    <!--used to access device physical activities-->
-    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
-    <!--used to access device physical activities running Android 9 and below-->
-    <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION"/>
-    <!--used to read saved SDK UUID-->
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <!--used to keep SDK UUID for future usage-->
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+
 </manifest>
