@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:tools="http://schemas.android.com/tools"
+      xmlns:android="http://schemas.android.com/apk/res/android"
+      xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+            android:id="@+id/GoalFragment"
+            android:title="목표"
+            android:enabled="true"
+            android:icon="@drawable/selector_goal"/>
+
+    <item
+            android:id="@+id/ReportFragment"
+            android:title="리포트"
+            android:enabled="true"
+            android:icon="@drawable/selector_report"/>
+
+    <item
+            android:id="@+id/MainFragment"
+            android:title="메인"
+            android:enabled="true"
+            android:icon="@drawable/selector_main"/>
+    <item
+            android:id="@+id/CommunityFragment"
+            android:title="커뮤니티"
+            android:enabled="true"
+            android:icon="@drawable/selector_community"/>
+    <item
+            android:id="@+id/SetFragment"
+            android:title="세팅"
+            android:enabled="true"
+            android:icon="@drawable/selector_setting"/>
+
+</menu>
