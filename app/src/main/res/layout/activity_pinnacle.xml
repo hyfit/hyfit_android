@@ -15,6 +15,7 @@
             android:gravity="center"
             android:layout_height="614dp" android:id="@+id/textView" android:layout_weight="1"
             tools:ignore="MissingConstraints"/>
+
 <!--    <Button-->
 <!--            android:text="calculate"-->
 <!--            android:layout_width="wrap_content"-->
