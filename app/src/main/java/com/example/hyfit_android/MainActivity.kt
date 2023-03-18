@@ -20,10 +20,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        binding.goJoin.setOnClickListener {
-            val intent= Intent(this, JoinActivity1::class.java)
-            startActivity(intent)
-        }
+//        binding.goJoin.setOnClickListener {
+//            val intent= Intent(this, JoinActivity1::class.java)
+//            startActivity(intent)
+//        }
 
         // BottomNavigationView 초기화
         binding.navigationView.selectedItemId = R.id.MainFragment
