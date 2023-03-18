@@ -7,8 +7,8 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.hyfit_android.Join.JoinActivity1
+import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
 
@@ -86,11 +86,6 @@ class MainActivity : AppCompatActivity() {
             if (grantResults.size > 0) {
                 for (grant in grantResults) {
                     if (grant != PackageManager.PERMISSION_GRANTED) System.exit(0)
-                    else {
-                        binding.MoveButton.setOnClickListener{
-                            startActivity(Intent(this@MainActivity, PinnacleActivity::class.java))
-                        }
-                    }
                 }
             }
         }
