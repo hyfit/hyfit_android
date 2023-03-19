@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph"
+    app:startDestination="@id/followingFragment">
+
+    <fragment
+        android:id="@+id/followingFragment"
+        android:name="com.example.hyfit_android.communityFragment.FollowingFragment"
+        android:label="fragment_following"
+        tools:layout="@layout/fragment_following">
+
+        <action
+            android:id="@+id/action_followingFragment_to_myPageFragment"
+            app:destination="@id/myPageFragment" />
+        <action
+            android:id="@+id/action_followingFragment_to_postFragment"
+            app:destination="@id/postFragment" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/postFragment"
+        android:name="com.example.hyfit_android.communityFragment.PostFragment"
+        android:label="fragment_post"
+        tools:layout="@layout/fragment_post">
+
+    </fragment>
+
+    <fragment
+        android:id="@+id/myPageFragment"
+        android:name="com.example.hyfit_android.communityFragment.MyPageFragment"
+        android:label="fragment_my_page"
+        tools:layout="@layout/fragment_my_page">
+
+    </fragment>
+
+
+
+</navigation>

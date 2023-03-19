@@ -17,14 +17,18 @@
     <Button
             android:text="get current Location"
             android:layout_width="match_parent"
-            android:layout_height="88dp" android:id="@+id/getLocation"/>
-    <LinearLayout android:layout_width="wrap_content" android:layout_height="wrap_content"
-                  android:orientation="vertical">
+            android:layout_height="88dp"
+            android:id="@+id/getLocation"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
         <TextView
                 android:text="init code is"
                 android:textSize="20sp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent" android:id="@+id/firstCode"/>
+                android:layout_height="match_parent"
+            android:id="@+id/firstCode"/>
         <TextView
                 android:text="altitude code is"
                 android:textSize="20sp"

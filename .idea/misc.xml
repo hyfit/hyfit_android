@@ -43,19 +43,21 @@
         <entry key="app/src/main/res/drawable/selector_report.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_setting.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/values.xml" value="0.11" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.41749877929687507" />
+        <entry key="app/src/main/res/layout/activity_community_main.xml" value="0.29732513427734375" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.10206451416015622" />
         <entry key="app/src/main/res/layout/activity_my_goal.xml" value="0.14860839843750007" />
         <entry key="app/src/main/res/layout/activity_my_location.xml" value="0.23854166666666668" />
         <entry key="app/src/main/res/layout/activity_navi.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_pinnacle.xml" value="0.10104166666666667" />
-        <entry key="app/src/main/res/layout/fragment_community.xml" value="0.1539855072463768" />
+        <entry key="app/src/main/res/layout/fragment_community.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_goal.xml" value="0.2723449707031251" />
         <entry key="app/src/main/res/layout/fragment_goal_modal.xml" value="0.267779541015625" />
-        <entry key="app/src/main/res/layout/fragment_goal_modal2.xml" value="0.2526041666666667" />
+        <entry key="app/src/main/res/layout/fragment_goal_modal2.xml" value="0.33471476236979164" />
         <entry key="app/src/main/res/layout/fragment_goal_nav.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.20246913580246914" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.35341949462890626" />
         <entry key="app/src/main/res/layout/fragment_set.xml" value="0.1539855072463768" />
         <entry key="app/src/main/res/layout/goal_detail_list.xml" value="0.45" />
         <entry key="app/src/main/res/layout/goal_list.xml" value="0.1" />

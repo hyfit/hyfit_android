@@ -21,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.hyfit_android.BuildConfig.KEY_VALUE
+import com.example.hyfit_android.CommunityMainActivity
 import com.example.hyfit_android.MapsActivity
 //import com.example.hyfit_android.MapsActivity
 import com.example.hyfit_android.databinding.ActivityPinnacleBinding
@@ -97,7 +98,7 @@ class PinnacleActivity : AppCompatActivity(), Observer{
 //                    // SDK is initialized successfully, it’s ready to start altitude calculation
                     Toast.makeText(this@PinnacleActivity, "current Status code is " + o.code.toString(), Toast.LENGTH_SHORT).show()
                     binding.textView.text = "init!!!"
-                    startActivity(Intent(this@PinnacleActivity, MapsActivity::class.java))
+                    startActivity(Intent(this@PinnacleActivity, CommunityMainActivity::class.java))
                 }
             }
         }
