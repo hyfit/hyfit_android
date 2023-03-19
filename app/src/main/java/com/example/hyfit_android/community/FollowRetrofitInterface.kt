@@ -1,5 +1,6 @@
-package com.example.hyfit_android
+package com.example.hyfit_android.community
 
+import com.example.hyfit_android.ApiPathConstants
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Header

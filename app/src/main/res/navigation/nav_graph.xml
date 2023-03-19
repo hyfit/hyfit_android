@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/followingFragment"
-        android:name="com.example.hyfit_android.communityFragment.FollowingFragment"
+        android:name="com.example.hyfit_android.community.FollowingFragment"
         android:label="fragment_following"
         tools:layout="@layout/fragment_following">
 
@@ -21,7 +21,7 @@
 
     <fragment
         android:id="@+id/postFragment"
-        android:name="com.example.hyfit_android.communityFragment.PostFragment"
+        android:name="com.example.hyfit_android.community.PostFragment"
         android:label="fragment_post"
         tools:layout="@layout/fragment_post">
 
@@ -29,7 +29,7 @@
 
     <fragment
         android:id="@+id/myPageFragment"
-        android:name="com.example.hyfit_android.communityFragment.MyPageFragment"
+        android:name="com.example.hyfit_android.community.MyPageFragment"
         android:label="fragment_my_page"
         tools:layout="@layout/fragment_my_page">
 

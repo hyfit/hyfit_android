@@ -8,15 +8,6 @@
         android:orientation="vertical"
         android:gravity="center"
         tools:context=".MainActivity">
-<!--    <Button-->
-<!--        android:id="@+id/goJoin"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="goJoin"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
     <FrameLayout
             android:id="@+id/fragment_container"
             android:layout_width="0dp"
@@ -24,7 +15,16 @@
             app:layout_constraintBottom_toTopOf="@id/navigationView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent">
+<!--        <Button-->
+<!--            android:id="@+id/goJoin"-->
+<!--            android:layout_gravity="center_horizontal | bottom"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:text="go join" />-->
+    </FrameLayout>
+
+
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
             android:id="@+id/navigationView"
@@ -37,5 +37,8 @@
             tools:ignore="MissingConstraints"
             app:labelVisibilityMode="unlabeled"
             tools:layout_editor_absoluteX="0dp"/>
+
+
+
 </androidx.constraintlayout.widget.ConstraintLayout
 >

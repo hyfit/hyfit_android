@@ -14,8 +14,6 @@
     <color name="goal_building">#4c24629b</color>
     <color name="goal_mountain">#4c519b24</color>
     <color name="goal_end">#c2c2c2</color>
-    <color name="background1">#FFFAFBFC</color>
-    <color name="gray2">#FFF3F3F3</color>
     <color name="blue_point">#24629b</color>
-    <color name="gray">#949494</color>
+    <color name="string_gray">#949494</color>
 </resources>

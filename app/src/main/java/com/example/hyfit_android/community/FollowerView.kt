@@ -1,4 +1,4 @@
-package com.example.hyfit_android.communityView
+package com.example.hyfit_android.community
 
 interface FollowerView {
     fun onFollowerSuccess(code:Int, result:HashMap<String, List<String>>)

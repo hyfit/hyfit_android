@@ -1,4 +1,4 @@
-package com.example.hyfit_android
+package com.example.hyfit_android.community
 
 import com.google.gson.annotations.SerializedName
 

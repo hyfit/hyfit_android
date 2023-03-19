@@ -1,8 +1,7 @@
-package com.example.hyfit_android
+package com.example.hyfit_android.community
 
 import android.util.Log
-import com.example.hyfit_android.communityView.FollowerView
-import com.example.hyfit_android.communityView.FollowingView
+import com.example.hyfit_android.getRetrofit
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response

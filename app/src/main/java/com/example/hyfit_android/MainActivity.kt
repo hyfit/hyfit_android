@@ -9,6 +9,7 @@ import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.hyfit_android.Join.JoinActivity1
+import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
 
