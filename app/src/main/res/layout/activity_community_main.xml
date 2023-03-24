@@ -1,15 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    tools:context=".CommunityMainActivity">
+
+    <androidx.fragment.app.FragmentContainerView
+        android:id="@+id/nav_host_fragment"
+        android:name="androidx.navigation.fragment.NavHostFragment"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:defaultNavHost="true"
+        app:navGraph="@navigation/nav_graph"/>
 
     <LinearLayout
-        android:id="@+id/aboveBar"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
+        android:layout_height="0dp"
+        app:layout_constraintVertical_weight="1"
         android:weightSum="3"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -21,72 +35,71 @@
             android:textAllCaps="false"
             android:fontFamily="@font/roboto_medium"
             android:text="Following"
+            android:textColor="@color/blue_point"
             android:textSize="16sp"
             android:letterSpacing="0"
             android:drawableBottom="@drawable/blue_line"/>
-<!--        android:background="android/color/transparent"-->
+<!--            android:background="android/color/transparent"-->
+
+
 
         <Button
             android:id="@+id/allBtn"
             android:layout_width="0dp"
             android:layout_weight="1"
             android:layout_height="wrap_content"
-            android:text="ALL"
+            android:text="All"
             android:textAllCaps="false"
             android:fontFamily="@font/roboto_medium"
             android:textStyle="normal"
             android:textColor="@color/grey"
-            android:textSize="16sp" />
+            android:textSize="16sp"/>
 <!--            android:background="android/color/transparent"/>-->
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
-            android:orientation="vertical"
             android:gravity="center">
             <ImageView
                 android:id="@+id/myPageImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/community_user_blue"/>
-            <View
-                android:layout_width="80dp"
-                android:layout_height="3dp"
-                android:background="@color/blue_point"/>
-
+                android:src="@drawable/community_user_gray"/>
         </LinearLayout>
 
     </LinearLayout>
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="600dp"
-        app:layout_constraintBottom_toTopOf="@+id/belowBar"
-        app:layout_constraintTop_toBottomOf="@+id/aboveBar">
-
-    </LinearLayout>
+<!--    <fragment-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="0dp"-->
+<!--        app:layout_constraintVertical_weight="6"-->
+<!--        app:layout_constraintLeft_toLeftOf="parent"-->
+<!--        app:layout_constraintRight_toRightOf="parent"-->
+<!--        app:layout_constraintBottom_toBottomOf="@id/belowBar"-->
+<!--        android:id="@+id/map"-->
+<!--        tools:context=".CommunityMainActivity"-->
+<!--        android:name="com.google.android.gms.maps.SupportMapFragment"/>-->
 
 
     <LinearLayout
         android:id="@+id/belowBar"
         android:layout_width="match_parent"
-        android:layout_height="47dp"
-        android:background="#FAFBFC"
-        android:weightSum="5"
-        app:layout_constraintBottom_toBottomOf="parent">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintVertical_weight="1"
+        android:weightSum="5">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center">
-
             <ImageView
                 android:id="@+id/navGoalImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/nav_goal_gray" />
+                android:src="@drawable/nav_goal_gray"/>
         </LinearLayout>
 
         <LinearLayout
@@ -94,12 +107,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center">
-
             <ImageView
                 android:id="@+id/navReportImageView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/nav_report_gray" />
+                android:src="@drawable/nav_report_gray"/>
         </LinearLayout>
 
         <LinearLayout
@@ -107,11 +119,11 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center">
-
             <ImageView
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/nav_logo_gray_circle2" />
+                android:src="@drawable/nav_logo_gray_circle2"/>
         </LinearLayout>
 
         <LinearLayout
@@ -119,11 +131,10 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center">
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/nav_community_blue" />
+                android:src="@drawable/nav_community_blue"/>
         </LinearLayout>
 
         <LinearLayout
@@ -131,12 +142,12 @@
             android:layout_height="match_parent"
             android:layout_weight="1"
             android:gravity="center">
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@drawable/nav_setting" />
+                android:src="@drawable/nav_setting"/>
         </LinearLayout>
+
 
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

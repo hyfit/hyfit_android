@@ -2,7 +2,6 @@ plugins {
     id 'com.android.application'
     id 'org.jetbrains.kotlin.android'
     id 'com.google.android.libraries.mapsplatform.secrets-gradle-plugin'
-    id "kotlin-parcelize"
 }
 Properties properties = new Properties()
 properties.load(project.rootProject.file('local.properties').newDataInputStream())
@@ -24,8 +23,6 @@ android {
         buildConfigField "String", "BASE_URL", properties['base_url']
         // sdk key
         buildConfigField "String", "KEY_VALUE",  properties['key_value']
-        // google key
-        buildConfigField "String", "GOOGLE_VALUE",  properties['map_api_key']
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -72,6 +69,7 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
+    implementation 'com.google.ar.sceneform:filament-android:1.17.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'
@@ -88,10 +86,4 @@ dependencies {
     def nav_version = "2.5.3"
     implementation "androidx.navigation:navigation-fragment-ktx:$nav_version"
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
-
-    // google search
-    implementation 'com.google.android.libraries.places:places:2.4.0'
-    implementation 'com.android.volley:volley:1.2.1'
-    
-
 }

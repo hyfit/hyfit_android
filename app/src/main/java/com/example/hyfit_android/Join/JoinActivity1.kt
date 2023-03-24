@@ -3,6 +3,7 @@ package com.example.hyfit_android.Join
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.databinding.ActivityJoin1Binding
 import com.example.hyfit_android.databinding.ActivityJoin2Binding
 import com.example.hyfit_android.databinding.ActivityJoin3Binding
@@ -16,6 +17,11 @@ class JoinActivity1 : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding1=ActivityJoin1Binding.inflate(layoutInflater)
         setContentView(binding1.root)
+
+        binding1.prev.setOnClickListener {
+            val intent=Intent(this, LoginActivity::class.java)
+            startActivity(intent)
+        }
 
         if(binding1.textPassword.text.toString().equals(binding1.PasswordAgain.text.toString())){
             binding1.correction.setText("Correct Password")

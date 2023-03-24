@@ -13,7 +13,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentGoalModal2Binding
 import com.example.hyfit_android.databinding.FragmentGoalModalBinding
-import com.google.android.libraries.places.api.Places
 import com.google.gson.Gson
 import retrofit2.Call
 import retrofit2.Callback

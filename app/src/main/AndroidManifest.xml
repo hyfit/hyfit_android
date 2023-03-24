@@ -43,30 +43,41 @@
              "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
         -->
 
-        <activity android:name=".Join.JoinActivity1"
-            android:exported="true"/>
-        <activity android:name=".Join.JoinActivity2"
-            android:exported="true"/>
-        <activity android:name=".Join.JoinActivity3"
-        android:exported="true"/>
-        <activity android:name=".Join.JoinActivity4"
-            android:exported="true"/>
 
         <activity
-            android:name="MapsActivity"
+            android:name=".MapsActivity"
             android:exported="true"
-            android:label="@string/title_activity_maps"/>
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".pinnacle.PinnacleActivity"
-            android:exported="true"/>
+            android:exported="true" />
+        <activity
+            android:name=".Join.JoinActivity1"
+            android:exported="true" />
+        <activity
+            android:name=".Join.JoinActivity2"
+            android:exported="true" />
+        <activity
+            android:name=".Join.JoinActivity3"
+            android:exported="true" />
+        <activity
+            android:name=".Join.JoinActivity4"
+            android:exported="true" />
+        <activity
+            android:name=".Join.JoinEmailActivity"
+            android:exported="true"
+            tools:ignore="Instantiatable">
+        </activity>
         <activity
             android:name=".MainActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER"/>
-            </intent-filter>
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
     </application>
 
