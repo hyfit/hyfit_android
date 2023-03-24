@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         val spf = getSharedPreferences("auth", MODE_PRIVATE)
         val editor = spf.edit()
 
-        editor.putString("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJka2R1ZDIwM0BuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjc5MTg3NjA1LCJleHAiOjE2NzkxODk0MDV9.XADlCxnQ9CSMo-aYp4bNEiE6elF8xge9FLtjh598gos")
+        editor.putString("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJka2R1ZDIwM0BuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjc5NjI4MDE2LCJleHAiOjE2Nzk2Mjk4MTZ9.tAJVJEq-8DDRTJB9_2_YsOhzat4wG-34zC5aEwUh9TI")
         editor.apply()
 
 

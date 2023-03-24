@@ -45,6 +45,13 @@
 
         <activity android:name=".Join.JoinActivity1"
             android:exported="true"/>
+        <activity android:name=".Join.JoinActivity2"
+            android:exported="true"/>
+        <activity android:name=".Join.JoinActivity3"
+        android:exported="true"/>
+        <activity android:name=".Join.JoinActivity4"
+            android:exported="true"/>
+
         <activity
             android:name="MapsActivity"
             android:exported="true"
