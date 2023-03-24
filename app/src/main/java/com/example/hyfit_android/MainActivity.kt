@@ -8,6 +8,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
@@ -25,7 +27,7 @@ class MainActivity : AppCompatActivity() {
         val spf = getSharedPreferences("auth", MODE_PRIVATE)
         val editor = spf.edit()
 
-        editor.putString("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJka2R1ZDIwM0BuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjc5MTg3NjA1LCJleHAiOjE2NzkxODk0MDV9.XADlCxnQ9CSMo-aYp4bNEiE6elF8xge9FLtjh598gos")
+        editor.putString("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJka2R1ZDIwM0BuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjc5MTk0MjczLCJleHAiOjE2NzkxOTYwNzN9.22VQRA8BGP5lYcVQuCFRFgyFAjZxPI6gb1PRaI2N4V4")
         editor.apply()
 
 
@@ -90,14 +92,16 @@ class MainActivity : AppCompatActivity() {
             if (grantResults.size > 0) {
                 for (grant in grantResults) {
                     if (grant != PackageManager.PERMISSION_GRANTED) System.exit(0)
-//                    else {
-//                        binding.MoveButton.setOnClickListener{
-//                            startActivity(Intent(this@MainActivity, PinnacleActivity::class.java))
-//                        }
+
                     }
                 }
             }
         }
+
+    // fragment에서 다른 fragment로 화면전환
+    public fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+    }
 
     }
 

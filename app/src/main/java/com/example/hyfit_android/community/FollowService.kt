@@ -7,14 +7,14 @@ import retrofit2.Callback
 import retrofit2.Response
 
 class FollowService {
-    private lateinit var followerView: FollowerView
-    private lateinit var followingView: FollowingView
+    private lateinit var getFollowerView: GetFollowerView
+    private lateinit var getFollowingView: GetFollowingView
 
-    fun setFollowerView(followerView: FollowerView){
-        this.followerView = followerView
+    fun setFollowerView(getFollowerView: GetFollowerView){
+        this.getFollowerView = getFollowerView
     }
-    fun setFollowingView(followingView: FollowingView){
-        this.followingView = followingView
+    fun setFollowingView(getFollowingView: GetFollowingView){
+        this.getFollowingView = getFollowingView
     }
 
     fun getFollowerList(token:String) {
@@ -29,8 +29,8 @@ class FollowService {
                 val resp: FollowResponse = response.body()!!
                 Log.d("FOLLOWER/SUCCESS", resp.toString())
                 when(val code = resp.code){
-                    1000-> followerView.onFollowerSuccess(code, resp.result)
-                    else-> followerView.onFollowerFailure(code, resp.message)
+                    1000-> getFollowerView.onFollowerSuccess(code, resp.result)
+                    else-> getFollowerView.onFollowerFailure(code, resp.message)
 
                 }
             }
@@ -54,8 +54,8 @@ class FollowService {
                 val resp: FollowResponse = response.body()!!
                 Log.d("FOLLOWING/SUCCESS", resp.toString())
                 when(val code = resp.code){
-                    1000-> followingView.onFollowingSuccess(code, resp.result)
-                    else-> followingView.onFollowingFailure(code, resp.message)
+                    1000-> getFollowingView.onFollowingSuccess(code, resp.result)
+                    else-> getFollowingView.onFollowingFailure(code, resp.message)
                 }
             }
 
