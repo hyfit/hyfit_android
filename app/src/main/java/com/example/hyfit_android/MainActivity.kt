@@ -6,11 +6,10 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Join.JoinActivity1
-import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
@@ -94,6 +93,12 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
+    // fragment에서 다른 fragment로 화면전환
+    public fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+    }
+
     }
 
 

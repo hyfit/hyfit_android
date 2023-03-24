@@ -3,7 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
     android:gravity="center_vertical"
     android:layout_height="wrap_content"
-    android:background="#ffffff"
     android:id="@+id/goal_search_list_layout"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
@@ -16,10 +15,13 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:clickable="true"
+        android:background="@color/place_list_color"
         android:gravity="center_horizontal"
+        android:id="@+id/place_list_layout"
         app:layout_constraintHorizontal_bias="0.0">
 
         <TextView
+            android:background="@color/place_list_color"
             android:id="@+id/goal_place_title"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -29,6 +31,7 @@
             android:padding="10dp"
             android:fontFamily="@font/inter_light"
             android:textStyle="bold"
+            android:clickable="true"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -49,16 +52,16 @@
 <!--            app:layout_constraintHorizontal_bias="0.0"/>-->
 
 
-
-        <ImageView
-            android:layout_width="@+id/goal_search_list_layout"
-            android:layout_height="wrap_content"
-            android:src="@drawable/ic_line_8"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="5dp" app:layout_constraintHorizontal_bias="0.5"/>
-
     </LinearLayout>
+
+
+<!--    <ImageView-->
+<!--        android:layout_width="@+id/goal_search_list_layout"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:src="@drawable/ic_line_8"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/place_list_layout"-->
+<!--        android:layout_marginTop="5dp" app:layout_constraintHorizontal_bias="0.5"/>-->
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -24,11 +24,6 @@ class MainFragment : Fragment() {
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
-        binding.goJoin.setOnClickListener {
-            val intent = Intent(getActivity(), JoinActivity1::class.java)
-            startActivity(intent)
-        }
-
         return binding.root
     }
 

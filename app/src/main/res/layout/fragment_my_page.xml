@@ -4,139 +4,68 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/main">
 
-    <LinearLayout
-        android:id="@+id/aboveBar"
+    <RelativeLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="52dp"
-        android:weightSum="3"
+        android:layout_height="30dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginRight="30dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/followingBtn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="match_parent"
-            android:textAllCaps="false"
-            android:fontFamily="@font/roboto_medium"
-            android:text="Following"
-            android:textSize="16sp"
-            android:letterSpacing="0"
-            android:drawableBottom="@drawable/blue_line"/>
-<!--        android:background="android/color/transparent"-->
+        <ImageButton
+            android:id="@+id/back_btn"
+            android:layout_width="19.5dp"
+            android:layout_height="19dp"
+            android:layout_centerVertical="true"
+            android:background="#00ff0000"
+            android:scaleType="center"
+            android:src="@drawable/material_symbols_arrow_back_rounded" />
 
-        <Button
-            android:id="@+id/allBtn"
-            android:layout_width="0dp"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="ALL"
-            android:textAllCaps="false"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
             android:fontFamily="@font/roboto_medium"
+            android:text="Profile"
             android:textStyle="normal"
-            android:textColor="@color/grey"
-            android:textSize="16sp" />
-<!--            android:background="android/color/transparent"/>-->
+            android:textSize="20sp"
+            android:textColor="@color/black" />
+    </RelativeLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:orientation="vertical"
-            android:gravity="center">
-            <ImageView
-                android:id="@+id/myPageImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/community_user_blue"/>
-            <View
-                android:layout_width="80dp"
-                android:layout_height="3dp"
-                android:background="@color/blue_point"/>
-
-        </LinearLayout>
-
-    </LinearLayout>
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="600dp"
-        app:layout_constraintBottom_toTopOf="@+id/belowBar"
-        app:layout_constraintTop_toBottomOf="@+id/aboveBar">
+        android:layout_height="160dp"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        android:orientation="vertical">
 
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:id="@+id/belowBar"
-        android:layout_width="match_parent"
-        android:layout_height="47dp"
-        android:background="#FAFBFC"
-        android:weightSum="5"
-        app:layout_constraintBottom_toBottomOf="parent">
-
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/profile_iv"
+            android:layout_width="97dp"
+            android:layout_height="97dp"
+            android:layout_centerHorizontal="true"
+            android:src="@drawable/profile_image" />
+        
         <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+            android:layout_width="match_parent"
+            android:layout_height="105dp"
+            android:layout_alignParentBottom="true"
+            android:background="@drawable/mypage_round">
 
-            <ImageView
-                android:id="@+id/navGoalImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/nav_goal_gray" />
+
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
+    </RelativeLayout>
 
-            <ImageView
-                android:id="@+id/navReportImageView"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/nav_report_gray" />
-        </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/nav_logo_gray_circle2" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/nav_community_blue" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_weight="1"
-            android:gravity="center">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/nav_setting" />
-        </LinearLayout>
-
-    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

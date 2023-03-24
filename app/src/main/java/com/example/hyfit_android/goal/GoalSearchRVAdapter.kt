@@ -2,8 +2,10 @@ package com.example.hyfit_android.goal
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hyfit_android.R
@@ -23,6 +25,10 @@ class GoalSearchRVAdapter(val context: Context, val result: ArrayList<Place>): R
 
     override fun onBindViewHolder(holder: GoalSearchRVAdapter.ViewHolder, position: Int) {
         holder.bind(result[position])
+        val textView = holder.binding.goalPlaceTitle
+        textView.setOnClickListener{
+
+        }
     }
 
     // 전체 리사이클러뷰의 갯수
@@ -30,6 +36,7 @@ class GoalSearchRVAdapter(val context: Context, val result: ArrayList<Place>): R
         return result.size
     }
 
+    @SuppressLint("ResourceAsColor")
     inner class ViewHolder(val binding: GoalSearchListBinding) : RecyclerView.ViewHolder(binding.root) {
 
         @SuppressLint("ResourceAsColor")
@@ -37,6 +44,7 @@ class GoalSearchRVAdapter(val context: Context, val result: ArrayList<Place>): R
             binding.goalPlaceTitle.text= searchList.name
 //            binding.goalPlaceAltitude.text = searchList.altitude + "m"
         }
+
     }
 }
 
