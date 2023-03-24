@@ -6,11 +6,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import com.example.hyfit_android.Join.JoinActivity1
+import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
@@ -23,12 +25,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // 임시 jwt
-        val spf = getSharedPreferences("auth", MODE_PRIVATE)
-        val editor = spf.edit()
-
-        editor.putString("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJka2R1ZDIwM0BuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjc5MTk0MjczLCJleHAiOjE2NzkxOTYwNzN9.22VQRA8BGP5lYcVQuCFRFgyFAjZxPI6gb1PRaI2N4V4")
-        editor.apply()
 
 
         // BottomNavigationView 초기화

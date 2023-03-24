@@ -69,7 +69,7 @@ dependencies {
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
-    implementation 'androidx.core:core-ktx:+'
+    implementation 'com.google.ar.sceneform:filament-android:1.17.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.5'

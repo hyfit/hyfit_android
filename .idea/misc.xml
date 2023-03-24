@@ -34,9 +34,11 @@
         <entry key="app/src/main/res/drawable/ic_rectangle_39_mountain.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_rectangle_41.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_rectangle_42.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_search_button.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_select_building.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_select_mountain.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/menu_selector_color.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/my_btn.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_community.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_goal.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_main.xml" value="0.1" />
@@ -52,15 +54,17 @@
         <entry key="app/src/main/res/layout/activity_pinnacle.xml" value="0.10104166666666667" />
         <entry key="app/src/main/res/layout/fragment_community.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_goal.xml" value="0.2723449707031251" />
-        <entry key="app/src/main/res/layout/fragment_goal_modal.xml" value="0.267779541015625" />
-        <entry key="app/src/main/res/layout/fragment_goal_modal2.xml" value="0.33471476236979164" />
+        <entry key="app/src/main/res/layout/fragment_goal_modal.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_goal_modal2.xml" value="0.4347177124023438" />
+        <entry key="app/src/main/res/layout/fragment_goal_modal3.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/fragment_goal_nav.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.20246913580246914" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.35341949462890626" />
         <entry key="app/src/main/res/layout/fragment_set.xml" value="0.1539855072463768" />
-        <entry key="app/src/main/res/layout/goal_detail_list.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/goal_detail_list.xml" value="0.335" />
         <entry key="app/src/main/res/layout/goal_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/goal_search_list.xml" value="0.45" />
         <entry key="app/src/main/res/menu/navi_menu.xml" value="0.25" />
       </map>
     </option>
