@@ -53,13 +53,16 @@ class CommunityFragment: Fragment() {
             followingButton.setTextColor(Color.parseColor("#949494"))
             allButton.setTextColor(Color.parseColor("#000000"))
 
-
         }
 
 
 
         binding.postLayout.setOnClickListener {
             (activity as com.example.hyfit_android.MainActivity).replaceFragment(PostFragment())
+        }
+
+        binding.profileImageview.setOnClickListener {
+            (activity as com.example.hyfit_android.MainActivity).replaceFragment(MyPageFragment())
         }
 
 

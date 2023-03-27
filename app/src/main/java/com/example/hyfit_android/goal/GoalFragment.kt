@@ -31,7 +31,7 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView{
         // 페이지 들어오자마자 getGoal
         getGoalProgress()
         getGoalDone()
-        binding.goalLatest.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+//        binding.goalLatest.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         val dialogButton = binding.goalPlus
         dialogButton.setOnClickListener {
             val dialogFragment = GoalModalFragment()
