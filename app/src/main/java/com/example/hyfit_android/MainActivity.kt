@@ -11,18 +11,26 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LoginActivity
+import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        loginActivity=LoginActivity()
 
+
+        binding.goLogout.setOnClickListener {
+            val intent=Intent(this, LogoutActivity::class.java)
+            startActivity(intent)
+        }
 
 
         // BottomNavigationView 초기화
@@ -74,6 +82,11 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+
+    private fun getJwt():String?{
+        val spf = getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString("jwt","0")
+    }
     // permission code
     override fun onRequestPermissionsResult(
         requestCode: Int,
