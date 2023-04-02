@@ -51,53 +51,66 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.242" />
 
-    <ImageView
-        android:id="@+id/rec1"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:src="@drawable/rectangle_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+    <!--    <ImageView-->
+<!--        android:id="@+id/rec1"-->
+<!--        android:layout_width="63dp"-->
+<!--        android:layout_height="62dp"-->
+<!--        android:src="@drawable/rectangle_24"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.16"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.399" />-->
 
-    <ImageView
-        android:id="@+id/rec3"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:src="@drawable/rectangle_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.387"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+<!--    <ImageView-->
+<!--        android:id="@+id/rec3"-->
+<!--        android:layout_width="63dp"-->
+<!--        android:layout_height="62dp"-->
+<!--        android:src="@drawable/rectangle_24"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.387"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.399" />-->
 
-    <ImageView
-        android:id="@+id/rec2"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:src="@drawable/rectangle_24"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.836"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+<!--    <ImageView-->
+<!--        android:id="@+id/rec2"-->
+<!--        android:layout_width="63dp"-->
+<!--        android:layout_height="62dp"-->
+<!--        android:src="@drawable/rectangle_24"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.836"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.399" />-->
 
-    <ImageView
-        android:id="@+id/rec4"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:src="@drawable/rectangle_24"
+<!--    <ImageView-->
+<!--        android:id="@+id/rec4"-->
+<!--        android:layout_width="63dp"-->
+<!--        android:layout_height="62dp"-->
+<!--        android:src="@drawable/rectangle_24"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.612"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.399" />-->
+
+    <EditText
+        android:id="@+id/typehere"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="        Type your code here        "
+        android:minHeight="48dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.612"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+        app:layout_constraintVertical_bias="0.405" />
 
     <TextView
         android:id="@+id/joinTextSubmit"
@@ -128,69 +141,69 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.638" />
 
-    <EditText
-        android:id="@+id/code1"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:gravity="center"
-        android:hint="*"
-        android:maxLength="1"
-        android:background="@android:color/transparent"
-        android:nextFocusDown="@+id/code2"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.16"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+<!--    <EditText-->
+<!--        android:id="@+id/code1"-->
+<!--        android:layout_width="63dp"-->
+<!--        android:layout_height="62dp"-->
+<!--        android:gravity="center"-->
+<!--        android:hint="*"-->
+<!--        android:maxLength="1"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:nextFocusDown="@+id/code2"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.16"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.399" />-->
 
-    <EditText
-        android:id="@+id/code2"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:background="@android:color/transparent"
-        android:gravity="center"
-        android:hint="*"
-        android:maxLength="1"
-        android:nextFocusDown="@+id/code3"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.836"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+<!--    <EditText-->
+<!--        android:id="@+id/code2"-->
+<!--        android:layout_width="63dp"-->
+<!--        android:layout_height="62dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:gravity="center"-->
+<!--        android:hint="*"-->
+<!--        android:maxLength="1"-->
+<!--        android:nextFocusDown="@+id/code3"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.836"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.399" />-->
 
-    <EditText
-        android:id="@+id/code3"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:background="@android:color/transparent"
-        android:gravity="center"
-        android:hint="*"
-        android:maxLength="1"
-        android:nextFocusDown="@+id/code4"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.612"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+<!--    <EditText-->
+<!--        android:id="@+id/code3"-->
+<!--        android:layout_width="63dp"-->
+<!--        android:layout_height="62dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:gravity="center"-->
+<!--        android:hint="*"-->
+<!--        android:maxLength="1"-->
+<!--        android:nextFocusDown="@+id/code4"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.612"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.399" />-->
 
-    <EditText
-        android:id="@+id/code4"
-        android:layout_width="63dp"
-        android:layout_height="62dp"
-        android:background="@android:color/transparent"
-        android:gravity="center"
-        android:hint="*"
-        android:imeOptions="actionDone"
-        android:maxLength="1"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.387"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.399" />
+<!--    <EditText-->
+<!--        android:id="@+id/code4"-->
+<!--        android:layout_width="63dp"-->
+<!--        android:layout_height="62dp"-->
+<!--        android:background="@android:color/transparent"-->
+<!--        android:gravity="center"-->
+<!--        android:hint="*"-->
+<!--        android:imeOptions="actionDone"-->
+<!--        android:maxLength="1"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.387"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.399" />-->
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
