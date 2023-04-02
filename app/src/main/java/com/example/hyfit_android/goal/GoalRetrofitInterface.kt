@@ -4,6 +4,7 @@ import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
 import retrofit2.http.Query
 
 interface GoalRetrofitInterface {
@@ -16,4 +17,8 @@ interface GoalRetrofitInterface {
 
     @GET("/api/goal/place")
     fun getGoalPlace(@Query("type") type: String, @Query("continents") continents: String) : Call<GetPlaceRes>
+
+    @POST("/api/goal/add")
+    fun saveGoal(@Header("X-AUTH-TOKEN")token : String, @Body saveGoalReq: SaveGoalReq) : Call<SaveGoalRes>
+
 }

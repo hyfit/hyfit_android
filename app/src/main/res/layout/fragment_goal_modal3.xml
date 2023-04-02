@@ -3,21 +3,22 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/goal_modal2"
+    android:id="@+id/goal_modal3"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:background="@drawable/ic_rectangle_42"
     tools:context=".goal.GoalModalFragment3"
+
     >
     <TextView
-        android:id="@+id/goal_selected_place"
+        android:id="@+id/goal_selected_description"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="sans-serif"
-        android:text="Everest"
+        android:text="Description"
         android:textStyle="bold"
         android:textSize="16sp"
-        android:textColor="@color/black"
+        android:textColor="#24629B"
         android:layout_marginTop="10dp"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
@@ -26,84 +27,86 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         />
-    <LinearLayout
-        android:id="@+id/place_select_meter_feet"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:clickable="true"
+    <EditText
+        android:inputType="text"
+        android:id="@+id/goal_description_content"
         android:layout_marginLeft="30dp"
         android:layout_marginRight="30dp"
-        android:layout_marginTop="40dp"
-        android:background="@color/main"
-        app:layout_constraintHorizontal_bias="0.5">
-
-    <LinearLayout
-        android:id="@+id/place_select_meter_title"
-        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:background="@drawable/ic_rectangle_46"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:clickable="true"
-        android:background="@color/main"
-        app:layout_constraintHorizontal_bias="0.0">
-
-        <TextView
-            android:textStyle="bold"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="meter: "
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            />
-    <TextView
-        android:id="@+id/meter_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="1000m"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_selected_description"
         />
-    </LinearLayout>
-        <LinearLayout
-            android:id="@+id/place_select_feet_title"
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/goal_process_2"
+        android:layout_width="@+id/goal_modal3"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_description_content"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
+            android:src="@drawable/ic_process2_2"/>
+
+    </LinearLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:id="@+id/button_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#C2C2C2"
+        app:layout_constraintTop_toBottomOf="@+id/goal_process_2" />
+    <LinearLayout
+        android:layout_width="@+id/goal_modal3"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_line"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+
+        <Button
+            android:id="@+id/search_close"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/inter_medium"
+            android:text="cancel"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/divider"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#C2C2C2" />
+
+        <Button
+            android:clickable="true"
+            android:id="@+id/search_save"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="save"
+            android:background="@android:color/transparent"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter_medium"
+            app:layout_constraintStart_toEndOf="@+id/divider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:clickable="true"
-            android:background="@color/main"
-            app:layout_constraintHorizontal_bias="0.0">
-
-            <TextView
-                android:textStyle="bold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="feet: "
-                android:background="@color/main"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-            <TextView
-                android:id="@+id/feet_content"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="1000ft"
-                android:background="@color/main"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                />
-        </LinearLayout>
+            android:layout_weight="1" />
     </LinearLayout>
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

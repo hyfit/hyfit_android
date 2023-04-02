@@ -14,4 +14,5 @@ data class Place(
     @SerializedName("continents")val continents:String?=null,
     @SerializedName("type")val type:String?=null,
     @SerializedName("altitude")val altitude:String?=null,
+    @SerializedName("location")val location:String?=null,
 )

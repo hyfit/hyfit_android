@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentGoalModalBinding
 
 
@@ -26,7 +27,7 @@ private const val ARG_PARAM2 = "param2"
 class GoalModalFragment : DialogFragment() {
     lateinit var binding: FragmentGoalModalBinding
     val bundle = arguments
-    val fragment = GoalModalFragment2()
+    val fragment2 = GoalModalFragment2()
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentGoalModalBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -37,16 +38,18 @@ class GoalModalFragment : DialogFragment() {
             val bundle = Bundle().apply {
                 putString("type", "building")
             }
-            fragment.arguments = bundle
-            fragment.show(parentFragmentManager, "dialog")
+
+            fragment2.arguments = bundle
+            fragment2.show(parentFragmentManager, "dialog2")
             dismiss()
+
         }
         binding.mountainLayout.setOnClickListener{
             val bundle = Bundle().apply {
                 putString("type", "mountain")
             }
-            fragment.arguments = bundle
-            fragment.show(parentFragmentManager, "dialog")
+            fragment2.arguments = bundle
+            fragment2.show(parentFragmentManager, "dialog2")
             dismiss()
         }
         return binding.root
