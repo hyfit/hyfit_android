@@ -19,10 +19,19 @@ class MyPageFragment: Fragment() {
     ): View? {
         binding = FragmentMyPageBinding.inflate(inflater, container, false)
 
+
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
         binding.backBtn.setOnClickListener {
             (activity as com.example.hyfit_android.MainActivity).replaceFragment(CommunityFragment())
 
         }
-        return binding.root
+
+
+
     }
 }

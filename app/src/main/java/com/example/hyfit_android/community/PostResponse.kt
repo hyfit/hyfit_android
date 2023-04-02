@@ -13,6 +13,5 @@ data class Post(
     @SerializedName(value="postId")val postId:Int?=null,
     @SerializedName(value="email")val email:String,
     @SerializedName(value="exercise_data_id")val exercise_data_id:Int?=null,
-    @SerializedName(value="title")val title:String,
     @SerializedName(value="content")val content:String
 )

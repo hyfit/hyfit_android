@@ -22,8 +22,13 @@ class PostFragment : Fragment() {
             (activity as com.example.hyfit_android.MainActivity).replaceFragment(CommunityFragment())
 
         }
-
         return binding.root
+
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
 
     }
 

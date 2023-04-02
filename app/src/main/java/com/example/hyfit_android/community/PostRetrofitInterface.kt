@@ -15,13 +15,14 @@ interface PostRetrofitInterface {
     @POST(ApiPathConstants.POST_API_PATH + "/save")
     fun savePost(@Header("X-AUTH-TOKEN")token: String, @Body post: Post): Call<PostResponse>
 
-    @GET(ApiPathConstants.POST_API_PATH + "/{post_id}")
-    fun getOnePost(@Header("X-AUTH-TOKEN")token:String, @Path("post_id")post_id:Int): Call<PostResponse>
+    @GET(ApiPathConstants.POST_API_PATH + "")
+    fun getOnePost(@Header("X-AUTH-TOKEN")token:String, @Query("post_id")post_id:Long, @Query("email")email: String): Call<PostResponse>
+
 
     @GET(ApiPathConstants.POST_API_PATH + "")
-    fun getAllPosts(@Query("email") email: String): Call<GetAllPostsResponse>
+    fun getAllPosts(@Query("email")email: String): Call<GetAllPostsResponse>
 
-    @PATCH(ApiPathConstants.POST_API_PATH + "/modify/{post_id}")
-    fun modifyPost(@Header("X-AUTH-TOKEN")token: String, @Path("post_id")post_id: Int): Call<PostResponse>
+    @PATCH(ApiPathConstants.POST_API_PATH + "/{post_id}")
+    fun modifyPost(@Header("X-AUTH-TOKEN")token: String, @Path("post_id")post_id: Long): Call<PostResponse>
 
 }
