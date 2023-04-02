@@ -34,6 +34,9 @@
         <entry key="app/src/main/res/drawable/ic_rectangle_39_mountain.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_rectangle_41.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_rectangle_42.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_rectangle_46.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_rectangle_64.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_rectangle_65.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_search_button.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_select_building.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_select_mountain.xml" value="0.1" />
@@ -46,8 +49,10 @@
         <entry key="app/src/main/res/drawable/selector_main.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_report.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_setting.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/tag_btn_back.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/values.xml" value="0.11" />
         <entry key="app/src/main/res/layout/activity_community_main.xml" value="0.29732513427734375" />
+        <entry key="app/src/main/res/layout/activity_join4.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
         <entry key="app/src/main/res/layout/activity_maps.xml" value="0.10206451416015622" />
         <entry key="app/src/main/res/layout/activity_my_goal.xml" value="0.14860839843750007" />
@@ -55,7 +60,7 @@
         <entry key="app/src/main/res/layout/activity_navi.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_pinnacle.xml" value="0.10104166666666667" />
         <entry key="app/src/main/res/layout/comment_item.xml" value="0.2557291666666667" />
-        <entry key="app/src/main/res/layout/fragment_community.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/fragment_community.xml" value="0.8862777709960938" />
         <entry key="app/src/main/res/layout/fragment_goal.xml" value="0.28427886962890625" />
         <entry key="app/src/main/res/layout/fragment_goal_modal.xml" value="0.335" />
         <entry key="app/src/main/res/layout/fragment_goal_modal2.xml" value="0.4347177124023438" />

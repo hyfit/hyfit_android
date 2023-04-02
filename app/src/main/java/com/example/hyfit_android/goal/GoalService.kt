@@ -9,6 +9,7 @@ import retrofit2.Response
 class GoalService {
     private lateinit var getGoalView: GetGoalView
     private lateinit var getDoneGoalView: GetDoneGoalView
+    private lateinit var saveGoalView: SaveGoalView
 
     fun setGetGoalView(getGoalView: GetGoalView){
         this.getGoalView = getGoalView
@@ -17,7 +18,9 @@ class GoalService {
     fun setGetDoneGoalView(getDoneGoalView: GetDoneGoalView){
         this.getDoneGoalView = getDoneGoalView
     }
-
+    fun setSaveGoalView(saveGoalView: SaveGoalView){
+        this.saveGoalView = saveGoalView
+    }
 
     fun getGoalProgress(jwt:String){
         val postService = getRetrofit().create(GoalRetrofitInterface::class.java)
@@ -55,4 +58,22 @@ class GoalService {
         })
     }
 
-}
+    fun saveGoal(jwt : String,saveGoalReq: SaveGoalReq){
+        val postService = getRetrofit().create(GoalRetrofitInterface::class.java)
+        postService.saveGoal(jwt,saveGoalReq).enqueue(object : Callback<SaveGoalRes>{
+            override fun onResponse(call : Call<SaveGoalRes>, response : Response<SaveGoalRes>){
+                Log.d("JOIN/SUCCESS", response.toString())
+                val resp: SaveGoalRes = response.body()!!
+                Log.d("JOIN/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> saveGoalView.onSaveGoalSuccess(resp.result)
+                    else-> saveGoalView.onSaveGoalFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<SaveGoalRes>, t: Throwable) {
+                Log.d("JOIN/FAILURE", t.message.toString())
+            }
+        })
+    }
+    }
+

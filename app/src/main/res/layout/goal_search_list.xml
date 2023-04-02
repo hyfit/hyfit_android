@@ -1,67 +1,148 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="wrap_content"
-    android:gravity="center_vertical"
+    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+
     android:layout_height="wrap_content"
     android:id="@+id/goal_search_list_layout"
+    android:background="@color/place_list_color"
+
     xmlns:app="http://schemas.android.com/apk/res-auto"
     >
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:clickable="true"
-        android:background="@color/place_list_color"
-        android:gravity="center_horizontal"
-        android:id="@+id/place_list_layout"
-        app:layout_constraintHorizontal_bias="0.0">
-
         <TextView
-            android:background="@color/place_list_color"
+            android:gravity="center_vertical"
             android:id="@+id/goal_place_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:fontFamily="@font/inter_light"
+            android:padding="10dp"
+            android:text="1WTC"
+            android:textColor="@color/black"
+            android:textSize="13sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toStartOf="@+id/place_detail"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <ImageView
+
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/black"
-            android:text="One World Trade Center, 1WTC"
-            android:textSize="13sp"
+            android:id="@+id/place_detail"
             android:padding="10dp"
-            android:fontFamily="@font/inter_light"
-            android:textStyle="bold"
-            android:clickable="true"
+            android:src="@drawable/ic_detail"
+
+            app:layout_constraintBottom_toBottomOf="@id/goal_place_title"
+            app:layout_constraintStart_toEndOf="@+id/goal_place_title"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/goal_place_title" />
+
+        <LinearLayout
+            android:id="@+id/place_detail_layout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@id/goal_place_title"
+            app:layout_constraintStart_toStartOf="parent"
+            android:gravity="center_horizontal"
+            android:visibility="gone"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent">
+        <LinearLayout
+            android:id="@+id/place_select_location_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"/>
+            android:clickable="true"
+            app:layout_constraintHorizontal_bias="0.0">
+                <TextView
+                    android:fontFamily="@font/inter_light"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="bold"
+                    android:text="LOC: "
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+                <TextView
+                    android:fontFamily="@font/inter_light"
+                    android:id="@+id/place_location_content"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Himalayas"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+        </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/place_select_meter_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:clickable="true"
+                    app:layout_constraintHorizontal_bias="0.0">
 
-<!--        <TextView-->
-<!--            android:id="@+id/goal_place_altitude"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:textColor="@color/black"-->
-<!--            android:text="1000m"-->
-<!--            android:textSize="12sp"-->
-<!--            android:padding="10dp"-->
-<!--            android:fontFamily="@font/inter_light"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            app:layout_constraintHorizontal_bias="0.0"/>-->
-
-
-    </LinearLayout>
-
-
-<!--    <ImageView-->
-<!--        android:layout_width="@+id/goal_search_list_layout"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:src="@drawable/ic_line_8"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/place_list_layout"-->
-<!--        android:layout_marginTop="5dp" app:layout_constraintHorizontal_bias="0.5"/>-->
+                        <TextView
+                            android:fontFamily="@font/inter_light"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="meter: "
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+                        <TextView
+                            android:fontFamily="@font/inter_light"
+                            android:id="@+id/meter_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1000m"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+                </LinearLayout>
+                <LinearLayout
+                    android:id="@+id/place_select_feet_title"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    android:layout_marginBottom="10dp"
+                    android:clickable="true"
+                    app:layout_constraintHorizontal_bias="0.0">
+                        <TextView
+                            android:fontFamily="@font/inter_light"
+                            android:textStyle="bold"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="feet: "
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+                        <TextView
+                            android:fontFamily="@font/inter_light"
+                            android:id="@+id/feet_content"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="1000ft"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            />
+                </LinearLayout>
+        </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
