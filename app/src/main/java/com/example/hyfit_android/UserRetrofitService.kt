@@ -61,7 +61,7 @@ class UserRetrofitService {
                 val resp: UserResponse = response.body()!!
                 when (val code = resp.code) {
                     1000 -> joinView.onJoinSuccess(code, resp.result)
-                    else -> joinView.onJoinFailure(code, resp.message)
+                    else -> joinView.onJoinFailure(code, resp.message,resp.result)
                 }
             }
 

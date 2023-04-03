@@ -25,11 +25,11 @@ private const val ARG_PARAM2 = "param2"
  * Use the [GoalModalFragment3.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GoalModalFragment3 : DialogFragment(),SaveGoalView {
+class GoalModalFragment3() : DialogFragment(),SaveGoalView {
     lateinit var binding: FragmentGoalModal3Binding
     private lateinit var type : String
     private lateinit var place : String
-    private var onGoalSaveListener: OnGoalSaveListener? = null
+    var onChangeListener: OnGoalChangeListener? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentGoalModal3Binding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -43,9 +43,6 @@ class GoalModalFragment3 : DialogFragment(),SaveGoalView {
             saveGoal()
         }
         return binding.root
-    }
-    fun setOnSaveGoalListener(listener: OnGoalSaveListener) {
-        onGoalSaveListener = listener
     }
 
     private fun getJwt():String?{
@@ -64,7 +61,7 @@ class GoalModalFragment3 : DialogFragment(),SaveGoalView {
 
 
     override fun onSaveGoalSuccess(result: Goal) {
-        onGoalSaveListener?.onGoalSave()
+        onChangeListener?.onItemChange()
         dismiss()
     }
 

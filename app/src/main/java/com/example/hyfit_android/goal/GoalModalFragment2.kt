@@ -7,6 +7,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,15 +55,19 @@ class GoalModalFragment2 : DialogFragment(), GetPlaceView, OnItemClickListener{
             getGoalPlace("Europe")
         }
 
-
         binding.searchNext.setOnClickListener{
-            val bundle = Bundle().apply {
-                putString("type", type)
-                putString("place",place)
+            if(binding.searchNext.text == "select"){
+                val bundle = Bundle().apply {
+                    putString("type", type)
+                    putString("place",place)
+                }
+                fragment.arguments = bundle
+                fragment.show(parentFragmentManager, "dialog3")
+                dismiss()
             }
-            fragment.arguments = bundle
-            fragment.show(parentFragmentManager, "dialog3")
-            dismiss()
+            else {
+                Toast.makeText(requireContext(), "please select", Toast.LENGTH_SHORT).show()
+            }
 
         }
         return binding.root
@@ -93,6 +98,11 @@ class GoalModalFragment2 : DialogFragment(), GetPlaceView, OnItemClickListener{
 
     override fun onItemClick(data: Place) {
         place = data.name.toString()
+        binding.searchNext.text = "select"
+    }
+
+    override fun onItemNonSelected() {
+        binding.searchNext.text = "next"
     }
 
 }

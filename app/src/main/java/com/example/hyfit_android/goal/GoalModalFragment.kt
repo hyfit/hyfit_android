@@ -28,6 +28,7 @@ class GoalModalFragment : DialogFragment() {
     lateinit var binding: FragmentGoalModalBinding
     val bundle = arguments
     val fragment2 = GoalModalFragment2()
+    var onChangeListener: OnGoalChangeListener? = null
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = FragmentGoalModalBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
@@ -38,7 +39,6 @@ class GoalModalFragment : DialogFragment() {
             val bundle = Bundle().apply {
                 putString("type", "building")
             }
-
             fragment2.arguments = bundle
             fragment2.show(parentFragmentManager, "dialog2")
             dismiss()
@@ -54,6 +54,8 @@ class GoalModalFragment : DialogFragment() {
         }
         return binding.root
     }
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
