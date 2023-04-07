@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hyfit_android.databinding.FragmentGoalBinding
@@ -17,7 +18,7 @@ import com.google.gson.Gson
  * Use the [GoalFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeListener{
+class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeListener,SaveGoalView{
     lateinit var binding: FragmentGoalBinding
     private var gson:Gson = Gson()
     private lateinit var goalDetailRVAdapter: GoalDetailRVAdapter
@@ -125,6 +126,19 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         getGoalProgress()
 //        goalDetailRVAdapter.notifyDataSetChanged()
 //        goalDetailRVAdapter.updateData()
+    }
+
+    override fun onSaveGoalSuccess(result: Goal) {
+        for (fragment in childFragmentManager.fragments) {
+            if (fragment is DialogFragment) {
+                fragment.dismiss()
+            }
+        }
+        getGoalProgress()
+    }
+
+    override fun onSaveGoalFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
     }
 
 }

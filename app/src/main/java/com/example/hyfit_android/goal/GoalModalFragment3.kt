@@ -53,15 +53,18 @@ class GoalModalFragment3() : DialogFragment(),SaveGoalView {
        val jwt = getJwt()
        val description : String = binding.goalDescriptionContent.text.toString()
        val goalService = GoalService()
-       goalService.setSaveGoalView(this)
+       val goalFragment = parentFragmentManager.fragments.firstOrNull { it is GoalFragment } as? GoalFragment
+       goalFragment?.let { goalService.setSaveGoalView(it) }
+//       goalService.setSaveGoalView(this)
        Log.d("type",type)
        Log.d("place",place)
        goalService.saveGoal(jwt!!,SaveGoalReq(place,type,description))
+       dismiss()
    }
 
 
     override fun onSaveGoalSuccess(result: Goal) {
-        onChangeListener?.onItemChange()
+//        onChangeListener?.onItemChange()
         dismiss()
     }
 

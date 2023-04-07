@@ -51,10 +51,17 @@
         android:orientation="horizontal"
         android:gravity="center_horizontal"
         >
-        <ImageView
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/ic_process2_2"/>-->
+        <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_process2_2"/>
+            android:text="This is optional."
+            android:textStyle="normal"
+            android:fontFamily="@font/roboto_medium"
+            />
 
     </LinearLayout>
     <View
