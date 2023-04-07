@@ -122,51 +122,68 @@
             android:gravity="center_vertical">
 
             <Button
+                android:id="@+id/hiking_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/tag_btn_back"
                 android:fontFamily="@font/roboto_regular"
                 android:letterSpacing="0.01"
-                android:text="daily exercise"
+                android:text="Hiking"
                 android:textAllCaps="false"
                 android:textColor="@color/string_gray"
                 android:textSize="10sp"
                 android:textStyle="normal" />
 
             <Button
+                android:id="@+id/running_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/tag_btn_back"
                 android:fontFamily="@font/roboto_regular"
                 android:letterSpacing="0.01"
-                android:text="green activity"
+                android:text="Running"
                 android:textAllCaps="false"
                 android:textColor="@color/string_gray"
                 android:textSize="10sp"
                 android:textStyle="normal" />
 
             <Button
+                android:id="@+id/walking_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:layout_marginRight="5dp"
                 android:background="@drawable/tag_btn_back"
                 android:fontFamily="@font/roboto_regular"
                 android:letterSpacing="0.01"
-                android:text="healthy life style"
+                android:text="Walking"
                 android:textAllCaps="false"
                 android:textColor="@color/string_gray"
                 android:textSize="10sp"
                 android:textStyle="normal" />
 
             <Button
+                android:id="@+id/riding_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:background="@drawable/tag_btn_back"
                 android:fontFamily="@font/roboto_regular"
                 android:letterSpacing="0.01"
-                android:text="diet"
+                android:text="Riding"
+                android:textAllCaps="false"
+                android:textColor="@color/string_gray"
+                android:textSize="10sp"
+                android:textStyle="normal" />
+
+            <Button
+                android:id="@+id/stair_climbing_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:background="@drawable/tag_btn_back"
+                android:fontFamily="@font/roboto_regular"
+                android:letterSpacing="0.01"
+                android:text="Stair Climbing"
                 android:textAllCaps="false"
                 android:textColor="@color/string_gray"
                 android:textSize="10sp"
