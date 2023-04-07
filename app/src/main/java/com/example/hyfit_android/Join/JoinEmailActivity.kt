@@ -61,8 +61,8 @@ class JoinEmailActivity : AppCompatActivity(), JoinView {
         startActivity(intent)
     }
 
-    override fun onJoinFailure(code:Int, message:String, result:String) {
+    override fun onJoinFailure(code:Int, message:String, result :String) {
         Log.d("JoinFailure", message)
-        Log.d("JoinFailure:Result",result)
+        Log.d("JoinFailure : Result", result)
     }
 }
