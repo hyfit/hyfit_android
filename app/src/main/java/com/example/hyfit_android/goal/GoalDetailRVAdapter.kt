@@ -7,6 +7,8 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.GoalDetailListBinding
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
 class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val listener: OnGoalChangeListener): RecyclerView.Adapter<GoalDetailRVAdapter.ViewHolder>() {
 
@@ -43,6 +45,7 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val
             val TextView = binding.goalPlaceTitle
             val TextView2 = binding.goalRate
             val TextView3 = binding.goalDescription
+            val Textview4 = binding.goalCreatedAt
 
             if(goal.goalStatus != 0){
                 if(goal.type == "mountain"){
@@ -59,6 +62,9 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val
             TextView.text = goal.place
             TextView2.text = goal.rate.toString() + "%"
             TextView3.text = goal.description
+            val createdAtString = goal.createdAt.toString()
+
+            Textview4.text = createdAtString.substringBefore("T")
         }
     }
 

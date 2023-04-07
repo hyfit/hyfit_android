@@ -24,4 +24,10 @@ interface GoalRetrofitInterface {
 
     @DELETE("/api/goal")
     fun deleteGoal(@Header("X-AUTH-TOKEN")token : String, @Query("id") id: Long) :Call<DeleteGoalRes>
+
+    @GET("/api/goal/place/page-size")
+    fun getPageSize(@Query("type") type: String, @Query("continents") continents: String) : Call<Int>
+
+    @GET("/api/goal/place-page")
+    fun getGoalPlacePage(@Query("type") type: String, @Query("continents") continents: String, @Query("page") page:Int) : Call<GetPlaceRes>
 }

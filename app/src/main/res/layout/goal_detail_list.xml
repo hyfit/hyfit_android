@@ -70,14 +70,14 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:includeFontPadding="false"
-        android:src="@drawable/ic_close"
+        android:src="@drawable/ic_trash"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/goal_title_layout" />
 
     <LinearLayout
         android:id="@+id/goal_detail_box_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@+id/goal_title_layout"
         app:layout_constraintBottom_toBottomOf="parent"
         android:layout_marginStart="60dp"
@@ -126,6 +126,17 @@
             android:fontFamily="@font/inter_light"
             android:text="살빼자"
             android:textColor="#949494"
+            android:textSize="10dp" />
+        <TextView
+            android:id="@+id/goal_createdAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/inter_light"
+            android:text="2023"
+            android:textColor="#949494"
+            android:layout_gravity="end"
+            android:layout_marginRight="10dp"
             android:textSize="10dp" />
     </LinearLayout>
 
