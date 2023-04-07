@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                                   android:layout_width="match_parent"
+                                                   android:layout_height="match_parent"
+                                                   xmlns:app="http://schemas.android.com/apk/res-auto"
+                                                   xmlns:tools="http://schemas.android.com/tools"
+                                                   android:background="#f3f3f3">
+
+    <ImageView
+            android:id="@+id/process4"
+            android:layout_width="268dp"
+            android:layout_height="20dp"
+            android:src="@drawable/process4_4"
+            android:layout_alignParentEnd="true" android:layout_alignParentStart="true"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintHorizontal_bias="0.497" app:layout_constraintVertical_bias="0.087"/>
+
+
+    <TextView
+            android:id="@+id/welcome"
+            android:layout_below="@+id/process4"
+            android:layout_width="wrap_content" android:layout_height="wrap_content"
+            android:fontFamily="sans-serif-medium"
+            android:textStyle="normal"
+            android:textSize="24sp"
+            android:textColor="#24629b"
+            android:letterSpacing="0"
+            android:text="Welcome !"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="152dp"
+            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.078"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+    <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/join_success"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_marginTop="269dp"
+            app:layout_constraintVertical_bias="0.2" app:layout_constraintBottom_toBottomOf="parent"/>
+
+    <ImageView
+        android:id="@+id/joinStart"
+        android:layout_width="310dp"
+        android:layout_height="51dp"
+        android:layout_marginTop="630dp"
+        android:src="@drawable/rectangle_11"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/process4"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/joinStartText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="642dp"
+        android:fontFamily="sans-serif"
+        android:gravity="end"
+        android:letterSpacing="0"
+        android:text="Start"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/joinStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/process4"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

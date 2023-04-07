@@ -1,38 +1,25 @@
 package com.example.hyfit_android.pinnacle
 
 
-import android.Manifest
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
-import android.location.Address
-import android.location.Geocoder
-import android.location.Location
-import android.location.LocationManager
 import com.google.android.gms.location.*
 import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Looper
 import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import com.example.hyfit_android.BuildConfig.KEY_VALUE
-import com.example.hyfit_android.MapsActivity
 //import com.example.hyfit_android.MapsActivity
 import com.example.hyfit_android.databinding.ActivityPinnacleBinding
-import com.nextnav.nn_app_sdk.BarocalCallback
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
 import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
-import java.io.IOException
 import java.util.*
-import kotlin.properties.Delegates
 
 class PinnacleActivity : AppCompatActivity(), Observer{
     lateinit var binding : ActivityPinnacleBinding
@@ -97,7 +84,7 @@ class PinnacleActivity : AppCompatActivity(), Observer{
 //                    // SDK is initialized successfully, it’s ready to start altitude calculation
                     Toast.makeText(this@PinnacleActivity, "current Status code is " + o.code.toString(), Toast.LENGTH_SHORT).show()
                     binding.textView.text = "init!!!"
-                    startActivity(Intent(this@PinnacleActivity, MapsActivity::class.java))
+                    //startActivity(Intent(this@PinnacleActivity, CommunityMainActivity::class.java))
                 }
             }
         }

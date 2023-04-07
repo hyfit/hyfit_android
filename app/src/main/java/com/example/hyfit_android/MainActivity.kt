@@ -2,27 +2,35 @@ package com.example.hyfit_android
 
 
 import android.Manifest
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.WindowManager
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.example.hyfit_android.Join.JoinActivity1
+import com.example.hyfit_android.Login.LoginActivity
+import com.example.hyfit_android.Login.LogoutActivity
+import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
+    lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+        loginActivity=LoginActivity()
 
-        // 임시 jwt
-        val spf = getSharedPreferences("auth", MODE_PRIVATE)
-        val editor = spf.edit()
 
-        editor.putString("jwt", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJka2R1ZDIwM0BuYXZlci5jb20iLCJyb2xlIjoiUk9MRV9VU0VSIiwiaWF0IjoxNjc4OTY5Mzg2LCJleHAiOjE2Nzg5NzExODZ9.hc4DZSQLjZEZyNLGNsL8lJGH6fjV3qlu59MEjKQoZJs")
-        editor.apply()
+
+
+
         // BottomNavigationView 초기화
         binding.navigationView.selectedItemId = R.id.MainFragment
         binding.navigationView.setOnNavigationItemSelectedListener { menuItem ->
@@ -72,6 +80,11 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+
+    private fun getJwt():String?{
+        val spf = getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString("jwt","0")
+    }
     // permission code
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -84,12 +97,20 @@ class MainActivity : AppCompatActivity(){
             if (grantResults.size > 0) {
                 for (grant in grantResults) {
                     if (grant != PackageManager.PERMISSION_GRANTED) System.exit(0)
+//                    else {
+//                        binding.MoveButton.setOnClickListener{
+//                            startActivity(Intent(this@MainActivity, PinnacleActivity::class.java))
+//                        }
+                    }
                 }
             }
         }
+
+    // fragment에서 다른 fragment로 화면전환
+    public fun replaceFragment(fragment: Fragment) {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
     }
 
+    }
 
-
-}
 

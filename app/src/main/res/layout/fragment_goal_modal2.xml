@@ -1,101 +1,220 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/goal_modal"
-        android:layout_width="300dp"
-        android:layout_height="200dp"
-        android:background="@drawable/ic_rectangle_42"
-        tools:context=".goal.GoalModalFragment">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/goal_modal2"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/ic_rectangle_42"
+    tools:context=".goal.GoalModalFragment2"
+>
     />
     <TextView
-            android:id="@+id/goal_latest"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
-            android:text="Select"
-            android:textStyle="bold"
-            android:textSize="16sp"
-            android:textColor="#24629b"
-            android:layout_marginTop="20dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-    />
+        android:id="@+id/goal_search_goal_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:text="Search Your Goal"
+        android:textStyle="bold"
+        android:textSize="16sp"
+        android:textColor="#24629B"
+        android:layout_marginTop="20dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        />
 
-<!--    <ImageView-->
-<!--            android:id="@+id/goal_modal_close"-->
-<!--            android:src="@drawable/ic_close"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_coanstraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:layout_marginTop="20dp" app:layout_constraintHorizontal_bias="0.944"/>-->
+
     <LinearLayout
-            android:id="@+id/select_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search_layout"
+        android:layout_marginTop="50dp"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/place_asia"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="70dp"
-            app:layout_constraintHorizontal_bias="0.5">
+            android:text="Asia"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter_light">
+        </Button>
+        <Button
+            android:id="@+id/place_america"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="America"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter_light">
+        </Button>
+        <Button
+            android:id="@+id/place_europe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Europe"
+            android:textSize="12sp"
 
-        <LinearLayout
-                android:id="@+id/building_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-        >
+            android:fontFamily="@font/inter_light">
+        </Button>
 
-            <ImageView
-                    android:id="@+id/select_building"
-                    android:src="@drawable/ic_select_building"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            <TextView
-                    android:id="@+id/select_building_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Building"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:layout_marginTop="10dp"/>
-
-        </LinearLayout>
-
-        <LinearLayout
-                android:id="@+id/mountain_layout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="80dp"
-                android:orientation="vertical"
-                android:gravity="center_horizontal"
-                android:layout_gravity="bottom">
-
-            <ImageView
-                    android:id="@+id/select_mountain"
-                    android:src="@drawable/ic_select_mountain"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            <TextView
-                    android:id="@+id/select_mountain_text"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Mountain"
-                    android:textColor="@color/black"
-                    android:textSize="12sp"
-                    android:layout_marginTop="10dp"/>
-
-        </LinearLayout>
 
     </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_recycler_layout"
+        android:layout_width="@+id/search_layout"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="30dp"
+        android:layout_marginRight="30dp"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="100dp"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/search_goal_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
+
+    </LinearLayout>
+
+
+<!--    <LinearLayout-->
+<!--        android:id="@+id/pagination_layout"-->
+<!--        android:layout_width="@id/search_layout"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginLeft="30dp"-->
+<!--        android:layout_marginRight="30dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        android:background="#ffffff"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/search_recycler_layout"-->
+<!--        android:gravity="center_horizontal">-->
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/goal_pagination"-->
+<!--            android:orientation="horizontal"-->
+<!--            android:scrollbars="horizontal"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            />-->
+<!--    </LinearLayout>-->
+
+    <LinearLayout
+        android:layout_marginTop="10dp"
+        android:id="@+id/place_pagination_layout"
+        android:layout_width="@id/search_layout"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_recycler_layout"
+        android:orientation="horizontal"
+
+        android:gravity="center_horizontal"
+        >
+        <ImageView
+            android:id="@+id/place_pagination_left"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_left"
+            android:padding="10dp"/>
+        <TextView
+            android:id="@+id/goal_currentPage"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:padding="10dp"
+            android:fontFamily="@font/inter_medium"
+            android:textStyle="bold"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="(1/3)"
+            />
+        <ImageView
+            android:id="@+id/place_pagination_right"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_left"
+            android:scaleX="-1"
+
+            android:padding="10dp"/>
+<!--        <ImageView-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:src="@drawable/ic_process2_1"/>-->
+<!--                <androidx.recyclerview.widget.RecyclerView-->
+<!--                    android:id="@+id/goal_pagination"-->
+<!--                    android:orientation="horizontal"-->
+<!--                    android:scrollbars="horizontal"-->
+<!--                    android:layout_width="match_parent"-->
+<!--                    android:layout_height="wrap_content"-->
+<!--                    />-->
+
+    </LinearLayout>
+    <View
+        android:layout_marginTop="10dp"
+        android:id="@+id/button_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#C2C2C2"
+        app:layout_constraintTop_toBottomOf="@+id/place_pagination_layout" />
+    <LinearLayout
+        android:layout_width="@id/search_layout"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_line"
+        android:orientation="horizontal"
+        android:gravity="center_horizontal"
+        >
+
+        <Button
+            android:id="@+id/search_close"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:fontFamily="@font/inter_medium"
+            android:text="cancel"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toStartOf="@+id/divider"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="1" />
+
+        <View
+            android:id="@+id/divider"
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:background="#C2C2C2" />
+
+        <Button
+            android:id="@+id/search_next"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="select"
+            android:background="@android:color/transparent"
+            android:textSize="12sp"
+            android:fontFamily="@font/inter_medium"
+            app:layout_constraintStart_toEndOf="@+id/divider"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:layout_weight="1" />
+    </LinearLayout>
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

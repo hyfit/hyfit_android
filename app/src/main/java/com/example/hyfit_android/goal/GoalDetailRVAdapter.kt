@@ -4,13 +4,13 @@ import android.content.Context
 import android.graphics.Paint
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.GoalDetailListBinding
-import com.example.hyfit_android.databinding.GoalListBinding
+import java.time.LocalDateTime
+import java.time.format.DateTimeFormatter
 
-class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>): RecyclerView.Adapter<GoalDetailRVAdapter.ViewHolder>() {
+class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val listener: OnGoalChangeListener): RecyclerView.Adapter<GoalDetailRVAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalDetailRVAdapter.ViewHolder {
@@ -24,6 +24,9 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>): Re
 
     override fun onBindViewHolder(holder: GoalDetailRVAdapter.ViewHolder, position: Int) {
 
+        holder.binding.goalDeleteButton.setOnClickListener{
+            listener.onItemClick(result[position])
+        }
         // view binding (adapter에 넣은 데이터를 rm_item에 넣어주는)
         holder.bind(result[position])
     }
@@ -39,32 +42,31 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>): Re
         @SuppressLint("ResourceAsColor")
         fun bind(goal: Goal){
             val goalLayout = binding.goalLayout
+            val TextView = binding.goalPlaceTitle
+            val TextView2 = binding.goalRate
+            val TextView3 = binding.goalDescription
+            val Textview4 = binding.goalCreatedAt
 
             if(goal.goalStatus != 0){
                 if(goal.type == "mountain"){
                     goalLayout.setBackgroundResource(R.drawable.ic_goal_rectangle_mountain)
                 }
-                else if(goal.type == "building"){
+                if(goal.type == "building"){
                     goalLayout.setBackgroundResource(com.example.hyfit_android.R.drawable.ic_goal_rectangle_building)
-
                 }
             }
             else {
                 goalLayout.setBackgroundResource(com.example.hyfit_android.R.drawable.ic_goal_rectangle_done)
-                val TextView = binding.goalPlaceTitle
-                val TextView2 = binding.goalRate
-        
                 TextView!!.setPaintFlags(TextView!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
-                TextView2!!.setPaintFlags(TextView!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
             }
-            binding.goalPlaceTitle.text = goal.place
-            binding.goalRate.text = goal.rate.toString() + "%"
-            binding.goalDescription.text = goal.description
+            TextView.text = goal.place
+            TextView2.text = goal.rate.toString() + "%"
+            TextView3.text = goal.description
+            val createdAtString = goal.createdAt.toString()
 
-
-
-
+            Textview4.text = createdAtString.substringBefore("T")
         }
     }
+
 }
 

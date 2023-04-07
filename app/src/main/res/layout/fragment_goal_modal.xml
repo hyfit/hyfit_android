@@ -7,14 +7,13 @@
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:background="@drawable/ic_rectangle_42"
-
              tools:context=".goal.GoalModalFragment">
     />
     <TextView
             android:id="@+id/goal_latest"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="sans-serif"
+            android:fontFamily="@font/inter_medium"
             android:text="Select"
             android:textStyle="bold"
             android:textSize="16sp"
@@ -26,15 +25,18 @@
             app:layout_constraintHorizontal_bias="0.5"
          />
 
-<!--    <ImageView-->
-<!--            android:id="@+id/goal_modal_close"-->
-<!--            android:src="@drawable/ic_close"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            app:layout_coanstraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:layout_marginTop="20dp" android:layout_marginEnd="16dp"/>-->
+    <ImageView
+        android:id="@+id/goal_modal_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_close"
+        android:padding="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.936"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <LinearLayout
             android:id="@+id/select_layout"
             android:layout_width="wrap_content"
@@ -53,7 +55,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="30dp"
         >
 
             <ImageView
@@ -69,6 +71,7 @@
                     android:text="Building"
                     android:textColor="@color/black"
                     android:textSize="12sp"
+                android:fontFamily="@font/inter_light"
                     android:layout_marginTop="10dp"/>
 
         </LinearLayout>
@@ -80,7 +83,7 @@
                 android:layout_marginLeft="80dp"
                 android:orientation="vertical"
                 android:gravity="center_horizontal"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="30dp"
                 android:layout_gravity="bottom">
             <ImageView
                     android:id="@+id/select_mountain"
@@ -95,6 +98,7 @@
                     android:text="Mountain"
                     android:textColor="@color/black"
                     android:textSize="12sp"
+                android:fontFamily="@font/inter_light"
                     android:layout_marginTop="10dp"/>
 
         </LinearLayout>
