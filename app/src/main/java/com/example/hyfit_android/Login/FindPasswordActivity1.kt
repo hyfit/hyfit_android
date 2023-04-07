@@ -19,6 +19,7 @@ class FindPasswordActivity1 : AppCompatActivity(), JoinEmailView {
 
         binding.joinSubmit.setOnClickListener{
             email=binding.typehere.text.toString()
+
             Log.d("emailhere", email)
             confirm(email)
         }
@@ -38,6 +39,7 @@ class FindPasswordActivity1 : AppCompatActivity(), JoinEmailView {
 
     override fun onEmailSuccess(code: Int, result: String) {
         val intent= Intent(this, FindPasswordActivity2::class.java)
+        intent.putExtra("email", email)
         val spf=getSharedPreferences("passmail", MODE_PRIVATE)
         val editor=spf.edit()
         editor.putString("passcode", result)

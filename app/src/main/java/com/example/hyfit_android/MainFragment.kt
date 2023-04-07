@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Join.JoinActivity1
+import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.databinding.FragmentMainBinding
 
 /**
@@ -23,6 +24,11 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        binding.goLogout.setOnClickListener {
+            val intent = Intent(getActivity(), LogoutActivity::class.java)
+            startActivity(intent)
+        }
 
         return binding.root
     }

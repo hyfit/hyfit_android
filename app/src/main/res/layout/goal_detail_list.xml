@@ -1,129 +1,146 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
-        xmlns:android="http://schemas.android.com/apk/res/android"
-                                                   xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-                                                   android:gravity="center_vertical"                   android:layout_height="110dp"
-                                                   android:orientation="vertical"
-                                                   android:background="@drawable/ic_rectangle_39"
-        android:id="@+id/goal_layout"                                  xmlns:app="http://schemas.android.com/apk/res-auto"
->
-
-<!--    <ImageView-->
-<!--            android:id="@+id/goal_backImage"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:src="@drawable/ic_goal_rectangle" tools:ignore="MissingConstraints"-->
-<!--            tools:layout_editor_absoluteY="0dp" tools:layout_editor_absoluteX="-37dp"/>-->
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/goal_layout"
+    android:layout_width="match_parent"
+    android:layout_height="110dp"
+    android:background="@drawable/ic_rectangle_39"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:includeFontPadding="false"
-            android:src="@drawable/ic_goal_index"
-            app:layout_constraintStart_toStartOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:includeFontPadding="false"
+        android:src="@drawable/ic_goal_index"
 
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="20dp" app:layout_constraintHorizontal_bias="0.078"/>
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.078"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <!--    <ImageView-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:padding="10dp"-->
-<!--            android:src="@drawable/ic_detail"-->
-<!--            app:layout_constraintStart_toStartOf="parent"-->
-<!--            app:layout_constraintEnd_toEndOf="parent"-->
-<!--            app:layout_constraintTop_toTopOf="parent"-->
-<!--            android:layout_marginTop="20dp"-->
-<!--            app:layout_constraintHorizontal_bias="0.929"-->
-<!--            app:layout_constraintVertical_bias="0.507"/>-->
+    <!--            android:layout_width="wrap_content"-->
+    <!--            android:layout_height="wrap_content"-->
+    <!--            android:padding="10dp"-->
+    <!--            android:src="@drawable/ic_detail"-->
+    <!--            app:layout_constraintStart_toStartOf="parent"-->
+    <!--            app:layout_constraintEnd_toEndOf="parent"-->
+    <!--            app:layout_constraintTop_toTopOf="parent"-->
+    <!--            android:layout_marginTop="20dp"-->
+    <!--            app:layout_constraintHorizontal_bias="0.929"-->
+    <!--            app:layout_constraintVertical_bias="0.507"/>-->
 
     <LinearLayout
+
+        android:id="@+id/goal_title_layout"
+        app:layout_constraintEnd_toStartOf="@+id/goal_delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="20dp"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/goal_place_title"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter_medium"
+            android:includeFontPadding="false"
+            android:text="에베레스트"
+            android:textColor="@color/black"
+            android:textSize="15sp"
+            app:layout_constraintEnd_toStartOf="@+id/goal_delete_button"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </LinearLayout>
+
+
+    <ImageView
+        android:clickable="true"
+        android:id="@+id/goal_delete_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="30dp"
+        android:includeFontPadding="false"
+        android:src="@drawable/ic_trash"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/goal_title_layout" />
+
+    <LinearLayout
+        android:id="@+id/goal_detail_box_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@+id/goal_title_layout"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="52dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="20dp"
+        android:background="#f3f3f3"
+        android:orientation="vertical"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="60dp"
-            android:layout_marginTop="20dp"
-                app:layout_constraintHorizontal_bias="0.0">
-        <TextView
-                android:id="@+id/goal_place_title"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/goal_rate_title"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textColor="@color/black"
-                android:text="에베레스트"
-                android:textSize="15sp"
-                 android:fontFamily="@font/inter_medium"
-                android:includeFontPadding="false"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"/>
-<!--        <TextView-->
-<!--                android:id="@+id/goal_rate"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:textColor="@color/black"-->
-<!--                android:background="#f3f3f3"-->
-<!--                android:text="87%"-->
-<!--                android:textSize="15sp"-->
-<!--                android:includeFontPadding="false"-->
-<!--                app:layout_constraintStart_toStartOf="parent"-->
-<!--                app:layout_constraintEnd_toEndOf="@id/goal_place_title"-->
-<!--                app:layout_constraintTop_toTopOf="parent"-->
-<!--                android:layout_marginLeft="10dp"-->
-<!--         app:layout_constraintHorizontal_bias="0.0"/>-->
+                android:layout_marginLeft="10dp"
+                android:fontFamily="@font/inter_medium"
+                android:text="achievement rate  "
+                android:textColor="#949494"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.0" />
 
+            <TextView
+                android:id="@+id/goal_rate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="80%"
+                android:textColor="#949494"
+                android:textStyle="bold"
+                app:layout_constraintHorizontal_bias="0.0" />
+        </LinearLayout>
 
-    </LinearLayout>
-    <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="#f3f3f3"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginStart="60dp"
-            android:layout_marginEnd="40dp"
-            android:layout_marginTop="52dp"
-            android:layout_marginBottom="20dp"
-            app:layout_constraintHorizontal_bias="0.0">
-<LinearLayout
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal">
-    <TextView
-            android:id="@+id/goal_rate_title"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="10dp"
-            android:text="achievement rate  "
-        android:fontFamily="@font/inter_medium"
-            android:textStyle="bold"
-            android:textColor="#949494"
-            app:layout_constraintHorizontal_bias="0.0" />
-        <TextView
-            android:id="@+id/goal_rate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textStyle="bold"
-            android:fontFamily="@font/inter_medium"
-            android:text="80%"
-            android:textColor="#949494"
-            app:layout_constraintHorizontal_bias="0.0" />
-</LinearLayout>
         <TextView
             android:id="@+id/goal_description"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_light"
             android:layout_marginLeft="10dp"
-            android:textSize="10dp"
+            android:fontFamily="@font/inter_light"
             android:text="살빼자"
-            android:textColor="#949494" />
+            android:textColor="#949494"
+            android:textSize="10dp" />
+        <TextView
+            android:id="@+id/goal_createdAt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:fontFamily="@font/inter_light"
+            android:text="2023"
+            android:textColor="#949494"
+            android:layout_gravity="end"
+            android:layout_marginRight="10dp"
+            android:textSize="10dp" />
     </LinearLayout>
 
 

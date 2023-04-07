@@ -54,6 +54,7 @@ class GoalSearchRVAdapter(val context: Context, val result: ArrayList<Place>, va
                 listener.onItemClick(result[position])
             } else {
                 selectPlaceIndex = -1
+                listener.onItemNonSelected()
             }
         }
 //            Toast.makeText(context, "Already selected", Toast.LENGTH_SHORT).show()

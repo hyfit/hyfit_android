@@ -1,13 +1,13 @@
 package com.example.hyfit_android.goal
 
-import android.content.Context
-import android.graphics.Paint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hyfit_android.databinding.FragmentGoalBinding
@@ -18,12 +18,15 @@ import com.google.gson.Gson
  * Use the [GoalFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalSaveListener{
+class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeListener,SaveGoalView{
     lateinit var binding: FragmentGoalBinding
     private var gson:Gson = Gson()
     private lateinit var goalDetailRVAdapter: GoalDetailRVAdapter
     private lateinit var goalList : ArrayList<Goal>
-    val fragment3 = GoalModalFragment3()
+//    private val fragment3 = GoalModalFragment3()
+//    private val deleteFragment = GoalModalDelete()
+//    private val fragment3 = GoalModalFragment3().apply { onChangeListener = this@GoalFragment }
+    private val deleteFragment = GoalModalDelete().apply { listener = this@GoalFragment }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,45 +43,44 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalSaveListen
             val dialogFragment = GoalModalFragment()
             dialogFragment.show(parentFragmentManager, "dialog1")
         }
-        fragment3.setOnSaveGoalListener(this)
+
         binding.goalDone.setOnClickListener{
             getGoalDone()
         }
         binding.goalInProgress.setOnClickListener{
             getGoalProgress()
         }
-
         return binding.root
     }
 
-    private fun initProgressRecyclerView(progressGoalList:ArrayList<Goal>){
-        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), progressGoalList)
-        binding.myGoalList.adapter = goalDetailRVAdapter
-        binding.myGoalList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-    }
-    private fun initDoneRecyclerView(DoneGoalList:ArrayList<Goal>){
-        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), DoneGoalList)
-        binding.myDoneGoalList.adapter = goalDetailRVAdapter
-        binding.myDoneGoalList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-    }
+//    private fun initProgressRecyclerView(progressGoalList:ArrayList<Goal>){
+//        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), progressGoalList,this)
+//        binding.myGoalList.adapter = goalDetailRVAdapter
+//        binding.myGoalList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+//    }
+//    private fun initDoneRecyclerView(DoneGoalList:ArrayList<Goal>){
+//        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), DoneGoalList,this)
+//        binding.myDoneGoalList.adapter = goalDetailRVAdapter
+//        binding.myDoneGoalList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
+//    }
 
     private fun initRecyclerView(result : ArrayList<Goal>){
-        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), result)
+        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), result,this)
         binding.myGoalList.adapter = goalDetailRVAdapter
         binding.myGoalList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
     }
-
 
     private fun getJwt():String?{
         val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
         return spf!!.getString("jwt","0")
     }
+
     private fun getGoalProgress(){
         val jwt = getJwt()
-        val goalProgressJson = arguments?.getString("goal")
         val goalService = GoalService()
         goalService.setGetGoalView(this)
-        goalService.getGoalProgress(jwt!!)
+         goalService.getGoalProgress(jwt!!)
+
     }
     private fun getGoalDone(){
         val jwt = getJwt()
@@ -95,6 +97,10 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalSaveListen
     }
 
     override fun onGetGoalFailure(code: Int, msg: String) {
+        if(code==2203){
+            val goalList = ArrayList<Goal>()
+            initRecyclerView(goalList)
+        }
     }
 
     override fun onGetDoneGoalSuccess(result: ArrayList<Goal>) {
@@ -104,14 +110,42 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalSaveListen
     }
 
     override fun onGetDoneGoalFailure(code: Int, msg: String) {
-
+        if(code==2203){
+            val goalList = ArrayList<Goal>()
+            initRecyclerView(goalList)
+        }
     }
-    override fun onGoalSave() {
-        Log.d("hahaha","success")
+
+    override fun onItemClick(data: Goal) {
+        Log.d("result",data.toString())
+        val bundle = Bundle().apply {
+
+            data.goalId?.let { putLong("goalId", it.toLong()) }
+            putString("goalTitle",data.place)
+            putString("goalRate",data.rate.toString())
+        }
+        deleteFragment.arguments = bundle
+        deleteFragment.show(parentFragmentManager, "dialog_delete")
+    }
+
+    override fun onItemChange() {
+        Toast.makeText(requireContext(), "delete!!!", Toast.LENGTH_SHORT).show()
         getGoalProgress()
-        getGoalDone()
+//        goalDetailRVAdapter.notifyDataSetChanged()
+//        goalDetailRVAdapter.updateData()
     }
 
+    override fun onSaveGoalSuccess(result: Goal) {
+        for (fragment in childFragmentManager.fragments) {
+            if (fragment is DialogFragment) {
+                fragment.dismiss()
+            }
+        }
+        getGoalProgress()
+    }
 
+    override fun onSaveGoalFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
 
 }
