@@ -97,6 +97,10 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     }
 
     override fun onGetGoalFailure(code: Int, msg: String) {
+        if(code==2203){
+            val goalList = ArrayList<Goal>()
+            initRecyclerView(goalList)
+        }
     }
 
     override fun onGetDoneGoalSuccess(result: ArrayList<Goal>) {
@@ -106,7 +110,10 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     }
 
     override fun onGetDoneGoalFailure(code: Int, msg: String) {
-
+        if(code==2203){
+            val goalList = ArrayList<Goal>()
+            initRecyclerView(goalList)
+        }
     }
 
     override fun onItemClick(data: Goal) {
