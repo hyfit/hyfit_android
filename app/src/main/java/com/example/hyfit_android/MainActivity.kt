@@ -108,10 +108,10 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-    // fragment에서 다른 fragment로 화면전환
-    public fun replaceFragment(fragment: Fragment) {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
-    }
+//    // fragment에서 다른 fragment로 화면전환
+//    public fun replaceFragment(fragment: Fragment) {
+//        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
+//    }
 
     }
 

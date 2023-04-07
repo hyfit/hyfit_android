@@ -18,11 +18,9 @@ class FollowService {
     fun setFollowingView(getFollowingView: GetFollowingView){
         this.getFollowingView = getFollowingView
     }
-
     fun setAddFollowView(addFollowView: AddFollowView){
         this.addFollowView = addFollowView;
     }
-
     fun setUnfollowView(unfollowView: UnfollowView){
         this.unfollowView = unfollowView;
     }
@@ -38,7 +36,7 @@ class FollowService {
                 val resp: FollowResponse = response.body()!!
                 Log.d("ADDFOLLOW/SUCCESS", resp.toString())
                 when(val code = resp.code) {
-                    1000 -> addFollowView.onAddFollowSuccess(code, resp.result)
+                    1000 -> addFollowView.onAddFollowSuccess(resp.result)
                     else -> addFollowView.onAddFollowFailure(code, resp.message)
                 }
             }
@@ -61,7 +59,7 @@ class FollowService {
                 val resp: FollowResponse = response.body()!!
                 Log.d("UNFOLLOW/SUCCESS", resp.toString())
                 when (val code = resp.code) {
-                    1000 -> unfollowView.onUnfollowSuccess(code, resp.result)
+                    1000 -> unfollowView.onUnfollowSuccess(resp.result)
                     else -> unfollowView.onUnfollowFailure(code, resp.message)
                 }
             }
@@ -85,7 +83,7 @@ class FollowService {
                 val resp: FollowListResponse = response.body()!!
                 Log.d("FOLLOWER/SUCCESS", resp.toString())
                 when(val code = resp.code){
-                    1000-> getFollowerView.onFollowerSuccess(code, resp.result)
+                    1000-> getFollowerView.onFollowerSuccess(resp.result)
                     else-> getFollowerView.onFollowerFailure(code, resp.message)
 
                 }
@@ -110,7 +108,7 @@ class FollowService {
                 val resp: FollowListResponse = response.body()!!
                 Log.d("FOLLOWING/SUCCESS", resp.toString())
                 when(val code = resp.code){
-                    1000-> getFollowingView.onFollowingSuccess(code, resp.result)
+                    1000-> getFollowingView.onFollowingSuccess(resp.result)
                     else-> getFollowingView.onFollowingFailure(code, resp.message)
                 }
             }

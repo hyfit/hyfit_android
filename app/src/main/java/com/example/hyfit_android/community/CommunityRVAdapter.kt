@@ -26,7 +26,13 @@ class CommunityRVAdapter(val context: Context, val result: ArrayList<Post>) : Re
     inner class ViewHolder(val binding: PostItemBinding): RecyclerView.ViewHolder(binding.root) {
 
         fun bind(post: Post){
+            val postImageView = binding.postIv
+            val profileImageView = binding.profileIv
+            val writerTextView = binding.writerTv
+            val dateTextView = binding.dateTv
+            val contentTextView = binding.contentTv
 
+            contentTextView.text = post.content
 
 
         }
