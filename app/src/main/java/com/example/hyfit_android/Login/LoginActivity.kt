@@ -22,6 +22,7 @@ class LoginActivity : AppCompatActivity(), LoginView{
         Log.d("logoutjwt", ljwt)
 
         binding.join.setOnClickListener {
+            init()
             val intent=Intent(this, JoinActivity1::class.java)
             startActivity(intent)
         }
@@ -32,25 +33,27 @@ class LoginActivity : AppCompatActivity(), LoginView{
 //            startActivity(intent)
         }
         binding.forgot.setOnClickListener {
+            init()
             val intent=Intent(this, FindPasswordActivity1::class.java)
             startActivity(intent)
         }
-//        bindingmain.goLogout.setOnClickListener {
-//            logout(getJwt().toString())
-//
-//            val intent=Intent(this, LoginActivity::class.java)
-//            startActivity(intent)
-//        }
+
 
     }
 
     private fun login(){
+        if (binding.textEmail.text.toString().isEmpty() || binding.textPassword.text.toString().isEmpty()){
+            Toast.makeText(this,"Fill in all the blanks", Toast.LENGTH_LONG).show()
+            Log.d("test", "fill in all the blanks")
+            return
+        }
+
         val email:String=binding.textEmail.text.toString()
         val password:String=binding.textPassword.text.toString()
-
         val usService = UserRetrofitService()
         usService.setLoginView(this)
         usService.login(LoginReq(email, password))
+
     }
     private fun saveJwt(jwt:String?){
         val spf=getSharedPreferences("auth", MODE_PRIVATE)
@@ -65,13 +68,11 @@ class LoginActivity : AppCompatActivity(), LoginView{
         return spf!!.getString("jwt","0")
     }
 
-//    fun deleteJwt(){
-//        val spf=getSharedPreferences("auth", MODE_PRIVATE)
-//        val editor=spf.edit()
-//        editor.clear()
-//        editor.apply()
-//        editor.commit()
-//    }
+    private fun init(){
+        binding.textEmail.text = null
+        binding.textPassword.text = null
+    }
+
 
     override fun onLoginSuccess(code: Int, jwt: String) {
         when(code){
@@ -79,46 +80,37 @@ class LoginActivity : AppCompatActivity(), LoginView{
                 Log.d("Success", code.toString())
                 saveJwt(jwt)
                 val intent=Intent(this, MainActivity::class.java)
+                init()
                 startActivity(intent)
             }
             else->{
                 Log.d("error", code.toString())
                 if(code.toString()=="2003"){
                     Toast.makeText(this, "Incorrect password", Toast.LENGTH_LONG).show()
+                    init()
                 }
                 else if(code.toString()=="2002")
                 {
                     Toast.makeText(this, "Email does not exist", Toast.LENGTH_LONG).show()
+                    init()
                 }
             }
         }
     }
-
-//    public fun logout(jwt:String){
-//        val usService=RetrofitService()
-//        usService.setLogoutView(this)
-//        usService.logout(jwt)
-//    }
 
 
     override fun onLoginFailure(code: Int, msg: String) {
             Log.d("failure", code.toString())
             if(code.toString()=="2003"){
                 Toast.makeText(this, "Incorrect password", Toast.LENGTH_LONG).show()
+                init()
             }
             else if(code.toString()=="2002")
             {
                 Toast.makeText(this, "Email does not exist", Toast.LENGTH_LONG).show()
+                init()
             }
     }
-
-//    override fun onLogoutSuccess(code: Int, msg: String) {
-//        Log.d("logoutgoodgood", code.toString())
-//    }
-//
-//    override fun onLogoutFailure(code: Int, msg: String) {
-//        Log.d("lotoutsadsad", code.toString())
-//    }
 
 
 }

@@ -17,11 +17,14 @@ class FindPasswordActivity2 : AppCompatActivity() {
         var findcode:String=getCode()!!
         Log.d("findcode", findcode)
 
+        var email: String =intent.getStringExtra("email").toString()
+
         binding.joinSubmit.setOnClickListener {
             var userpasscode:String=binding.typehere.text.toString()
             Log.d("userpasscode", userpasscode)
             if(userpasscode.equals(findcode)){
                 val intent= Intent(this, FindPasswordActivity3::class.java)
+                intent.putExtra("email", email)
                 startActivity(intent)
             }
             else{

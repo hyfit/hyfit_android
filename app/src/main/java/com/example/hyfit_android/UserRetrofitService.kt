@@ -4,9 +4,7 @@ import android.util.Log
 import com.example.hyfit_android.Join.JoinEmailView
 import com.example.hyfit_android.Join.JoinReq
 import com.example.hyfit_android.Join.JoinView
-import com.example.hyfit_android.Login.LoginReq
-import com.example.hyfit_android.Login.LoginView
-import com.example.hyfit_android.Login.LogoutView
+import com.example.hyfit_android.Login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -16,6 +14,7 @@ class UserRetrofitService {
     private lateinit var joinView: JoinView
     private lateinit var logoutView: LogoutView
     private lateinit var joinEmailView: JoinEmailView
+    private lateinit var findPasswordView: FindPasswordView
 
     fun setLoginView(loginView: LoginView){
         this.loginView=loginView
@@ -30,6 +29,10 @@ class UserRetrofitService {
 
     fun setJoinEmailView(joinEmailView: JoinEmailView){
         this.joinEmailView=joinEmailView
+    }
+
+    fun setFindPasswordView(findPasswordView: FindPasswordView){
+        this.findPasswordView=findPasswordView
     }
 
     fun login(loginRequest: LoginReq){
@@ -61,7 +64,7 @@ class UserRetrofitService {
                 val resp: UserResponse = response.body()!!
                 when (val code = resp.code) {
                     1000 -> joinView.onJoinSuccess(code, resp.result)
-                    else -> joinView.onJoinFailure(code, resp.message)
+                    else -> joinView.onJoinFailure(code, resp.message, resp.result)
                 }
             }
 
@@ -110,4 +113,28 @@ class UserRetrofitService {
         }
     }
 
+    fun editpassword(findPasswordReq: FindPasswordReq){
+        val userService= getRetrofit().create(UserRetrofitInterface::class.java)
+        if(findPasswordReq.email!=null && findPasswordReq.password!=null){
+            Log.d("thisisemail",findPasswordReq.email)
+            Log.d("thisispwd",findPasswordReq.password)
+            userService.editpassword(findPasswordReq).enqueue(object : Callback<UserResponse> {
+                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                    val resp: UserResponse = response.body()!!
+                    when (val code = resp.code) {
+                        1000 -> findPasswordView.onFindSuccess(code, resp.result)
+                        else -> findPasswordView.onFindFailure(code, resp.message)
+                    }
+                }
+
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    Log.d("FindFailure", t.message.toString())
+                }
+
+            })
+        }
+
+    }
 }
+

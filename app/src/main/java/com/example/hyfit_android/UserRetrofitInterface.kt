@@ -26,7 +26,7 @@ interface UserRetrofitInterface {
     @POST("/api/email/confirm")
     fun confirm(@Query("email") email:String) :Call<UserResponse>
 
-    @PATCH("/api/user/password")
+    @PATCH("/api/user/forget-password")
     fun editpassword(@Body passwordReq : FindPasswordReq) : Call<UserResponse>
 
 }

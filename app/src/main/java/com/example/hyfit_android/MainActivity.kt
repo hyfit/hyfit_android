@@ -27,10 +27,7 @@ class MainActivity : AppCompatActivity() {
         loginActivity=LoginActivity()
 
 
-        binding.goLogout.setOnClickListener {
-            val intent=Intent(this, LogoutActivity::class.java)
-            startActivity(intent)
-        }
+
 
 
         // BottomNavigationView 초기화
