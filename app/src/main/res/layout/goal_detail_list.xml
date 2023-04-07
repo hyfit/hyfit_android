@@ -65,12 +65,15 @@
 
 
     <ImageView
+        android:clickable="true"
         android:id="@+id/goal_delete_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
+        android:layout_marginEnd="30dp"
         android:includeFontPadding="false"
         android:src="@drawable/ic_trash"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/goal_title_layout" />
 
