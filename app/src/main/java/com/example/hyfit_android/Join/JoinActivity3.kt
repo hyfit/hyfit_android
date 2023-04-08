@@ -55,14 +55,14 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
         }
 
           next.setOnClickListener{
-//            if(rman.isChecked){
-//                gender=rman.text.toString()
-//                Log.d("hereherehereman", rman.text.toString())
-//            }
-//            else{
-//                gender=rwoman.text.toString()
-//                Log.d("herehereherewoman", rwoman.text.toString())
-//            }
+            if(rman.isChecked){
+                gender=rman.text.toString()
+                Log.d("hereherehereman", rman.text.toString())
+            }
+            else{
+                gender=rwoman.text.toString()
+                Log.d("herehereherewoman", rwoman.text.toString())
+            }
 
             confirm(email)
               progressBar.visibility = ProgressBar.VISIBLE
