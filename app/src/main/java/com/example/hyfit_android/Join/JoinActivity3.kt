@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.ActivityJoin3Binding
@@ -19,6 +20,7 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
     lateinit var email:String
     lateinit var password:String
 
+    lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +42,8 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
         val rwoman=binding3.woman
         val next=binding3.joinNext
 
+        progressBar = binding3.progressBar
+
         rdgg.setOnCheckedChangeListener { radioGroup,  i->
             if(i==binding3.rdgroup.id){
                 when(i) {
@@ -59,7 +63,9 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
                 gender=rwoman.text.toString()
                 Log.d("herehereherewoman", rwoman.text.toString())
             }
+
             confirm(email)
+              progressBar.visibility = ProgressBar.VISIBLE
         }
     }
 
@@ -84,10 +90,12 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
         editor.putString("code", result)
         editor.apply()
         editor.commit()
+        progressBar.visibility = ProgressBar.GONE
         startActivity(intent)
     }
 
     override fun onEmailFailure(code:Int, msg:String) {
+        progressBar.visibility = ProgressBar.GONE
         Log.d("EmailFailure", "sadsad")
     }
 

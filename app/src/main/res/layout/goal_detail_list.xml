@@ -56,7 +56,7 @@
             android:includeFontPadding="false"
             android:text="에베레스트"
             android:textColor="@color/black"
-            android:textSize="15sp"
+            android:textSize="12.5sp"
             app:layout_constraintEnd_toStartOf="@+id/goal_delete_button"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

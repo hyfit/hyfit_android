@@ -1,9 +1,11 @@
 package com.example.hyfit_android.Join
 
+import android.app.ProgressDialog
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.Toast
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.ActivityJoinEmailBinding
@@ -11,6 +13,7 @@ import com.example.hyfit_android.databinding.ActivityJoinEmailBinding
 class JoinEmailActivity : AppCompatActivity(), JoinView {
 
     lateinit var binding:ActivityJoinEmailBinding
+    lateinit var progressBar: ProgressBar
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding= ActivityJoinEmailBinding.inflate(layoutInflater)
@@ -20,7 +23,7 @@ class JoinEmailActivity : AppCompatActivity(), JoinView {
 
         Log.d("servercode", servercode)
 
-
+        progressBar = binding.progressBar
 
 
 
@@ -29,6 +32,7 @@ class JoinEmailActivity : AppCompatActivity(), JoinView {
             Log.d("usercode", usercode)
             if(usercode.equals(servercode)){
                 join()
+                progressBar.visibility = ProgressBar.VISIBLE
             }
             else{
                 Toast.makeText(this,"Code mismatch", Toast.LENGTH_LONG).show()
@@ -57,11 +61,13 @@ class JoinEmailActivity : AppCompatActivity(), JoinView {
     }
     override fun onJoinSuccess(code:Int, result:String) {
         Log.d("JoinGoodGood", "goodgoodgood")
+        progressBar.visibility = ProgressBar.GONE
         val intent=Intent(this, JoinActivity4::class.java)
         startActivity(intent)
     }
 
     override fun onJoinFailure(code:Int, message:String, result :String) {
+        progressBar.visibility = ProgressBar.GONE
         Log.d("JoinFailure", message)
         Log.d("JoinFailure : Result", result)
     }
