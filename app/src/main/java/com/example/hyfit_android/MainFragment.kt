@@ -24,12 +24,6 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
-
-        binding.goLogout.setOnClickListener {
-            val intent = Intent(getActivity(), LogoutActivity::class.java)
-            startActivity(intent)
-        }
-
         return binding.root
     }
 
