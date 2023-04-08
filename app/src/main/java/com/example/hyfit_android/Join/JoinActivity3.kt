@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
+import android.widget.Toast
 
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.ActivityJoin3Binding
@@ -19,6 +21,7 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
     lateinit var email:String
     lateinit var password:String
 
+    lateinit var progressBar: ProgressBar
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +43,8 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
         val rwoman=binding3.woman
         val next=binding3.joinNext
 
+        progressBar = binding3.progressBar
+
         rdgg.setOnCheckedChangeListener { radioGroup,  i->
             if(i==binding3.rdgroup.id){
                 when(i) {
@@ -49,21 +54,27 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
             }
         }
 
-
           next.setOnClickListener{
-            if(rman.isChecked){
-                gender=rman.text.toString()
-                Log.d("hereherehereman", rman.text.toString())
-            }
-            else{
-                gender=rwoman.text.toString()
-                Log.d("herehereherewoman", rwoman.text.toString())
-            }
+//            if(rman.isChecked){
+//                gender=rman.text.toString()
+//                Log.d("hereherehereman", rman.text.toString())
+//            }
+//            else{
+//                gender=rwoman.text.toString()
+//                Log.d("herehereherewoman", rwoman.text.toString())
+//            }
+
             confirm(email)
+              progressBar.visibility = ProgressBar.VISIBLE
         }
     }
 
     private fun confirm(email:String?){
+        if (binding3.textName.text.toString().isEmpty() || gender==null){
+            Toast.makeText(this,"Fill in all the blanks", Toast.LENGTH_LONG).show()
+            Log.d("test", "fill in all the blanks")
+            return
+        }
         //var email:String = intent.getStringExtra("email").toString()
         val usService = UserRetrofitService()
         usService.setJoinEmailView(this)
@@ -84,10 +95,12 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
         editor.putString("code", result)
         editor.apply()
         editor.commit()
+        progressBar.visibility = ProgressBar.GONE
         startActivity(intent)
     }
 
     override fun onEmailFailure(code:Int, msg:String) {
+        progressBar.visibility = ProgressBar.GONE
         Log.d("EmailFailure", "sadsad")
     }
 
