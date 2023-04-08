@@ -26,21 +26,30 @@
         android:theme="@style/Theme.Hyfit_android"
         tools:targetApi="31">
         <activity
-            android:name=".FindPasswordReq"
+            android:name=".SplashActivity" android:theme="@style/SplashTheme"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+        <activity
+            android:name=".Login.FindPasswordReq"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FindPasswordActivity3"
+            android:name=".Login.FindPasswordActivity3"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
         <activity
-            android:name=".FindPasswordActivity2"
+            android:name=".Login.FindPasswordActivity2"
             android:exported="false">
             <meta-data
                 android:name="android.app.lib_name"
@@ -88,11 +97,11 @@
         <activity
             android:name=".Login.LoginActivity"
             android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+<!--            <intent-filter>-->
+<!--                <action android:name="android.intent.action.MAIN" />-->
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+<!--                <category android:name="android.intent.category.LAUNCHER" />-->
+<!--            </intent-filter>-->
         </activity>
         <activity
             android:name=".MapsActivity"

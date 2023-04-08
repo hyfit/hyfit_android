@@ -18,29 +18,33 @@
 
 
     <TextView
-            android:id="@+id/welcome"
-            android:layout_below="@+id/process4"
-            android:layout_width="wrap_content" android:layout_height="wrap_content"
-            android:fontFamily="sans-serif-medium"
-            android:textStyle="normal"
-            android:textSize="24sp"
-            android:textColor="#24629b"
-            android:letterSpacing="0"
-            android:text="Welcome !"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" android:layout_marginTop="152dp"
-            app:layout_constraintBottom_toBottomOf="parent" app:layout_constraintVertical_bias="0.078"
-            app:layout_constraintTop_toTopOf="parent"/>
+        android:id="@+id/welcome"
+        android:layout_width="113dp"
+        android:layout_height="34dp"
+        android:layout_below="@+id/process4"
+        android:layout_marginTop="152dp"
+        android:fontFamily="sans-serif-medium"
+        android:letterSpacing="0"
+        android:text="Welcome !"
+        android:textColor="#24629b"
+        android:textSize="24sp"
+        android:textStyle="normal"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/join_success"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_marginTop="269dp"
-            app:layout_constraintVertical_bias="0.2" app:layout_constraintBottom_toBottomOf="parent"/>
+        android:layout_width="318dp"
+        android:layout_height="320dp"
+        android:layout_marginTop="269dp"
+        android:src="@drawable/join_success_png"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
 
     <ImageView
         android:id="@+id/joinStart"
