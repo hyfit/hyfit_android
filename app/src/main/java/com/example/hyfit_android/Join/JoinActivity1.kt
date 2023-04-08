@@ -2,6 +2,8 @@ package com.example.hyfit_android.Join
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.databinding.ActivityJoin1Binding
@@ -23,16 +25,21 @@ class JoinActivity1 : AppCompatActivity() {
             startActivity(intent)
         }
 
-        if(binding1.textPassword.text.toString().equals(binding1.PasswordAgain.text.toString())){
-            binding1.correction.setText("Correct Password")
-        }
+//        if(binding1.textPassword.text.toString().equals(binding1.PasswordAgain.text.toString())){
+//            binding1.correction.setText("Correct Password")
+//        }
 
         binding1.joinNext.setOnClickListener{
-            val intent = Intent(this, JoinActivity2::class.java)
-            intent.putExtra("email", binding1.textEmail.text.toString())
-            intent.putExtra("password", binding1.textPassword.text.toString())
-
-            startActivity(intent)
+            if (binding1.textEmail.text.toString().isEmpty() || binding1.textPassword.text.toString().isEmpty() || binding1.PasswordAgain.text.toString().isEmpty()){
+                Toast.makeText(this,"Fill in all the blanks", Toast.LENGTH_LONG).show()
+                Log.d("test", "fill in all the blanks")
+            }
+            else {
+                val intent = Intent(this, JoinActivity2::class.java)
+                intent.putExtra("email", binding1.textEmail.text.toString())
+                intent.putExtra("password", binding1.textPassword.text.toString())
+                startActivity(intent)
+            }
         }
 
     }

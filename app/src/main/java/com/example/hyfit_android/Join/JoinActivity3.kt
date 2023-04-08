@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.ProgressBar
+import android.widget.Toast
 
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.ActivityJoin3Binding
@@ -53,16 +54,15 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
             }
         }
 
-
           next.setOnClickListener{
-            if(rman.isChecked){
-                gender=rman.text.toString()
-                Log.d("hereherehereman", rman.text.toString())
-            }
-            else{
-                gender=rwoman.text.toString()
-                Log.d("herehereherewoman", rwoman.text.toString())
-            }
+//            if(rman.isChecked){
+//                gender=rman.text.toString()
+//                Log.d("hereherehereman", rman.text.toString())
+//            }
+//            else{
+//                gender=rwoman.text.toString()
+//                Log.d("herehereherewoman", rwoman.text.toString())
+//            }
 
             confirm(email)
               progressBar.visibility = ProgressBar.VISIBLE
@@ -70,6 +70,11 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
     }
 
     private fun confirm(email:String?){
+        if (binding3.textName.text.toString().isEmpty() || gender==null){
+            Toast.makeText(this,"Fill in all the blanks", Toast.LENGTH_LONG).show()
+            Log.d("test", "fill in all the blanks")
+            return
+        }
         //var email:String = intent.getStringExtra("email").toString()
         val usService = UserRetrofitService()
         usService.setJoinEmailView(this)
