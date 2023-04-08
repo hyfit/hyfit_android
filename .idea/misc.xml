@@ -54,6 +54,7 @@
         <entry key="app/src/main/res/drawable/selector_setting.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/spin.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/tag_btn_back.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/tag_btn_back_blue.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/values.xml" value="0.11" />
         <entry key="app/src/main/res/layout/activity_community_main.xml" value="0.29732513427734375" />
         <entry key="app/src/main/res/layout/activity_join3.xml" value="0.253125" />
@@ -76,6 +77,7 @@
         <entry key="app/src/main/res/layout/fragment_main.xml" value="0.20246913580246914" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.35341949462890626" />
+        <entry key="app/src/main/res/layout/fragment_post.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/fragment_set.xml" value="0.1539855072463768" />
         <entry key="app/src/main/res/layout/goal_detail_list.xml" value="0.335" />
         <entry key="app/src/main/res/layout/goal_list.xml" value="0.1" />
