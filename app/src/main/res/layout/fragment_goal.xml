@@ -75,9 +75,11 @@
     </LinearLayout>
 
         <ImageView
+
                 android:id="@+id/goal_plus"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
+            android:layout_marginTop="10dp"
                 android:clickable="true"
                 android:src="@drawable/ic_plus"/>
 
