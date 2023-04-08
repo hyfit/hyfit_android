@@ -1,29 +1,34 @@
 package com.example.hyfit_android.community
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.databinding.FragmentCommunityBinding
 import com.example.hyfit_android.MainActivity
 import com.example.hyfit_android.R
 
-class CommunityFragment: Fragment() {
+class CommunityFragment: Fragment(), View.OnClickListener {
     lateinit var binding: FragmentCommunityBinding
     private lateinit var communityRVAdapter: CommunityRVAdapter
-//    lateinit var mainActivity: MainActivity
+    lateinit var mainActivity: MainActivity
     lateinit var tagMap: HashMap<Button, Boolean>
 
-//    // context 가져옴
-//    override fun onAttach(context: Context) {
-//        super.onAttach(context)
-//        mainActivity = context as MainActivity
-//    }
+    // context 가져옴
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        mainActivity = context as MainActivity
+    }
 
     // 뷰를 만들 때 실행
     override fun onCreateView(
@@ -32,6 +37,11 @@ class CommunityFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentCommunityBinding.inflate(inflater, container, false)
+
+        // 포스트 이미지뷰 테두리 둥글게
+        binding.postIv.clipToOutline = true
+
+
 
         // 첫 화면-> 팔로잉 유저 게시물 목록 보여줌(getFollowingPosts)
         getFollowingPosts()
@@ -44,8 +54,13 @@ class CommunityFragment: Fragment() {
         tagMap[binding.runningBtn] = false
         tagMap[binding.stairClimbingBtn] = false
 
+        // 태그 버튼 리스너 연결
+        val keys = tagMap.keys
+        keys.forEach{btn -> btn.setOnClickListener(this)}
+
         return binding.root
     }
+
 
     // 뷰가 만들어지면 실행
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -124,6 +139,54 @@ class CommunityFragment: Fragment() {
 
         val jwt = getJwt()
         val postService = PostService()
+
+    }
+
+    override fun onClick(v: View) {
+        when (v.id) {
+            R.id.hiking_btn -> {
+                onTagClicked(binding.hikingBtn)
+            }
+            R.id.running_btn -> {
+                onTagClicked(binding.runningBtn)
+            }
+            R.id.walking_btn -> {
+                onTagClicked(binding.walkingBtn)
+            }
+            R.id.riding_btn -> {
+                onTagClicked(binding.ridingBtn)
+            }
+            R.id.stair_climbing_btn -> {
+                onTagClicked(binding.stairClimbingBtn)
+            }
+        }
+    }
+
+
+    @SuppressLint("ResourceAsColor", "NewApi")
+    private fun onTagClicked(btn: Button) {
+        val itr = tagMap.keys.iterator()
+        //tag 버튼 선택 취소
+        if(tagMap[btn] == true) {
+            tagMap[btn] = false
+            btn.setBackgroundResource(R.drawable.tag_btn_back)
+            btn.setTextColor(resources.getColor(R.color.string_gray, resources.newTheme()))
+        }
+        // tag 버튼 선택(다른 tag 선택 취소)
+        else if(tagMap[btn] == false){
+            tagMap[btn] = true
+            btn.setBackgroundResource(R.drawable.tag_btn_back_blue)
+            btn.setTextColor(resources.getColor(R.color.string_white, resources.newTheme()))
+            while (itr.hasNext()) {
+                val key = itr.next()
+                if (key != btn) {
+                    tagMap[key] = false
+                    key.setBackgroundResource(R.drawable.tag_btn_back)
+                    key.setTextColor(resources.getColor(R.color.string_gray, resources.newTheme()))
+                }
+            }
+
+        }
 
     }
 

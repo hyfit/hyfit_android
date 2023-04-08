@@ -20,6 +20,8 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView {
     ): View? {
         binding = FragmentPostBinding.inflate(inflater, container, false)
 
+        binding.postIv.clipToOutline = true
+
         // 선택된 게시물 띄움
         getOnePost()
 
