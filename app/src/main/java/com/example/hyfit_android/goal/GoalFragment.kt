@@ -1,5 +1,7 @@
 package com.example.hyfit_android.goal
 
+import android.annotation.SuppressLint
+import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -7,9 +9,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentGoalBinding
 import com.google.gson.Gson
 
@@ -90,10 +94,15 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         goalService.setGetDoneGoalView(this)
         goalService.getGoalDone(jwt!!)
     }
+    @SuppressLint("ResourceAsColor")
     override fun onGetGoalSuccess(result: ArrayList<Goal>) {
 //        initProgressRecyclerView(result)
         goalList = result
         initRecyclerView(result)
+        binding.goalInProgress.setBackgroundResource(R.drawable.tag_btn_back_blue)
+                binding.goalInProgress.setTextColor(Color.parseColor("#f3f3f3"))
+        binding.goalDone.setBackgroundResource(R.drawable.ic_rectangle_65)
+        binding.goalDone.setTextColor(Color.parseColor("#FF000000"))
     }
 
     override fun onGetGoalFailure(code: Int, msg: String) {
@@ -103,10 +112,15 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         }
     }
 
+    @SuppressLint("ResourceAsColor")
     override fun onGetDoneGoalSuccess(result: ArrayList<Goal>) {
 //        initDoneRecyclerView(result)
         goalList = result
         initRecyclerView(result)
+        binding.goalDone.setBackgroundResource(R.drawable.tag_btn_back_blue)
+        binding.goalDone.setTextColor(Color.parseColor("#f3f3f3"))
+        binding.goalInProgress.setBackgroundResource(R.drawable.ic_rectangle_65)
+       binding.goalInProgress.setTextColor(Color.parseColor("#FF000000"))
     }
 
     override fun onGetDoneGoalFailure(code: Int, msg: String) {
@@ -142,6 +156,7 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
             }
         }
         getGoalProgress()
+
     }
 
     override fun onSaveGoalFailure(code: Int, msg: String) {
