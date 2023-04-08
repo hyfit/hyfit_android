@@ -3,6 +3,7 @@ package com.example.hyfit_android
 import com.example.hyfit_android.Join.JoinReq
 import com.example.hyfit_android.Login.FindPasswordReq
 import com.example.hyfit_android.Login.LoginReq
+import com.example.hyfit_android.Login.UpdatepassReq
 //import com.example.hyfit_android.Login.LoginReq
 import retrofit2.Call
 import retrofit2.http.Body
@@ -28,5 +29,13 @@ interface UserRetrofitInterface {
 
     @PATCH("/api/user/forget-password")
     fun editpassword(@Body passwordReq : FindPasswordReq) : Call<UserResponse>
+
+    @PATCH("/api/user/password")
+    fun passwordupdate(@Header("X-AUTH-TOKEN")jwt:String,
+                       @Body updatepassReq: UpdatepassReq) : Call<UserResponse>
+
+//    @GET("")
+//    fun passwordcheck(@Header("X-AUTH-TOKEN")jwt:String,
+//                       @Body updatepassReq: UpdatepassReq) : Call<UserResponse>
 
 }
