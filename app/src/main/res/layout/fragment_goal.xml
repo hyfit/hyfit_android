@@ -58,7 +58,6 @@
             android:fontFamily="@font/roboto_light"
             android:text="in progress"
             android:textSize="12sp"
-
             android:layout_marginRight="10dp"
             android:background="@drawable/ic_rectangle_64"/>
         <Button
