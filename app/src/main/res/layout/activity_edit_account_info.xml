@@ -267,52 +267,52 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.4" />
 
-    <RadioGroup
-        android:id="@+id/rdgroup"
-        android:layout_width="209dp"
-        android:layout_height="54dp"
-        android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.831"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.714">
+<!--    <RadioGroup-->
+<!--        android:id="@+id/rdgroup"-->
+<!--        android:layout_width="209dp"-->
+<!--        android:layout_height="54dp"-->
+<!--        android:orientation="horizontal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.831"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.714">-->
 
 
-        <RadioButton
-            android:id="@+id/man"
-            android:layout_width="87dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="48dp"
-            android:text="man" />
+<!--        <RadioButton-->
+<!--            android:id="@+id/man"-->
+<!--            android:layout_width="87dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center"-->
+<!--            android:minHeight="48dp"-->
+<!--            android:text="man" />-->
 
-        <RadioButton
-            android:id="@+id/woman"
-            android:layout_width="87dp"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:minHeight="48dp"
-            android:text="woman" />
-    </RadioGroup>
+<!--        <RadioButton-->
+<!--            android:id="@+id/woman"-->
+<!--            android:layout_width="87dp"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:gravity="center"-->
+<!--            android:minHeight="48dp"-->
+<!--            android:text="woman" />-->
+<!--    </RadioGroup>-->
 
-    <TextView
-        android:id="@+id/gender"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:fontFamily="sans-serif-medium"
-        android:letterSpacing="0"
-        android:text="Gender"
-        android:textColor="#000000"
-        android:textSize="14sp"
-        android:textStyle="normal"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.167"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.697" />
+<!--    <TextView-->
+<!--        android:id="@+id/gender"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:fontFamily="sans-serif-medium"-->
+<!--        android:letterSpacing="0"-->
+<!--        android:text="Gender"-->
+<!--        android:textColor="#000000"-->
+<!--        android:textSize="14sp"-->
+<!--        android:textStyle="normal"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.167"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.697" />-->
 
     <TextView
         android:id="@+id/showname"
@@ -350,6 +350,48 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.053" />
+
+        <ProgressBar
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
+            android:id="@+id/progressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:visibility="invisible"
+            />
+
+        <ImageView
+            android:id="@+id/saveNext"
+            android:layout_width="310dp"
+            android:layout_height="51dp"
+            android:src="@drawable/rectangle_11"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.778" />
+
+        <TextView
+            android:id="@+id/saveTextNext"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:gravity="end"
+            android:letterSpacing="0"
+            android:text="Save"
+            android:textColor="#24629b"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.497"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.769" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 

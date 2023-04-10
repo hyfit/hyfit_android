@@ -2,13 +2,18 @@ package com.example.hyfit_android
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ProgressBar
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.UserInfo.EditAccountInfoActivity
 import com.example.hyfit_android.UserInfo.EditPasswordActivity1
+import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.databinding.ActivityEditAccountInfoBinding
 import com.example.hyfit_android.databinding.FragmentSetBinding
 
@@ -17,9 +22,10 @@ import com.example.hyfit_android.databinding.FragmentSetBinding
  * Use the [SetFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SetFragment : Fragment() {
+class SetFragment : Fragment(), GetUserView {
     lateinit var binding: FragmentSetBinding
     lateinit var bindingedit:ActivityEditAccountInfoBinding
+    lateinit var progressBar: ProgressBar
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -28,6 +34,9 @@ class SetFragment : Fragment() {
     ): View? {
         binding = FragmentSetBinding.inflate(inflater, container, false)
         bindingedit= ActivityEditAccountInfoBinding.inflate(layoutInflater)
+
+        progressBar = binding.progressBar
+
         binding.goLogout.setOnClickListener {
             val intent = Intent(getActivity(), LogoutActivity::class.java)
             startActivity(intent)
@@ -35,8 +44,8 @@ class SetFragment : Fragment() {
 
         binding.edituserinfo.setOnClickListener {
             val intent = Intent(getActivity(), EditAccountInfoActivity::class.java)
-            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-            //bindingedit.showemail.text="daun045@naver.com"
+            userget()
+            progressBar.visibility = ProgressBar.VISIBLE
             startActivity(intent)
         }
 
@@ -44,11 +53,47 @@ class SetFragment : Fragment() {
             val intent=Intent(getActivity(), EditPasswordActivity1::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
+
         }
 
 
 
         return binding.root
+    }
+
+    private fun userget() {
+        val jwt: String? = getJwt()
+        Log.d("jwtjwt", jwt.toString())
+        val usService = UserRetrofitService()
+        usService.setgetuserView(this)
+        usService.userget(jwt)
+    }
+
+    private fun getJwt():String?{
+        val spf = requireActivity().getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString("jwt","0")
+    }
+
+    override fun onUserSuccess(code: Int, result: User) {
+        when(code){
+            1000->{
+                val intent=Intent(getActivity(), EditAccountInfoActivity::class.java)
+                intent.putExtra("name", result.name)
+                intent.putExtra("email", result.email)
+                intent.putExtra("birth", result.birth.toString())
+                intent.putExtra("nickName",result.nickName)
+                intent.putExtra("gender", result.gender)
+                intent.putExtra("introduce", result.introduce)
+                intent.putExtra("phone", result.phone)
+                progressBar.visibility = ProgressBar.GONE
+                startActivity(intent)
+                Log.d("GetUserSuccess", code.toString())
+            }
+        }
+    }
+
+    override fun onUserFailure(code: Int, msg: String) {
+        Log.d("GetUserFail", msg)
     }
 
 }

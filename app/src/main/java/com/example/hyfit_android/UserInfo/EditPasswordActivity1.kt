@@ -21,6 +21,7 @@ class EditPasswordActivity1 : AppCompatActivity(), PasswordCheckView, PasswordUp
         setContentView(binding.root)
         progressBar=binding.progressBar
 
+
         binding.prev.setOnClickListener {
             Log.d("good", "Good")
         }

@@ -5,14 +5,10 @@ import com.example.hyfit_android.Join.JoinEmailView
 import com.example.hyfit_android.Join.JoinReq
 import com.example.hyfit_android.Join.JoinView
 import com.example.hyfit_android.Login.*
-import com.example.hyfit_android.UserInfo.PasswordCheckView
-import com.example.hyfit_android.UserInfo.PasswordUpdateView
-import com.example.hyfit_android.UserInfo.UpdatepassReq
+import com.example.hyfit_android.UserInfo.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import retrofit2.http.Header
-import retrofit2.http.Query
 
 class UserRetrofitService {
     private lateinit var loginView: LoginView
@@ -22,6 +18,7 @@ class UserRetrofitService {
     private lateinit var findPasswordView: FindPasswordView
     private lateinit var passwordCheckView: PasswordCheckView
     private lateinit var passwordUpdateView: PasswordUpdateView
+    private lateinit var getUserView: GetUserView
     fun setLoginView(loginView: LoginView){
         this.loginView=loginView
     }
@@ -47,6 +44,10 @@ class UserRetrofitService {
 
     fun setpasswordUpdateView(passwordUpdateView: PasswordUpdateView){
         this.passwordUpdateView=passwordUpdateView
+    }
+
+    fun setgetuserView(getUserView: GetUserView){
+        this.getUserView=getUserView
     }
 
     fun login(loginRequest: LoginReq){
@@ -191,5 +192,49 @@ class UserRetrofitService {
             })
         }
     }
+
+    fun userget(jwt:String?){
+        val userService = getRetrofit().create(UserRetrofitInterface::class.java)
+        if (jwt != null) {
+            userService.userget(jwt).enqueue(object : Callback<GetResponse> {
+                override fun onResponse(call: Call<GetResponse>, response: Response<GetResponse>) {
+                    Log.d("userget", "goodgood")
+                    val resp: GetResponse = response.body()!!
+                    when (val code = resp.code) {
+                        1000 -> getUserView.onUserSuccess(code, resp.result)
+                        else -> getUserView.onUserFailure(code, resp.message)
+                    }
+                }
+
+                override fun onFailure(call: Call<GetResponse>, t: Throwable) {
+                    Log.d("GetuserFailure", t.message.toString())
+                }
+
+            })
+        }
+    }
+
+    fun userupdate(jwt:String?, updateuserReq: UpdateUserReq){
+        val userService = getRetrofit().create(UserRetrofitInterface::class.java)
+        if (jwt != null) {
+            userService.userupdate(jwt, updateuserReq).enqueue(object : Callback<GetResponse> {
+                override fun onResponse(call: Call<GetResponse>, response: Response<GetResponse>) {
+                    Log.d("userupdate", "goodgood")
+                    val resp: GetResponse = response.body()!!
+                    when (val code = resp.code) {
+                        1000 -> getUserView.onUserSuccess(code, resp.result)
+                        else -> getUserView.onUserFailure(code, resp.message)
+                    }
+                }
+
+                override fun onFailure(call: Call<GetResponse>, t: Throwable) {
+                    Log.d("UpdateuserFailure", t.message.toString())
+                }
+
+            })
+        }
+    }
+
+
 }
 
