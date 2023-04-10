@@ -5,9 +5,14 @@ import com.example.hyfit_android.Join.JoinEmailView
 import com.example.hyfit_android.Join.JoinReq
 import com.example.hyfit_android.Join.JoinView
 import com.example.hyfit_android.Login.*
+import com.example.hyfit_android.UserInfo.PasswordCheckView
+import com.example.hyfit_android.UserInfo.PasswordUpdateView
+import com.example.hyfit_android.UserInfo.UpdatepassReq
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Header
+import retrofit2.http.Query
 
 class UserRetrofitService {
     private lateinit var loginView: LoginView
@@ -15,7 +20,8 @@ class UserRetrofitService {
     private lateinit var logoutView: LogoutView
     private lateinit var joinEmailView: JoinEmailView
     private lateinit var findPasswordView: FindPasswordView
-
+    private lateinit var passwordCheckView: PasswordCheckView
+    private lateinit var passwordUpdateView: PasswordUpdateView
     fun setLoginView(loginView: LoginView){
         this.loginView=loginView
     }
@@ -33,6 +39,14 @@ class UserRetrofitService {
 
     fun setFindPasswordView(findPasswordView: FindPasswordView){
         this.findPasswordView=findPasswordView
+    }
+
+    fun setpasswordCheckView(passwordCheckView: PasswordCheckView){
+        this.passwordCheckView=passwordCheckView
+    }
+
+    fun setpasswordUpdateView(passwordUpdateView: PasswordUpdateView){
+        this.passwordUpdateView=passwordUpdateView
     }
 
     fun login(loginRequest: LoginReq){
@@ -113,6 +127,7 @@ class UserRetrofitService {
         }
     }
 
+    //비번 분실 시 찾는 거
     fun editpassword(findPasswordReq: FindPasswordReq){
         val userService= getRetrofit().create(UserRetrofitInterface::class.java)
         if(findPasswordReq.email!=null && findPasswordReq.password!=null){
@@ -135,6 +150,46 @@ class UserRetrofitService {
             })
         }
 
+    }
+
+    fun passwordcheck(jwt:String?, password:String){
+        val userService = getRetrofit().create(UserRetrofitInterface::class.java)
+        if (jwt != null) {
+            userService.passwordcheck(jwt, password).enqueue(object : Callback<UserResponse> {
+                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                    Log.d("passwordcheck", "goodgood")
+                    val resp: UserResponse = response.body()!!
+                    when (val code = resp.code) {
+                        1000 -> passwordCheckView.onCheckSuccess(code, resp.result)
+                        else -> passwordCheckView.onCheckFailure(code, resp.message)
+                    }
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    Log.d("CheckFailure", t.message.toString())
+                }
+            })
+        }
+    }
+
+    fun passwordupdate(jwt:String?, updatepassReq: UpdatepassReq){
+        val userService = getRetrofit().create(UserRetrofitInterface::class.java)
+        if (jwt != null) {
+            userService.passwordupdate(jwt, updatepassReq).enqueue(object : Callback<UserResponse> {
+                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                    Log.d("passwordupdate", "goodgood")
+                    val resp: UserResponse = response.body()!!
+                    when (val code = resp.code) {
+                        1000 -> passwordUpdateView.onUpdateSuccess(code, resp.result)
+                        else -> passwordUpdateView.onUpdateFailure(code, resp.message)
+                    }
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    Log.d("CheckFailure", t.message.toString())
+                }
+            })
+        }
     }
 }
 

@@ -65,6 +65,8 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
             }
 
             confirm(email)
+
+              Log.d("herehere", "idont'knwo")
               progressBar.visibility = ProgressBar.VISIBLE
         }
     }
@@ -75,7 +77,9 @@ class JoinActivity3 : AppCompatActivity(), JoinEmailView {
             Log.d("test", "fill in all the blanks")
             return
         }
-        //var email:String = intent.getStringExtra("email").toString()
+        Log.d("gender", gender)
+        var email:String = intent.getStringExtra("email").toString()
+        Log.d("email", email)
         val usService = UserRetrofitService()
         usService.setJoinEmailView(this)
         usService.confirm(email)

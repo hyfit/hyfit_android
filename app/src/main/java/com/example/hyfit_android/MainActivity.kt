@@ -28,11 +28,11 @@ class MainActivity : AppCompatActivity() {
         loginActivity=LoginActivity()
 
 
-
-
+        var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
 
         // BottomNavigationView 초기화
         binding.navigationView.selectedItemId = R.id.MainFragment
+
         binding.navigationView.setOnNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.GoalFragment -> {
@@ -59,7 +59,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // 초기 fragment 설정
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+        if(showSetFragment){
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SetFragment()).commit()
+        }
+        else {
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+        }
 
         // permission code
         if ((ActivityCompat.checkSelfPermission(
