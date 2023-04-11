@@ -47,4 +47,7 @@ interface UserRetrofitInterface {
     fun userupdate(@Header("X-AUTH-TOKEN")jwt:String,
                    @Body updateUserReq: UpdateUserReq) :Call<GetResponse>
 
+    @GET("/api/user/valid")
+    fun valid(@Header("X-AUTH-TOKEN")jwt:String) :Call<UserResponse>
+
 }

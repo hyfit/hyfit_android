@@ -19,6 +19,7 @@ class UserRetrofitService {
     private lateinit var passwordCheckView: PasswordCheckView
     private lateinit var passwordUpdateView: PasswordUpdateView
     private lateinit var getUserView: GetUserView
+    private lateinit var validView:ValidView
     fun setLoginView(loginView: LoginView){
         this.loginView=loginView
     }
@@ -48,6 +49,10 @@ class UserRetrofitService {
 
     fun setgetuserView(getUserView: GetUserView){
         this.getUserView=getUserView
+    }
+
+    fun setvalidView(validView: ValidView){
+        this.validView=validView
     }
 
     fun login(loginRequest: LoginReq){
@@ -198,11 +203,27 @@ class UserRetrofitService {
         if (jwt != null) {
             userService.userget(jwt).enqueue(object : Callback<GetResponse> {
                 override fun onResponse(call: Call<GetResponse>, response: Response<GetResponse>) {
-                    Log.d("userget", "goodgood")
-                    val resp: GetResponse = response.body()!!
-                    when (val code = resp.code) {
-                        1000 -> getUserView.onUserSuccess(code, resp.result)
-                        else -> getUserView.onUserFailure(code, resp.message)
+//                    Log.d("userget", "goodgood")
+//                    val resp: GetResponse = response.body()!!
+//                    when (val code = resp.code) {
+//                        1000 -> getUserView.onUserSuccess(code, resp.result)
+//                        else -> getUserView.onUserFailure(code, resp.message)
+//                    }
+                    if (response.isSuccessful) {
+                        Log.d("userget", "goodgood")
+                        val resp: GetResponse? = response.body()
+                        if (resp != null) {
+                            when (val code = resp.code) {
+                                1000 -> getUserView.onUserSuccess(code, resp.result)
+                                else -> getUserView.onUserFailure(code, resp.message)
+                            }
+                        } else {
+                            // 서버로부터 받은 응답이 null인 경우 처리
+                            Log.d("GetuserFailure", "Response body is null.")
+                        }
+                    } else {
+                        // 서버로부터 받은 응답이 실패인 경우 처리
+                        Log.d("GetuserFailure", "Response failed with code ${response.code()}.")
                     }
                 }
 
@@ -234,6 +255,30 @@ class UserRetrofitService {
             })
         }
     }
+
+    fun valid(jwt:String?){
+        val userService = getRetrofit().create(UserRetrofitInterface::class.java)
+        if (jwt != null) {
+            userService.valid(jwt).enqueue(object : Callback<UserResponse> {
+                override fun onResponse(call: Call<UserResponse>, response: Response<UserResponse>) {
+                    //Log.d("valid check", "goodgood")
+                    val resp: UserResponse = response.body()!!
+                    when (val code = resp.code) {
+                        1000 -> validView.onValidSuccess(code, resp.result)
+                        else -> validView.onValidFailure(code, resp.message)
+                    }
+                    //Log.d("valid result", resp.result)
+                }
+
+                override fun onFailure(call: Call<UserResponse>, t: Throwable) {
+                    Log.d("ValidFailure", t.message.toString())
+                }
+
+            })
+        }
+    }
+
+
 
 
 }
