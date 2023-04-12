@@ -30,6 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
 
+
         // BottomNavigationView 초기화
         binding.navigationView.selectedItemId = R.id.MainFragment
 

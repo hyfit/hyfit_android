@@ -17,13 +17,15 @@ import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.UserInfo.ValidView
 import com.example.hyfit_android.databinding.ActivityEditAccountInfoBinding
 import com.example.hyfit_android.databinding.FragmentSetBinding
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 /**
  * A simple [Fragment] subclass.
  * Use the [SetFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class SetFragment : Fragment(), GetUserView, ValidView {
+class SetFragment : Fragment(), GetUserView {
     lateinit var binding: FragmentSetBinding
     lateinit var bindingedit:ActivityEditAccountInfoBinding
     lateinit var progressBar: ProgressBar
@@ -62,17 +64,15 @@ class SetFragment : Fragment(), GetUserView, ValidView {
         return binding.root
     }
 
-    private fun valid(){
-        val spf = requireActivity().getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
-        val jwt:String?=spf!!.getString("jwt","0")
-        val usService=UserRetrofitService()
-        usService.setvalidView(this)
-        usService.valid(jwt)
-    }
+//    private fun valid(){
+//        val spf = requireActivity().getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
+//        val jwt:String?=spf!!.getString("jwt","0")
+//        val usService=UserRetrofitService()
+//        usService.setvalidView(this)
+//        usService.valid(jwt)
+//    }
 
     private fun userget() {
-        valid()
-        Thread.sleep(1000)
         val jwt: String? = getJwt()
         Log.d("jwtjwt", jwt.toString())
 
@@ -116,29 +116,35 @@ class SetFragment : Fragment(), GetUserView, ValidView {
         Log.d("GetUserFail", msg)
     }
 
-    override fun onValidSuccess(code: Int, result: String) {
-        when(code){
-            1000->{
-                if(result=="valid"){
-                    Log.d("hivalid", result)
-                }
-                else if(result=="invalid"){
-                    Log.d("ininvalid", result)
-
-                }
-                else{
-                    Log.d("oldone", getJwt().toString())
-                    saveJwt(result)
-                    Log.d("newone", getJwt().toString())
-                }
-                Log.d("ValidSuccess", code.toString())
-            }
-            else->Log.d("validsad", "sadsad")
-        }
-    }
-
-    override fun onValidFailure(code: Int, msg: String) {
-
-    }
+//    override fun onValidSuccess(code: Int, result: String) {
+//        when(code){
+//            1000->{
+//                if(result=="valid"){
+//                    Log.d("hivalid", result)
+//                }
+//                else if(result=="invalid"){
+//                    Log.d("ininvalid", result)
+//
+//
+//                }
+//                else{
+//                    Log.d("oldone", getJwt().toString())
+//                    saveJwt(result)
+//                    Log.d("newone", getJwt().toString())
+//
+//
+//                }
+////                val usService = UserRetrofitService()
+////                usService.setgetuserView(this)
+////                usService.userget(getJwt())
+////                Log.d("ValidSuccess", code.toString())
+//            }
+//            else->Log.d("validsad", "sadsad")
+//        }
+//    }
+//
+//    override fun onValidFailure(code: Int, msg: String) {
+//
+//    }
 
 }
