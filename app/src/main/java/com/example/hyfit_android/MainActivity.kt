@@ -28,9 +28,6 @@ class MainActivity : AppCompatActivity() {
         loginActivity=LoginActivity()
 
 
-
-
-
         // BottomNavigationView 초기화
         binding.navigationView.selectedItemId = R.id.MainFragment
         binding.navigationView.setOnNavigationItemSelectedListener { menuItem ->
@@ -78,6 +75,18 @@ class MainActivity : AppCompatActivity() {
             )
             return
         }
+    }
+    // 권한 요청
+    private fun requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACTIVITY_RECOGNITION), PERMISSIONS_REQUEST_LOCATION)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        requestPermissions() // 액티비티가 시작되면 권한 요청 실행
     }
 
 

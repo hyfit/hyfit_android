@@ -159,7 +159,7 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
 
     }
 
-    override fun onSaveGoalFailure(code: Int, msg: String) {
+    override fun onSaveGoalFailure(code: Int, msg: String) {2
         TODO("Not yet implemented")
     }
 
