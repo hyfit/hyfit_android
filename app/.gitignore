@@ -15,6 +15,8 @@ AndroidManifest.xml
 # Local configuration file (sdk path, etc)
 local.properties
 android/app/src/main/AndroidManifest.xml
+android/app/src/main/res/values/google_maps_api.xml
+google_maps_api.xml
 
 # Log/OS Files
 *.log
