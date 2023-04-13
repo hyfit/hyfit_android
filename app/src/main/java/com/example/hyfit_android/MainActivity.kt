@@ -2,20 +2,17 @@ package com.example.hyfit_android
 
 
 import android.Manifest
-import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowManager
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LoginActivity
-import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
+import com.example.hyfit_android.home.MainFragment
+
+// import com.example.hyfit_android.home.MapsFragment
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
