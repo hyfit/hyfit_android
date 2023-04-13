@@ -3,31 +3,35 @@ package com.example.hyfit_android.exercise
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.location.*
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.hyfit_android.BuildConfig
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.ActivityExerciseBinding
 import com.example.hyfit_android.location.*
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.google.android.gms.maps.*
-import com.google.android.gms.maps.model.Circle
-import com.google.android.gms.maps.model.CircleOptions
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.*
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.PhoneMetaData.mContext
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
 import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import kotlinx.coroutines.launch
 import java.lang.Math.cos
 import java.lang.Math.sqrt
 import java.time.LocalDateTime
@@ -36,7 +40,7 @@ import kotlin.math.pow
 import kotlin.properties.Delegates
 
 
-class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, ExerciseStartView,EndExerciseView,SaveExerciseRedisLocView, SaveExerciseLocView{
+class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, ExerciseStartView,EndExerciseView,SaveExerciseRedisLocView, SaveExerciseLocView, GetRedisExerciseView{
 
     // pinnacle
     private lateinit var sdk: NextNavSdk
@@ -47,6 +51,8 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     private lateinit var altitudeObservable: AltitudeContextNotification
 
     private lateinit var mMap: GoogleMap
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var polyline: Polyline
     private lateinit var binding: ActivityExerciseBinding
     private lateinit var mapFragment : SupportMapFragment
     private lateinit var timer: Timer
@@ -54,8 +60,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     var mLocationManager: LocationManager? = null
     var mLocationListener: LocationListener? = null
     private var mCircle: Circle? = null
-    private var isStart = 0
-    private var exerciseId by Delegates.notNull<Long>()
+    private var exerciseId = 0
 
     // distance에 사용
     private var previousLat: String? = null
@@ -63,13 +68,22 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     private var previousAlt: String? = null
     private var currentLat: String? = null
     private var currentLong: String? = null
-    private var currentAlt: String? = null
+    private var currentAlt: String?  = null
+    // 운동량
+    private var distance by Delegates.notNull<Double>()
+    private var pace = "null"
 
+    // 운동 위치
+    private lateinit var firstList :List<String>
+    private lateinit  var middleList :List<String>
+    private  lateinit var lastList:List<String>
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(
         savedInstanceState: Bundle?) {
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         super.onCreate(savedInstanceState)
+        // distance
         context = applicationContext
         mContext = this
 
@@ -100,14 +114,16 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
                 if (location != null) {
                     latitude = location.latitude
                     longitude = location.longitude
-//                    binding.locationText.text = "lat, lng : ${latitude} , ${longitude}";
-                    calculateAlt(latitude.toString(), longitude.toString(),"5")
+                    if(exerciseId > 0){
+                        calculateAlt(latitude.toString(), longitude.toString(),"5")
+                    }
                 }
                 var currentLocation = LatLng(latitude, longitude)
-                addCircleToMap(currentLocation)
-//                mMap.addMarker(MarkerOptions().position(currentLocation).title("current Location"))
+                polyline.points = polyline.points.plus(currentLocation)
+//                addCircleToMap(currentLocation)
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18f))
             }
+
             override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
             override fun onProviderEnabled(provider: String) {}
             override fun onProviderDisabled(provider: String) {}
@@ -115,14 +131,15 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         }
         // 시작버튼
         binding.exerciseStartBtn.setOnClickListener{
+            distance = 0.0
             startExercise()
-
         }
 
         // 종료버튼
         binding.exerciseEndBtn.setOnClickListener{
             Log.d("time", timeInSeconds.toString() )
             timer.cancel()
+            endExercise()
         }
         // redis 위치 저장
 
@@ -134,7 +151,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     }
     // exercise start
     @RequiresApi(Build.VERSION_CODES.O)
-    fun startExercise(){
+    private fun startExercise(){
         val jwt = getJwt()
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
@@ -154,6 +171,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         mLocationListener?.let { mLocationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, it) }
 
         exerciseService.startExercise(jwt!!,ExerciseStartReq("running",current.toString(),0 ))
+
     }
     fun startTimer(){
         timer.scheduleAtFixedRate(object : TimerTask() {
@@ -170,35 +188,41 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
     // exercise end
     @RequiresApi(Build.VERSION_CODES.O)
-    fun endExercise(){
+    private fun endExercise(){
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setEndExerciseView(this)
-//        exerciseService.endExercise(ExerciseEndReq(exerciseId,timeInSeconds,))
+        exerciseService.endExercise(ExerciseEndReq(exerciseId.toLong(),timeInSeconds,pace,distance.toString(),current.toString()))
     }
 
     // location save
-    fun saveExerciseLoc(id : Long,latitude : String, longitude : String, altitude : String){
+    private fun saveExerciseLoc(id : Long,latitude : String, longitude : String, altitude : String){
         val locationService = LocationService()
         locationService.setSaveExerciseLocView(this)
         locationService.saveExerciseLoc(LocationExerciseSaveReq(latitude,longitude,altitude,id))
     }
 
     // location save in redis
-    fun saveExerciseRedisLoc(id : Long,latitude : String, longitude : String, altitude : String){
+    private fun saveExerciseRedisLoc(id : Long,latitude : String, longitude : String, altitude : String){
         val locationService = LocationService()
         locationService.setSaveExerciseRedisLocView(this)
         locationService.saveExerciseRedisLoc(LocationRedisReq(latitude,longitude,altitude,id))
     }
 
-    fun calDistance(Lat1: String, Lon1: String, Alt1: String, Lat2: String, Lon2: String, Alt2: String): Double{
+    private fun getRedisExercise(){
+        val locationService = LocationService()
+        locationService.setGetRedisExerciseView(this)
+        locationService.getRedisExercise(exerciseId.toInt())
+    }
+
+    private fun calDistance(Lat1: String, Lon1: String, Alt1: String, Lat2: String, Lon2: String, Alt2: String): Double{
         // DCMA 알고리즘 사용
         val lat1 = Lat1.toDouble()
         val lat2 = Lat2.toDouble()
         val lon1 = Lon1.toDouble()
         val lon2 = Lon2.toDouble()
-        val alt1 = kotlin.math.abs(Alt1.toDouble())
-        val alt2 = kotlin.math.abs(Alt2.toDouble())
+        val alt1 = (kotlin.math.abs(Alt1.toDouble())/1000)
+        val alt2 = (kotlin.math.abs(Alt2.toDouble())/1000)
 
         val ML = (lat1 + lat2) / 2
         val KPD1 = 111.13209 - 0.56605 * cos(2 * ML) + 0.00120 * cos(4 * ML)
@@ -214,19 +238,19 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
 
     // google map
-    private fun addCircleToMap(location: LatLng) {
-        if (mCircle == null) {
-            val circleOptions = CircleOptions()
-                .center(location)
-                .radius(2.0)
-                .strokeWidth(1f)
-                .strokeColor(ContextCompat.getColor(this, R.color.black))
-                .fillColor(ContextCompat.getColor(this, R.color.string_gray))
-            mCircle = mMap.addCircle(circleOptions)
-        } else {
-            mCircle!!.center = location
-        }
-    }
+//    private fun addCircleToMap(location: LatLng) {
+//        if (mCircle == null) {
+//            val circleOptions = CircleOptions()
+//                .center(location)
+//                .radius(2.0)
+//                .strokeWidth(1f)
+//                .strokeColor(ContextCompat.getColor(this, R.color.black))
+//                .fillColor(ContextCompat.getColor(this, R.color.string_gray))
+//            mCircle = mMap.addCircle(circleOptions)
+//        } else {
+//            mCircle!!.center = location
+//        }
+//    }
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
@@ -240,17 +264,22 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         ) {
             return
         }
+        polyline = mMap.addPolyline(
+            PolylineOptions()
+                .color(Color.BLUE)
+                .width(5f)
+                .geodesic(true)
+        )
         mMap.isMyLocationEnabled = true // 현재 위치 표시 활성화
-
         // 현재 위치 가져와서 지도 중심으로 설정
-        mLocationManager?.getLastKnownLocation(LocationManager.GPS_PROVIDER)?.let {
-            val currentLocation = LatLng(it.latitude, it.longitude)
-            addCircleToMap(currentLocation)
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18f))
+        fusedLocationClient.lastLocation.addOnSuccessListener { location ->
+            location?.let {
+                val currentLocation = LatLng(it.latitude, it.longitude)
+//                addCircleToMap(currentLocation)
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18f))
+            }
         }
-//        val firstLocation = LatLng(37.383831666666666,-121.98756833333333)
-//        mMap.addMarker(MarkerOptions().position(firstLocation).title("Marker in nextNav"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(firstLocation))
+
     }
     override fun onStart() {
         super.onStart()
@@ -282,6 +311,28 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         mapFragment.onDestroy()
     }
 
+    private fun saveRedis(hat : Double){
+        if(exerciseId!=0){
+            val lat = sdk.currentLocation.latitude.toString()
+            val long = sdk.currentLocation.longitude.toString()
+            val alt = hat.toString()
+            runOnUiThread { binding.locationText.text = "($lat , $long , $alt)" }
+            if (previousLat == null && previousLong == null && previousAlt == null) {
+                previousLat = lat
+                previousLong = long
+                previousAlt = alt
+            } else {
+                val currentDistance = calDistance(previousLat!!, previousLong!!, previousAlt!!, lat, long, alt)
+                distance += currentDistance
+                Log.d("CURRENTDISTANCE", distance.toString())
+                previousLat = lat
+                previousLong = long
+                previousAlt = alt
+            }
+            saveExerciseRedisLoc(exerciseId.toLong(), lat, long, alt)
+        }
+    }
+
     // pinnacle
     private fun initPinnacle() {
         sdk = NextNavSdk.getInstance()
@@ -290,27 +341,22 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
     private fun calculateAlt(a : String, b:String, c : String) {
         sdk = NextNavSdk.getInstance()
-        sdk.startAltitudeCalculation(NextNavSdk.AltitudeCalculationFrequency.THIRTY,a,b,c)
-//        sdk.startBarocalUpload(barocalCallback, true)
-//        startBarocal(a,b,c,null)
+        sdk.startAltitudeCalculation(NextNavSdk.AltitudeCalculationFrequency.ONE,a,b,c)
     }
 
-    private fun stopCalAlt(){
-        sdk.stopAltitudeCalculation()
-    }
     override fun update(o: Observable?, p: Any?) {
 
         if (o is SdkStatusNotification) {
             when (o.code) {
-
                 SdkStatus.STATUS_MESSAGES.INIT_SUCCESS.code -> {
 //                    // SDK is initialized successfully, it’s ready to start altitude calculation
+                    Toast.makeText(this, "init complete", Toast.LENGTH_LONG).show()
 
                 }
             }
         }
         if (o is AltitudeContextNotification) {
-            Log.d("second status code is ",o.statusCode.toString())
+            Log.d("STATUSCODE_SECOND",o.statusCode.toString())
             Log.d("second error code is ",o.errorCode.toString())
             if (Date().time - o.timestamp <= 1000) {
                 when (o.statusCode) {
@@ -329,43 +375,34 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
                             Log.d("hae", hae.toString())
                             Log.d("haeUnc", haeUnc.toString())
                             Log.d("mUserPressure",mUserPressure)
-
-                            // redis에 저장
-                            saveExerciseRedisLoc(exerciseId,sdk.currentLocation.latitude.toString(),sdk.currentLocation.longitude.toString(), hat.toString())
-                                currentLat = sdk.currentLocation.latitude.toString()
-                                currentLong =sdk.currentLocation.longitude.toString()
-                                currentAlt= sdk.currentLocation.longitude.toString()
-                                previousLat =currentLat
-                                previousLong =currentLong
-                                previousAlt =  currentAlt
-                            val currentDistance = calDistance(currentLat!!,currentLong!!,currentAlt!!,previousLat!!,previousLong!!,previousAlt!!)
-                            Log.d("currentDistance",currentDistance.toString())
-
-                            }
-
-
+                            saveRedis(hat)
                         }
-
                     }
-                }
-                when(o.warningCode){
-                    WarningMessages.HIGH_DELTA_LOCATION.code -> {
-                        Log.w(
-                            ContentValues.TAG, "update: " +
-                                    WarningMessages.HIGH_DELTA_LOCATION.code)
-                    }
-                    WarningMessages.HIGH_DELTA_PRESSURE.code -> {
-                        Log.w(
-                            ContentValues.TAG, "update: " +
-                                    WarningMessages.HIGH_DELTA_PRESSURE.code)
+                    // in korea
+                    600 -> {
+                        Log.d("STATUSCODE", o.statusCode.toString())
+                        saveRedis(9.0)
                     }
                 }
             }
+            when(o.warningCode){
+                WarningMessages.HIGH_DELTA_LOCATION.code -> {
+                    Log.w(
+                        ContentValues.TAG, "update: " +
+                                WarningMessages.HIGH_DELTA_LOCATION.code)
+                }
+                WarningMessages.HIGH_DELTA_PRESSURE.code -> {
+                    Log.w(
+                        ContentValues.TAG, "update: " +
+                                WarningMessages.HIGH_DELTA_PRESSURE.code)
+                }
+            }
         }
+    }
 
 
     override fun onEndExerciseSuccess(result: Exercise) {
-        TODO("Not yet implemented")
+        getRedisExercise()
     }
 
     override fun onEndExerciseFailure(code: Int, msg: String) {
@@ -373,10 +410,8 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     }
 
     override fun onExerciseStartSuccess(result: Exercise) {
-        Log.d("start","success")
-        isStart= 1
         startTimer()
-        exerciseId = result.exerciseId!!
+        exerciseId = result.exerciseId?.toInt() ?: 0
     }
 
     override fun onExerciseStartFailure(code: Int, msg: String) {
@@ -385,6 +420,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
     override fun onSaveExerciseLocSuccess(result: com.example.hyfit_android.location.Location) {
         Log.d("save Loc Result",result.toString())
+
     }
 
     override fun onSaveExerciseLocFailure(code: Int, msg: String) {
@@ -393,11 +429,36 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
     override fun onSaveExerciseRedisLocSuccess(result: List<String>) {
         Log.d("save Loc Result",result.toString())
+
     }
 
     override fun onSaveExerciseRedisLocFailure(code: Int, msg: String) {
         TODO("Not yet implemented")
     }
 
+    override fun onGetRedisExerciseViewSuccess(result: RedisExercise) {
+        firstList = result.start.split(",")
+        middleList = result.middle.split(",")
+        lastList = result.end.split(",")
+        lifecycleScope.launch {
+            saveExerciseLoc(exerciseId.toLong(),firstList[0],firstList[1],firstList[2])
+            saveExerciseLoc(exerciseId.toLong(),middleList[0],middleList[1],middleList[2])
+            saveExerciseLoc(exerciseId.toLong(),lastList[0],lastList[1],lastList[2])
+        }
+        val intent= Intent(this, ExerciseResultActivity::class.java)
+        intent.putExtra("distance", distance)
+        intent.putExtra("firstList",result.start)
+        intent.putExtra("middleList",result.middle)
+        intent.putExtra("lastList",result.end)
+        sdk.stop()
+        sdk.stopAltitudeCalculation()
+        startActivity(intent)
+    }
+
+    override fun onGetRedisExerciseViewFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
 
 }
+

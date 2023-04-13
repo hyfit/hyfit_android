@@ -24,7 +24,7 @@ class LogoutActivity : AppCompatActivity(), LogoutView {
             startActivity(intent)
         }
     }
-    private fun logout(jwt:String?){
+    fun logout(jwt:String?){
         val usService= UserRetrofitService()
         usService.setLogoutView(this)
         usService.logout(jwt)

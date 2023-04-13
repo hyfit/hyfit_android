@@ -45,7 +45,14 @@
             android:background="@drawable/ic_circle_stop"/>
 
     </LinearLayout>
-
+<LinearLayout
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintTop_toBottomOf="@+id/exercise_start_layout"
+    android:orientation="vertical"
+    >
     <TextView
         android:id="@+id/timer_text"
         android:layout_width="wrap_content"
@@ -54,6 +61,29 @@
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exercise_start_layout"
+        android:layout_gravity="center"
         android:text="00:00:00" />
+<!--    <TextView-->
+<!--        android:id="@+id/pace_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:textSize="24sp"-->
+<!--        android:textColor="@color/black"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        android:layout_gravity="center"-->
+<!--        android:text="0" />-->
+    <TextView
+        android:id="@+id/location_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="13sp"
+        android:textColor="@color/black"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_gravity="center"
+        android:text=""
+        ></TextView>
+</LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

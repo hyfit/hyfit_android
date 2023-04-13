@@ -32,12 +32,14 @@ class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loginActivity=LoginActivity()
+
+
+        var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
 
 
         // BottomNavigationView 초기화
@@ -68,7 +70,12 @@ class MainActivity : AppCompatActivity(){
             }
         }
         // 초기 fragment 설정
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+        if(showSetFragment){
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SetFragment()).commit()
+        }
+        else {
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+        }
 
         // permission code
         if ((ActivityCompat.checkSelfPermission(
@@ -132,7 +139,6 @@ class MainActivity : AppCompatActivity(){
 //        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
 //    }
 
-
-}
+    }
 
 

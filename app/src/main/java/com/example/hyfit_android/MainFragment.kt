@@ -6,6 +6,7 @@ import android.content.Intent
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
+import android.transition.Visibility
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -50,13 +51,13 @@ class MainFragment : Fragment(), Observer {
 
         sdkMessageObservable = SdkStatusNotification.getInstance()
         sdkMessageObservable.addObserver(this)
-
         altitudeObservable = AltitudeContextNotification.getInstance()
         altitudeObservable.addObserver(this)
         binding = FragmentMainBinding.inflate(inflater, container, false)
         binding.goToExercise.setOnClickListener{
             initPinnacle()
             binding.progressBar.visibility = ProgressBar.VISIBLE
+            binding.initText.visibility =View.VISIBLE
 //            val intent = Intent(requireActivity(), ExerciseActivity::class.java)
 //            startActivity(intent)
         }

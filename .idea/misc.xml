@@ -61,6 +61,8 @@
         <entry key="app/src/main/res/drawable/values.xml" value="0.11" />
         <entry key="app/src/main/res/layout/activity_community_main.xml" value="0.29732513427734375" />
         <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.34158172607421877" />
+        <entry key="app/src/main/res/layout/activity_exercise_result.xml" value="0.238037109375" />
+        <entry key="app/src/main/res/layout/activity_find_password.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/activity_join2.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/activity_join3.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/activity_join4.xml" value="0.25364583333333335" />
