@@ -46,7 +46,6 @@ class MapsActivity :AppCompatActivity(),OnMapReadyCallback, Observer {
         savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-
         sdkMessageObservable = SdkStatusNotification.getInstance()
         sdkMessageObservable.addObserver(this)
 

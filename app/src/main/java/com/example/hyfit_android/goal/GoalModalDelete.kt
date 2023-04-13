@@ -17,7 +17,7 @@ import kotlin.properties.Delegates
  * Use the [GoalModalDelete.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GoalModalDelete : DialogFragment() , DeleteGoalView {
+class GoalModalDelete : DialogFragment() {
     lateinit var binding: FragmentGoalModalDeleteBinding
     private lateinit var goalTitle : String
     private lateinit var goalRate : String
@@ -49,17 +49,13 @@ class GoalModalDelete : DialogFragment() , DeleteGoalView {
     private fun deleteGoal(){
         val jwt = getJwt()
         val goalService = GoalService()
-        goalService.setDeleteGoalView(this)
+        val goalFragment = parentFragmentManager.fragments.firstOrNull { it is GoalFragment } as? GoalFragment
+        goalFragment?.let { goalService.setDeleteGoalView(it) }
+//        goalService.setDeleteGoalView(this)
         goalService.deleteGoal(jwt!!,goalId)
+
     }
 
-    override fun onDeleteGoalSuccess(result: String) {
-        listener?.onItemChange()
-       dismiss()
-    }
 
-    override fun onDeleteGoalFailure(code: Int, msg: String) {
-        Toast.makeText(requireContext(), msg, Toast.LENGTH_SHORT).show()
-    }
 
 }

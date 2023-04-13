@@ -2,25 +2,37 @@ package com.example.hyfit_android
 
 
 import android.Manifest
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import com.example.hyfit_android.BuildConfig.KEY_VALUE
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
+import com.nextnav.nn_app_sdk.NextNavSdk
+import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
+import com.nextnav.nn_app_sdk.notification.SdkStatus
+import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
+import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -120,6 +132,7 @@ class MainActivity : AppCompatActivity() {
 //        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
 //    }
 
-    }
+
+}
 
 

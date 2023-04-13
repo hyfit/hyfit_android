@@ -16,21 +16,22 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentGoalBinding
 import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * A simple [Fragment] subclass.
  * Use the [GoalFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeListener,SaveGoalView{
+class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeListener,SaveGoalView, DeleteGoalView{
     lateinit var binding: FragmentGoalBinding
     private var gson:Gson = Gson()
     private lateinit var goalDetailRVAdapter: GoalDetailRVAdapter
     private lateinit var goalList : ArrayList<Goal>
-//    private val fragment3 = GoalModalFragment3()
-//    private val deleteFragment = GoalModalDelete()
-//    private val fragment3 = GoalModalFragment3().apply { onChangeListener = this@GoalFragment }
-    private val deleteFragment = GoalModalDelete().apply { listener = this@GoalFragment }
+    private val deleteFragment = GoalModalDelete()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -40,8 +41,6 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         binding = FragmentGoalBinding.inflate(inflater, container, false)
         // 페이지 들어오자마자 getGoal
         getGoalProgress()
-//        getGoalDone()
-//        binding.goalLatest.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         val dialogButton = binding.goalPlus
         dialogButton.setOnClickListener {
             val dialogFragment = GoalModalFragment()
@@ -56,18 +55,6 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         }
         return binding.root
     }
-
-//    private fun initProgressRecyclerView(progressGoalList:ArrayList<Goal>){
-//        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), progressGoalList,this)
-//        binding.myGoalList.adapter = goalDetailRVAdapter
-//        binding.myGoalList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-//    }
-//    private fun initDoneRecyclerView(DoneGoalList:ArrayList<Goal>){
-//        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), DoneGoalList,this)
-//        binding.myDoneGoalList.adapter = goalDetailRVAdapter
-//        binding.myDoneGoalList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-//    }
-
     private fun initRecyclerView(result : ArrayList<Goal>){
         goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), result,this)
         binding.myGoalList.adapter = goalDetailRVAdapter
@@ -88,8 +75,8 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     }
     private fun getGoalDone(){
         val jwt = getJwt()
-        val goalDoneJson = arguments?.getString("goal")
-        val goalDone = gson.fromJson(goalDoneJson, Goal::class.java)
+//        val goalDoneJson = arguments?.getString("goal")
+//        val goalDone = gson.fromJson(goalDoneJson, Goal::class.java)
         val goalService = GoalService()
         goalService.setGetDoneGoalView(this)
         goalService.getGoalDone(jwt!!)
@@ -100,7 +87,7 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         goalList = result
         initRecyclerView(result)
         binding.goalInProgress.setBackgroundResource(R.drawable.tag_btn_back_blue)
-                binding.goalInProgress.setTextColor(Color.parseColor("#f3f3f3"))
+        binding.goalInProgress.setTextColor(Color.parseColor("#f3f3f3"))
         binding.goalDone.setBackgroundResource(R.drawable.ic_rectangle_65)
         binding.goalDone.setTextColor(Color.parseColor("#FF000000"))
     }
@@ -110,21 +97,30 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
             val goalList = ArrayList<Goal>()
             initRecyclerView(goalList)
         }
+        if(code==2202){
+            val goalList = ArrayList<Goal>()
+            initRecyclerView(goalList)
+        }
     }
 
     @SuppressLint("ResourceAsColor")
     override fun onGetDoneGoalSuccess(result: ArrayList<Goal>) {
-//        initDoneRecyclerView(result)
-        goalList = result
+//        goalList = result
+//
         initRecyclerView(result)
         binding.goalDone.setBackgroundResource(R.drawable.tag_btn_back_blue)
         binding.goalDone.setTextColor(Color.parseColor("#f3f3f3"))
         binding.goalInProgress.setBackgroundResource(R.drawable.ic_rectangle_65)
        binding.goalInProgress.setTextColor(Color.parseColor("#FF000000"))
+
     }
 
     override fun onGetDoneGoalFailure(code: Int, msg: String) {
         if(code==2203){
+            val goalList = ArrayList<Goal>()
+            initRecyclerView(goalList)
+        }
+        if(code==2202){
             val goalList = ArrayList<Goal>()
             initRecyclerView(goalList)
         }
@@ -150,17 +146,33 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     }
 
     override fun onSaveGoalSuccess(result: Goal) {
-        for (fragment in childFragmentManager.fragments) {
-            if (fragment is DialogFragment) {
-                fragment.dismiss()
+        GlobalScope.launch {
+            getGoalProgress()
+            withContext(Dispatchers.Main){
+                for (fragment in childFragmentManager.fragments) {
+                    if (fragment is DialogFragment) {
+                         fragment.dismiss()
+                     }
+                 }
             }
         }
         getGoalProgress()
+    }
+
+    override fun onSaveGoalFailure(code: Int, msg: String) {
 
     }
 
-    override fun onSaveGoalFailure(code: Int, msg: String) {2
-        TODO("Not yet implemented")
+    override fun onDeleteGoalSuccess(result: String) {
+        GlobalScope.launch {
+            getGoalProgress()
+            withContext(Dispatchers.Main) {
+                deleteFragment.dismiss()
+            }
+        }
+    }
+
+    override fun onDeleteGoalFailure(code: Int, msg: String) {
     }
 
 }
