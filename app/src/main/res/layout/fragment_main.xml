@@ -33,11 +33,12 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:text="Welcome, "
+            android:text="Welcome, Billie"
             android:textColor="@color/black"
             android:textSize="24dp"
             android:textStyle="bold" />
 
+        <!-- user name 받아오고 위에 Billie 삭제-->
         <TextView
             android:id="@+id/home_username"
             android:layout_width="wrap_content"
@@ -58,6 +59,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_regular"
@@ -71,25 +73,40 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.165" />
 
-    <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/select_goal_btn"
-        android:layout_width="match_parent"
+    <!-- 목표 선택 버튼 -->
+<!--    <androidx.appcompat.widget.AppCompatButton-->
+<!--        android:id="@+id/select_goal_btn"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginHorizontal="25dp"-->
+<!--        android:background="@drawable/rectangle_main_select"-->
+<!--        android:drawableRight="@drawable/main_arrow_selectgoal"-->
+<!--        android:fontFamily="@font/roboto_medium"-->
+<!--        android:paddingHorizontal="20dp"-->
+<!--        android:text="Select your goal"-->
+<!--        android:textAlignment="viewStart"-->
+<!--        android:textColor="@color/darkgray2"-->
+<!--        android:textSize="20dp"-->
+<!--        app:layout_constraintBottom_toBottomOf="parent"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintHorizontal_bias="0.32"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent"-->
+<!--        app:layout_constraintVertical_bias="0.249" />-->
+
+    <TextView
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginHorizontal="25dp"
-        android:background="@drawable/rectangle_main_select"
-        android:drawableRight="@drawable/main_arrow_selectgoal"
         android:fontFamily="@font/roboto_medium"
-        android:paddingHorizontal="20dp"
-        android:text="Select your goal"
-        android:textAlignment="viewStart"
-        android:textColor="@color/darkgray2"
+        android:text="How is this goal for you today?"
+        android:textColor="@color/black"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.32"
+        app:layout_constraintHorizontal_bias="0.813"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.249" />
+        app:layout_constraintVertical_bias="0.237" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -98,8 +115,25 @@
         android:src="@drawable/empirestatebuilding"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.416" />
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_light"
+        android:text="Empire State Building"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.291"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.332" />
 
     <androidx.appcompat.widget.AppCompatButton
         android:id="@+id/main_startBtn"
@@ -107,22 +141,22 @@
         android:layout_height="wrap_content"
         android:layout_marginHorizontal="25dp"
         android:background="@drawable/main_startbtn_rectangle"
-        android:text="Start this Goal"
         android:fontFamily="@font/roboto_bold"
-        android:textSize="20dp"
+        android:text="Start this Goal"
         android:textColor="@color/white"
+        android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.32"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.667" />
+        app:layout_constraintVertical_bias="0.655" />
 
     <TextView
+        android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/roboto_medium"
-        android:text="It's not long before the goal"
+        android:text="It's not long before the goal !"
         android:textColor="@color/black"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -130,9 +164,10 @@
         app:layout_constraintHorizontal_bias="0.15"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.755" />
+        app:layout_constraintVertical_bias="0.741" />
 
-    <ImageView
+    <ImageButton
+        android:id="@+id/imageView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/everest"
@@ -142,6 +177,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.955" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_light"
+        android:text="Everest"
+        android:textColor="@color/white"
+        android:textSize="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.283"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.832" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

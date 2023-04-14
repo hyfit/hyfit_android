@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LogoutActivity
@@ -31,9 +32,9 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
-        val selectBtn = binding.selectGoalBtn
-        selectBtn.setOnClickListener{
-            GoalDialogFragment().show(parentFragmentManager, "selectgoal")
+        //val selectBtn = binding.selectGoalBtn
+        //selectBtn.setOnClickListener{
+            //GoalDialogFragment().show(parentFragmentManager, "selectgoal")
             //val dialogFragment = GoalDialogFragment()
             //dialogFragment.show()
 
@@ -55,9 +56,15 @@ class MainFragment : Fragment() {
                 })
                 .show()
              */
-        }
+
+
+       // }
         return binding.root
     }
 
+    private fun getJwt():String?{
+        val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString("jwt","0")
+    }
 
 }
