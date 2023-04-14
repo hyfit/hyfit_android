@@ -33,6 +33,7 @@ class MainFragment : Fragment() {
         binding = FragmentMainBinding.inflate(inflater, container, false)
         val selectBtn = binding.selectGoalBtn
         selectBtn.setOnClickListener{
+            GoalDialogFragment().show(parentFragmentManager, "selectgoal")
             //val dialogFragment = GoalDialogFragment()
             //dialogFragment.show()
 
