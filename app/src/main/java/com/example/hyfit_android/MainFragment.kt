@@ -54,13 +54,6 @@ class MainFragment : Fragment(), Observer {
         altitudeObservable = AltitudeContextNotification.getInstance()
         altitudeObservable.addObserver(this)
         binding = FragmentMainBinding.inflate(inflater, container, false)
-        binding.goToExercise.setOnClickListener{
-            initPinnacle()
-            binding.progressBar.visibility = ProgressBar.VISIBLE
-            binding.initText.visibility =View.VISIBLE
-//            val intent = Intent(requireActivity(), ExerciseActivity::class.java)
-//            startActivity(intent)
-        }
 
         return binding.root
     }
@@ -86,7 +79,7 @@ class MainFragment : Fragment(), Observer {
                 SdkStatus.STATUS_MESSAGES.INIT_SUCCESS.code -> {
 //                    // SDK is initialized successfully, it’s ready to start altitude calculation
 //                    Toast.makeText(this@MainActivity, "current Status code is " + o.code.toString(), Toast.LENGTH_SHORT).show()
-                    binding.progressBar.visibility = ProgressBar.GONE
+//                    binding.progressBar.visibility = ProgressBar.GONE
             val intent = Intent(requireActivity(), ExerciseActivity::class.java)
             startActivity(intent)
 //          startActivity(Intent(this@PinnacleActivity, MapsActivity::class.java))

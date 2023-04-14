@@ -17,7 +17,6 @@ import androidx.fragment.app.Fragment
 import com.example.hyfit_android.BuildConfig.KEY_VALUE
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LoginActivity
-import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
@@ -27,6 +26,9 @@ import com.nextnav.nn_app_sdk.notification.SdkStatus
 import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
 import java.util.*
+import com.example.hyfit_android.home.MainFragment
+
+// import com.example.hyfit_android.home.MapsFragment
 
 class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding

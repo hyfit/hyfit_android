@@ -65,7 +65,7 @@ dependencies {
 
     //used by Pinnacle SDK to determine device activity and location
     implementation 'com.google.android.gms:play-services-awareness:18.0.1'
-    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
