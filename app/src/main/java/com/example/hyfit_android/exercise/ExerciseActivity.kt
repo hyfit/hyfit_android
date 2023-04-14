@@ -366,7 +366,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
                             o.heightUncertainty != null
                         ) {
                             val mUserPressure = o.mUserPressure.toString();
-                            val hat = o.heightHat.toDouble()
+                            val hat = String.format("%.1f", o.heightHat.toDouble()).toDouble()
                             val hatUnc = o.heightHatUncertainty.toDouble()
                             val hae = o.height.toDouble()
                             val haeUnc = o.heightUncertainty.toDouble()
