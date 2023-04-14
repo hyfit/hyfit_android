@@ -16,6 +16,7 @@ import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.databinding.FragmentMainBinding
+import com.example.hyfit_android.exercise.ExerciseActivity
 import kotlinx.coroutines.selects.select
 
 /**
@@ -32,6 +33,15 @@ class MainFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentMainBinding.inflate(inflater, container, false)
+
+        val startBtn = binding.mainStartBtn
+        startBtn.setOnClickListener {
+            activity?.let {
+                val intent = Intent(context, ExerciseActivity::class.java)
+                startActivity(intent)
+            }
+        }
+        
         //val selectBtn = binding.selectGoalBtn
         //selectBtn.setOnClickListener{
             //GoalDialogFragment().show(parentFragmentManager, "selectgoal")
