@@ -31,7 +31,7 @@ class GoalDialogFragment : DialogFragment(), GetGoalView  {
             builder.setTitle("Select Your Goal")
 //                .setSingleChoiceItems(goalList., -1) { dialog, which ->
 //                    selectedGoal = goalList[which]
-//                }
+//                } goal list가 array형태로..  ........
                 .setPositiveButton("SELECT", DialogInterface.OnClickListener {
                     dialog, id->
                 })
