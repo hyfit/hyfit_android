@@ -76,7 +76,7 @@
             android:layout_height="wrap_content"
             android:inputType="text|numberDecimal"
             android:fontFamily="sans-serif-light"
-            android:hint=" ex) 990102"
+            android:hint=" ex) mmddyy"
             android:ems="13" app:layout_constraintTop_toBottomOf="@+id/process2"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="360dp" app:layout_constraintHorizontal_bias="0.266" android:minHeight="48dp"/>
@@ -101,7 +101,7 @@
             android:layout_height="wrap_content"
             android:inputType="text|numberDecimal"
             android:fontFamily="sans-serif-light"
-            android:hint=" 010-xxxx-xxxx"
+            android:hint=" except '-', only numbers  "
             android:ems="13" app:layout_constraintTop_toBottomOf="@+id/process2"
             app:layout_constraintEnd_toEndOf="parent" app:layout_constraintStart_toStartOf="parent"
             android:layout_marginTop="532dp" app:layout_constraintHorizontal_bias="0.266" android:minHeight="48dp"/>

@@ -2,19 +2,35 @@ package com.example.hyfit_android
 
 
 import android.Manifest
+import android.content.ContentValues
+import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
+import com.example.hyfit_android.BuildConfig.KEY_VALUE
+import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
+import com.nextnav.nn_app_sdk.NextNavSdk
+import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
+import com.nextnav.nn_app_sdk.notification.SdkStatus
+import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
+import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import java.util.*
 import com.example.hyfit_android.home.MainFragment
 
 // import com.example.hyfit_android.home.MapsFragment
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(){
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
@@ -25,7 +41,7 @@ class MainActivity : AppCompatActivity() {
         loginActivity=LoginActivity()
 
 
-
+        var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
 
 
         // BottomNavigationView 초기화
@@ -56,7 +72,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
         // 초기 fragment 설정
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+        if(showSetFragment){
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SetFragment()).commit()
+        }
+        else {
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+        }
 
         // permission code
         if ((ActivityCompat.checkSelfPermission(
@@ -75,6 +96,18 @@ class MainActivity : AppCompatActivity() {
             )
             return
         }
+    }
+    // 권한 요청
+    private fun requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACTIVITY_RECOGNITION), PERMISSIONS_REQUEST_LOCATION)
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        requestPermissions() // 액티비티가 시작되면 권한 요청 실행
     }
 
 

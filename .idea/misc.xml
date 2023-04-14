@@ -3,6 +3,7 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="app/src/main/res/drawable-v24/baseline_home_20.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ant_design_reload_time_outline.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_close.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_detail.xml" value="0.1" />
@@ -11,6 +12,8 @@
         <entry key="app/src/main/res/drawable/ic_goal_rectangle_building.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_goal_rectangle_done.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_goal_rectangle_mountain.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_home_blue.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_home_gray.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_left.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.1" />
@@ -57,11 +60,15 @@
         <entry key="app/src/main/res/drawable/tag_btn_back_blue.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/values.xml" value="0.11" />
         <entry key="app/src/main/res/layout/activity_community_main.xml" value="0.29732513427734375" />
+        <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.34158172607421877" />
+        <entry key="app/src/main/res/layout/activity_exercise_result.xml" value="0.238037109375" />
+        <entry key="app/src/main/res/layout/activity_find_password.xml" value="0.13125" />
+        <entry key="app/src/main/res/layout/activity_join2.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/activity_join3.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/activity_join4.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/activity_join_email.xml" value="0.253125" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.10206451416015622" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25641632080078125" />
+        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.14290161132812496" />
         <entry key="app/src/main/res/layout/activity_my_goal.xml" value="0.14860839843750007" />
         <entry key="app/src/main/res/layout/activity_my_location.xml" value="0.23854166666666668" />
         <entry key="app/src/main/res/layout/activity_navi.xml" value="0.165" />
