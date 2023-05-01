@@ -1,21 +1,26 @@
 package com.example.hyfit_android.exercise
 
 import android.Manifest
+import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.location.*
 import android.location.Location
 import android.os.Build
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
+import android.view.Window
+import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.example.hyfit_android.BuildConfig
 import com.example.hyfit_android.R
@@ -36,11 +41,12 @@ import java.lang.Math.cos
 import java.lang.Math.sqrt
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.pow
 import kotlin.properties.Delegates
 
 
-class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, ExerciseStartView,EndExerciseView,SaveExerciseRedisLocView, SaveExerciseLocView, GetRedisExerciseView{
+class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, ExerciseStartView,EndExerciseView,SaveExerciseRedisLocView, SaveExerciseLocView, GetRedisExerciseView,GetAllExerciseListView ,GetAllRedisExerciseView{
 
     // pinnacle
     private lateinit var sdk: NextNavSdk
@@ -55,20 +61,24 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     private lateinit var polyline: Polyline
     private lateinit var binding: ActivityExerciseBinding
     private lateinit var mapFragment : SupportMapFragment
-    private lateinit var timer: Timer
+    private var timer: CountDownTimer? = null
     private var timeInSeconds by Delegates.notNull<Long>()
     var mLocationManager: LocationManager? = null
     var mLocationListener: LocationListener? = null
     private var mCircle: Circle? = null
     private var exerciseId = 0
+    private var isReady by Delegates.notNull<Int>()
+    private var isEnd by Delegates.notNull<Int>()
 
     // distance에 사용
     private var previousLat: String? = null
     private var previousLong: String? = null
     private var previousAlt: String? = null
-    private var currentLat: String? = null
-    private var currentLong: String? = null
-    private var currentAlt: String?  = null
+//    private var currentLat: String? = null
+//    private var currentLong: String? = null
+//    private var currentAlt: String?  = null
+
+
     // 운동량
     private var distance by Delegates.notNull<Double>()
     private var pace = "null"
@@ -88,8 +98,37 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         mContext = this
 
         // 타이머
-        timer = Timer()
         timeInSeconds = 0
+
+        // 초기화
+        isReady = 0
+        isEnd = 0
+        distance = 0.0
+
+        // 준비 다이얼로그
+        val dialog = Dialog(this)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(false)
+        dialog.setContentView(R.layout.ready_dialog)
+        val numberTextView = dialog.findViewById<TextView>(R.id.number_textview)
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.show()
+
+        val countDownTimer = object : CountDownTimer(5000, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                val secondsLeft = millisUntilFinished / 1000
+                numberTextView.text = (secondsLeft + 1).toString()
+            }
+
+            override fun onFinish() {
+                dialog.dismiss()
+                // 운동 시작하기
+                startExercise()
+            }
+        }
+
+        countDownTimer.start()
+
 
         sdkMessageObservable = SdkStatusNotification.getInstance()
         sdkMessageObservable.addObserver(this)
@@ -111,6 +150,13 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
             override fun onLocationChanged(location: Location) {
                 var latitude = 0.0
                 var longitude = 0.0
+                if(location==null){
+                    Toast.makeText(
+                        this@ExerciseActivity,
+                        "I think you are currently indoors.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
                 if (location != null) {
                     latitude = location.latitude
                     longitude = location.longitude
@@ -130,19 +176,37 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
         }
         // 시작버튼
-        binding.exerciseStartBtn.setOnClickListener{
-            distance = 0.0
-            startExercise()
-        }
+//        binding.exerciseStartBtn.setOnClickListener{
+//            distance = 0.0
+//            startExercise()
+//        }
 
         // 종료버튼
         binding.exerciseEndBtn.setOnClickListener{
-            Log.d("time", timeInSeconds.toString() )
-            timer.cancel()
-            endExercise()
-        }
-        // redis 위치 저장
+            if(isReady == 1){
+                saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
+                isEnd = 1
+                stopTimer()
+                endExercise()
+            }
+            else{
+                binding.progressBar.visibility = View.VISIBLE
+                binding.exerciseEndBtn.isEnabled = false
+                binding.exerciseEndBtn.postDelayed({
+                    if(isReady == 1) {
+                        binding.progressBar.visibility = View.GONE
+                        binding.exerciseEndBtn.isEnabled = true
+                        isEnd = 1
+                        stopTimer()
+                        endExercise()
+                        saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
+                    } else {
+                        binding.exerciseEndBtn.isEnabled = true
+                    }
+                }, 1000)
+            }
 
+        }
     }
     // get jwt
     private fun getJwt():String?{
@@ -152,43 +216,96 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     // exercise start
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startExercise(){
+        startTimer()
         val jwt = getJwt()
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setExerciseStartView(this)
-
-        // 현재 위치 받아오기
-        if (ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                this,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            return
-        }
-        mLocationListener?.let { mLocationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, it) }
-
         exerciseService.startExercise(jwt!!,ExerciseStartReq("running",current.toString(),0 ))
 
+        // 현재 위치 받아오기
+//        if (ActivityCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_FINE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+//                this,
+//                Manifest.permission.ACCESS_COARSE_LOCATION
+//            ) != PackageManager.PERMISSION_GRANTED
+//        ) {
+//            return
+//        }
+//        mLocationListener?.let { mLocationManager?.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0f, it) }
+
     }
-    fun startTimer(){
-        timer.scheduleAtFixedRate(object : TimerTask() {
-            override fun run() {
-                timeInSeconds++
-                val hours = timeInSeconds / 3600
-                val minutes = (timeInSeconds % 3600) / 60
-                val seconds = timeInSeconds % 60
-                val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                runOnUiThread { binding.timerText.text = timeString }
-            }
-        }, 0, 1000)
+//    fun startTimer(){
+//        timer.scheduleAtFixedRate(object : TimerTask() {
+//            override fun run() {
+//                if(isReady==0){
+//                    runOnUiThread {
+//                        Toast.makeText(
+//                            this@ExerciseActivity,
+//                            "wait!",
+//                            Toast.LENGTH_SHORT
+//                        ).show()
+//                    }
+//                }
+//                else {
+//                    timeInSeconds++
+//                    val hours = timeInSeconds / 3600
+//                    val minutes = (timeInSeconds % 3600) / 60
+//                    val seconds = timeInSeconds % 60
+//                    val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+//                    runOnUiThread { binding.timerText.text = timeString }
+//
+//
+//            }}
+//        }, 0, 1000)
+//    }
+//        fun startTimer() {
+//            timerTask = object : TimerTask() {
+//                override fun run() {
+//                    if (isReady == 1) {
+//                        timeInSeconds++
+//                        val hours = timeInSeconds / 3600
+//                        val minutes = (timeInSeconds % 3600) / 60
+//                        val seconds = timeInSeconds % 60
+//                        val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+//                        runOnUiThread { binding.timerText.text = timeString }
+//                    }
+//                }
+//            }
+//            Timer().scheduleAtFixedRate(timerTask, 0, 1000)
+//        }
+        fun startTimer() {
+            object : CountDownTimer(Long.MAX_VALUE, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    if (isReady == 1) {
+                        timeInSeconds++
+                        val hours = timeInSeconds / 3600
+                        val minutes = (timeInSeconds % 3600) / 60
+                        val seconds = timeInSeconds % 60
+                        val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                        binding.timerText.text = timeString
+                    }
+                }
+                override fun onFinish() {
+                    // 카운트다운이 끝났을 때 실행할 작업
+                }
+            }.start()
+        }
+    fun stopTimer() {
+        timer?.cancel()
     }
 
+    fun stopCalculate(){
+        sdk = NextNavSdk.getInstance()
+        sdk.stopAltitudeCalculation()
+    }
     // exercise end
     @RequiresApi(Build.VERSION_CODES.O)
     private fun endExercise(){
+        mLocationListener?.let { mLocationManager?.removeUpdates(it) }
+        stopCalculate()
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setEndExerciseView(this)
@@ -212,7 +329,12 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     private fun getRedisExercise(){
         val locationService = LocationService()
         locationService.setGetRedisExerciseView(this)
-        locationService.getRedisExercise(exerciseId.toInt())
+        locationService.getRedisExercise(exerciseId)
+    }
+    private fun getAllExerciseList() {
+        val locationService = LocationService()
+        locationService.setGetAllExerciseListView(this)
+        locationService.getAllExerciseList(exerciseId)
     }
 
     private fun calDistance(Lat1: String, Lon1: String, Alt1: String, Lat2: String, Lon2: String, Alt2: String): Double{
@@ -236,22 +358,6 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         return DISTANCEmove
     }
 
-
-    // google map
-//    private fun addCircleToMap(location: LatLng) {
-//        if (mCircle == null) {
-//            val circleOptions = CircleOptions()
-//                .center(location)
-//                .radius(2.0)
-//                .strokeWidth(1f)
-//                .strokeColor(ContextCompat.getColor(this, R.color.black))
-//                .fillColor(ContextCompat.getColor(this, R.color.string_gray))
-//            mCircle = mMap.addCircle(circleOptions)
-//        } else {
-//            mCircle!!.center = location
-//        }
-//    }
-
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         if (ActivityCompat.checkSelfPermission(
@@ -267,7 +373,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         polyline = mMap.addPolyline(
             PolylineOptions()
                 .color(Color.BLUE)
-                .width(5f)
+                .width(15f)
                 .geodesic(true)
         )
         mMap.isMyLocationEnabled = true // 현재 위치 표시 활성화
@@ -275,7 +381,6 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
             location?.let {
                 val currentLocation = LatLng(it.latitude, it.longitude)
-//                addCircleToMap(currentLocation)
                 mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18f))
             }
         }
@@ -329,9 +434,41 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
                 previousLong = long
                 previousAlt = alt
             }
-            saveExerciseRedisLoc(exerciseId.toLong(), lat, long, alt)
+
+            // 30초에 한번씩 저장
+            if((timeInSeconds % 30).toDouble() == 0.0){
+                saveExerciseRedisLoc(exerciseId.toLong(), lat, long, alt)
+            }
+//            if (timeInSeconds < 300 && ((timeInSeconds % 30).toDouble() == 0.0)){
+//                saveExerciseRedisLoc(exerciseId.toLong(), lat, long, alt)
+//            }
+//            // 10분 보다 적을땐 1분에 한번씩
+//            else if (timeInSeconds < 600 && ((timeInSeconds % 60).toDouble() == 0.0)){
+//                saveExerciseRedisLoc(exerciseId.toLong(), lat, long, alt)
+//            }
+
+
         }
+
     }
+
+    private fun getAllRedisExercise(){
+        val locationService = LocationService()
+        locationService.setGetAllRedisExerciseView(this)
+        locationService.getAllRedisExercise(exerciseId)
+    }
+//    private fun saveRedisLoc(hat : Double) {
+//        if(exerciseId!=0) {
+//            saveExerciseRedisLoc(
+//                exerciseId.toLong(),
+//                sdk.currentLocation.latitude.toString(),
+//                sdk.currentLocation.longitude.toString(),
+//                hat.toString()
+//            )
+//            Thread.sleep(60000) // 1분 대기
+//        }
+//    }
+
 
     // pinnacle
     private fun initPinnacle() {
@@ -349,40 +486,55 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         if (o is SdkStatusNotification) {
             when (o.code) {
                 SdkStatus.STATUS_MESSAGES.INIT_SUCCESS.code -> {
-//                    // SDK is initialized successfully, it’s ready to start altitude calculation
-                    Toast.makeText(this, "init complete", Toast.LENGTH_LONG).show()
-
                 }
             }
         }
         if (o is AltitudeContextNotification) {
+
             Log.d("STATUSCODE_SECOND",o.statusCode.toString())
             Log.d("second error code is ",o.errorCode.toString())
             if (Date().time - o.timestamp <= 1000) {
                 when (o.statusCode) {
                     200 -> {
-                        //Deliver data to Pinnacle service successfully, //process Altitude data!
-                        if (o.heightHat != null && o.heightHatUncertainty != null && o.height != null &&
-                            o.heightUncertainty != null
-                        ) {
-                            val mUserPressure = o.mUserPressure.toString();
+                        // pinnacle ready
+                        if(isReady == 0) {
+                            isReady = 1
                             val hat = String.format("%.1f", o.heightHat.toDouble()).toDouble()
-                            val hatUnc = o.heightHatUncertainty.toDouble()
-                            val hae = o.height.toDouble()
-                            val haeUnc = o.heightUncertainty.toDouble()
-                            Log.d("hat", hat.toString())
-                            Log.d("hatUnc", hatUnc.toString())
-                            Log.d("hae", hae.toString())
-                            Log.d("haeUnc", haeUnc.toString())
-                            Log.d("mUserPressure",mUserPressure)
-                            saveRedis(hat)
+                            saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hat.toString())
                         }
+
+                        else {
+                            if (o.heightHat != null && o.heightHatUncertainty != null && o.height != null &&
+                                o.heightUncertainty != null
+                            ) {
+                                val hat = String.format("%.1f", o.heightHat.toDouble()).toDouble()
+                                saveRedis(hat)
+                            }
+                        }
+
                     }
                     // in korea
                     600 -> {
-                        Log.d("STATUSCODE", o.statusCode.toString())
-                        saveRedis(9.0)
+                        if(isReady == 0) {
+                            isReady = 1
+                            saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), "9.0")
+                        }
+                        else {
+                                Log.d("KOREACODE", o.statusCode.toString())
+                                saveRedis(9.0)
+                        }
+
                     }
+                    else -> {
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@ExerciseActivity,
+                                o.statusCode.toString(),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+
                 }
             }
             when(o.warningCode){
@@ -402,7 +554,9 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
 
     override fun onEndExerciseSuccess(result: Exercise) {
-        getRedisExercise()
+       // getRedisExercise()
+       // getAllExerciseList()
+        getAllRedisExercise()
     }
 
     override fun onEndExerciseFailure(code: Int, msg: String) {
@@ -410,8 +564,19 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     }
 
     override fun onExerciseStartSuccess(result: Exercise) {
-        startTimer()
         exerciseId = result.exerciseId?.toInt() ?: 0
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        mLocationListener?.let { mLocationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, it) }
+
     }
 
     override fun onExerciseStartFailure(code: Int, msg: String) {
@@ -428,7 +593,6 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     }
 
     override fun onSaveExerciseRedisLocSuccess(result: List<String>) {
-        Log.d("save Loc Result",result.toString())
 
     }
 
@@ -436,26 +600,59 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         TODO("Not yet implemented")
     }
 
+
     override fun onGetRedisExerciseViewSuccess(result: RedisExercise) {
         firstList = result.start.split(",")
-        middleList = result.middle.split(",")
-        lastList = result.end.split(",")
-        lifecycleScope.launch {
-            saveExerciseLoc(exerciseId.toLong(),firstList[0],firstList[1],firstList[2])
-            saveExerciseLoc(exerciseId.toLong(),middleList[0],middleList[1],middleList[2])
-            saveExerciseLoc(exerciseId.toLong(),lastList[0],lastList[1],lastList[2])
+        if(result.middle == null && result.end == null){
+            middleList = firstList
+            lastList = firstList
         }
+        else if(result.middle!=null && result.end==null) {
+            lastList = middleList
+        }
+        else if(result.middle == null && result.end!=null){
+            middleList = lastList
+        }
+        else {
+            middleList = result.middle.split(",")
+            lastList = result.end.split(",")
+        }
+
+//        lifecycleScope.launch {
+//            saveExerciseLoc(exerciseId.toLong(),firstList[0],firstList[1],firstList[2])
+//            saveExerciseLoc(exerciseId.toLong(),middleList[0],middleList[1],middleList[2])
+//            saveExerciseLoc(exerciseId.toLong(),lastList[0],lastList[1],lastList[2])
+//        }
         val intent= Intent(this, ExerciseResultActivity::class.java)
         intent.putExtra("distance", distance)
         intent.putExtra("firstList",result.start)
         intent.putExtra("middleList",result.middle)
         intent.putExtra("lastList",result.end)
-        sdk.stop()
-        sdk.stopAltitudeCalculation()
         startActivity(intent)
     }
 
     override fun onGetRedisExerciseViewFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetAllExerciseListSuccess(result: ArrayList<String>) {
+
+
+    }
+
+    override fun onGetAllExerciseListFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetAllRedisExerciseSuccess(result: ArrayList<String>) {
+        val intent= Intent(this, ExerciseResultActivity::class.java)
+        intent.putExtra("distance", distance)
+        intent.putStringArrayListExtra("locationList",result )
+        intent.putExtra("totalTime",timeInSeconds)
+        startActivity(intent)
+    }
+
+    override fun onGetAllRedisExerciseFailure(code: Int, msg: String) {
         TODO("Not yet implemented")
     }
 

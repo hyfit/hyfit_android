@@ -63,6 +63,7 @@
         <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.34158172607421877" />
         <entry key="app/src/main/res/layout/activity_exercise_result.xml" value="0.238037109375" />
         <entry key="app/src/main/res/layout/activity_find_password.xml" value="0.13125" />
+        <entry key="app/src/main/res/layout/activity_find_password3.xml" value="0.25052083333333336" />
         <entry key="app/src/main/res/layout/activity_join2.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/activity_join3.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/activity_join4.xml" value="0.25364583333333335" />
@@ -90,6 +91,7 @@
         <entry key="app/src/main/res/layout/goal_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/goal_search_list.xml" value="0.45" />
         <entry key="app/src/main/res/layout/post_item.xml" value="0.25364583333333335" />
+        <entry key="app/src/main/res/layout/ready_dialog.xml" value="0.24947916666666667" />
         <entry key="app/src/main/res/menu/navi_menu.xml" value="0.25" />
       </map>
     </option>

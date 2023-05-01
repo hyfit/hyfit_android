@@ -33,7 +33,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_bold"
-            android:text="Welcome, Billie"
+            android:text="Welcome, "
+            android:id="@+id/welcome_text"
             android:textColor="@color/black"
             android:textSize="24dp"
             android:textStyle="bold" />
@@ -142,7 +143,7 @@
         android:layout_marginHorizontal="25dp"
         android:background="@drawable/main_startbtn_rectangle"
         android:fontFamily="@font/roboto_bold"
-        android:text="Start this Goal"
+        android:text="Start Exercise"
         android:textColor="@color/white"
         android:textSize="20dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -206,6 +207,29 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.89" />
+
+    <ProgressBar
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
+
+<!--    <TextView-->
+<!--        android:id="@+id/init_text"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:text="Initializing Pinnacle"-->
+<!--        android:visibility="invisible"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/progressBar" />-->
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

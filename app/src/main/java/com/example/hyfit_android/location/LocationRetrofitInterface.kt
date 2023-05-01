@@ -16,4 +16,7 @@ interface LocationRetrofitInterface {
     @GET("/api/location/redis-exercise")
     fun getRedisExercise(@Query("id") id : Int) : Call<LocationRedisExerciseRes>
 
+    @GET("/api/location/redis-all")
+    fun getAllRedisExercise(@Query("id") id : Int): Call<LocationRedisRes>
+
 }

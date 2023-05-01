@@ -11,6 +11,7 @@ class LocationService {
     private lateinit var getRedisExerciseView: GetRedisExerciseView
     private lateinit var saveExerciseLocView: SaveExerciseLocView
     private lateinit var saveExerciseRedisLocView: SaveExerciseRedisLocView
+    private lateinit var getAllRedisExerciseView: GetAllRedisExerciseView
 
     fun setGetAllExerciseListView(getAllExerciseListView: GetAllExerciseListView){
         this.getAllExerciseListView = getAllExerciseListView
@@ -23,6 +24,10 @@ class LocationService {
     }
     fun setSaveExerciseRedisLocView(saveExerciseRedisLocView: SaveExerciseRedisLocView){
         this.saveExerciseRedisLocView = saveExerciseRedisLocView
+    }
+
+    fun setGetAllRedisExerciseView(getAllRedisExerciseView : GetAllRedisExerciseView){
+        this.getAllRedisExerciseView = getAllRedisExerciseView
     }
 
     fun saveExerciseLoc(locationExerciseSaveReq: LocationExerciseSaveReq){
@@ -65,9 +70,9 @@ class LocationService {
         val locationService = getRetrofit().create(LocationRetrofitInterface::class.java)
         locationService.getAllExerciseList(id).enqueue(object: Callback<LocationRedisRes> {
             override fun onResponse(call: Call<LocationRedisRes>, response: Response<LocationRedisRes>) {
-                Log.d("LOCATION/SUCCESS", response.toString())
+                Log.d("LOCATIONGET/SUCCESS", response.toString())
                 val resp: LocationRedisRes = response.body()!!
-                Log.d("LOCATION/SUCCESS", resp.toString())
+                Log.d("LOCATIONGET/SUCCESS", resp.toString())
                 when(val code = resp.code){
                     1000-> getAllExerciseListView.onGetAllExerciseListSuccess(resp.result)
                     else-> getAllExerciseListView.onGetAllExerciseListFailure(code, resp.message)
@@ -92,6 +97,24 @@ class LocationService {
                 }
             }
             override fun onFailure(call: Call<LocationRedisExerciseRes>, t: Throwable) {
+                Log.d("LOCATION/FAILURE", t.message.toString())
+            }
+        })
+    }
+
+    fun getAllRedisExercise(id : Int){
+        val locationService = getRetrofit().create(LocationRetrofitInterface::class.java)
+        locationService.getAllRedisExercise(id).enqueue(object: Callback<LocationRedisRes> {
+            override fun onResponse(call: Call<LocationRedisRes>, response: Response<LocationRedisRes>) {
+                Log.d("LOCATION/SUCCESS", response.toString())
+                val resp: LocationRedisRes = response.body()!!
+                Log.d("LOCATION/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> getAllRedisExerciseView.onGetAllRedisExerciseSuccess(resp.result)
+                    else-> getAllRedisExerciseView.onGetAllRedisExerciseFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<LocationRedisRes>, t: Throwable) {
                 Log.d("LOCATION/FAILURE", t.message.toString())
             }
         })

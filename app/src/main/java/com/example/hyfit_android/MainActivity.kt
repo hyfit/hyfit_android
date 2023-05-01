@@ -9,14 +9,11 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
-import com.example.hyfit_android.BuildConfig.KEY_VALUE
-import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LoginActivity
+import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
@@ -27,18 +24,41 @@ import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
 import java.util.*
 import com.example.hyfit_android.home.MainFragment
+import kotlin.properties.Delegates
 
-// import com.example.hyfit_android.home.MapsFragment
 
-class MainActivity : AppCompatActivity(){
+class MainActivity : AppCompatActivity() , Observer {
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
+
+    // pinncale
+    private lateinit var context: Context
+    private lateinit var sdk: NextNavSdk
+    private val NEXTNAV_SERVICE_URL = "api.nextnav.io"
+    private val API_KEY = BuildConfig.KEY_VALUE
+    private lateinit var sdkMessageObservable: SdkStatusNotification
+    private lateinit var altitudeObservable: AltitudeContextNotification
+
+    var initCode = 0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // pinnacle setting
+        context = applicationContext
+        sdkMessageObservable = SdkStatusNotification.getInstance()
+        sdkMessageObservable.addObserver(this)
+        altitudeObservable = AltitudeContextNotification.getInstance()
+        altitudeObservable.addObserver(this)
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loginActivity=LoginActivity()
+
+        // 메인에 들어오자마자 initPinnacle
+        initPinnacle()
 
 
         var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
@@ -105,11 +125,51 @@ class MainActivity : AppCompatActivity(){
         }
     }
 
+    private fun initPinnacle() {
+        sdk = NextNavSdk.getInstance()
+        sdk.init(context, NEXTNAV_SERVICE_URL, API_KEY)
+    }
+    override fun update(o: Observable?, p: Any?) {
+
+        if (o is SdkStatusNotification) {
+            // initCode update
+            initCode = o.code
+            when (o.code) {
+                SdkStatus.STATUS_MESSAGES.INIT_SUCCESS.code -> {
+//                    // SDK is initialized successfully, it’s ready to start altitude calculation
+                }
+            }
+        }
+        if (o is AltitudeContextNotification) {
+            Log.d("current Location" , sdk.currentLocation.toString())
+            Log.d("second status code is ", o.statusCode.toString())
+            Log.d("second error code is ", o.errorCode.toString())
+            if (Date().time - o.timestamp <= 1000) {
+                when (o.statusCode) {
+                    200 -> {
+
+                    }
+                }
+                when(o.warningCode){
+                    WarningMessages.HIGH_DELTA_LOCATION.code -> {
+                        Log.w(
+                            ContentValues.TAG, "update: " +
+                                    WarningMessages.HIGH_DELTA_LOCATION.code)
+                    }
+                    WarningMessages.HIGH_DELTA_PRESSURE.code -> {
+                        Log.w(
+                            ContentValues.TAG, "update: " +
+                                    WarningMessages.HIGH_DELTA_PRESSURE.code)
+                    }
+                }
+            }
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         requestPermissions() // 액티비티가 시작되면 권한 요청 실행
     }
-
 
     private fun getJwt():String?{
         val spf = getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
