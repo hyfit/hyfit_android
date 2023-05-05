@@ -65,27 +65,28 @@ class MainFragment : Fragment(), GetUserView{
 
         val mainActivity = activity as MainActivity
         binding = FragmentMainBinding.inflate(inflater, container, false)
+
         binding.progressBar.visibility = ProgressBar.GONE
-        val startBtn = binding.mainStartBtn
-
-        startBtn.setOnClickListener {
-            if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ){
-                val intent = Intent(requireActivity(), ExerciseActivity::class.java)
-                startActivity(intent)
-            }
-            else {
-                binding.progressBar.visibility = ProgressBar.VISIBLE
-                lifecycleScope.launch {
-
-                    while(mainActivity.initCode != 800 ) {
-                        Log.d("STATUSCODE",mainActivity.initCode.toString())
-                        delay(1000)
-                    }
-                    val intent = Intent(requireActivity(), ExerciseActivity::class.java)
-                    startActivity(intent)
-                }
-            }
-        }
+//        val startBtn = binding.mainStartBtn
+        binding.welcomeText.text = "Welcome, ${mainActivity.userNickName}"
+//        startBtn.setOnClickListener {
+//            if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
+//                val intent = Intent(requireActivity(), ExerciseActivity::class.java)
+//                startActivity(intent)
+//            }
+//            else {
+//                binding.progressBar.visibility = ProgressBar.VISIBLE
+//                lifecycleScope.launch {
+//
+//                    while(mainActivity.initCode != 800 ) {
+//                        Log.d("STATUSCODE",mainActivity.initCode.toString())
+//                        delay(1000)
+//                    }
+//                    val intent = Intent(requireActivity(), ExerciseActivity::class.java)
+//                    startActivity(intent)
+//                }
+//            }
+//        }
 
         return binding.root
     }
@@ -116,7 +117,7 @@ class MainFragment : Fragment(), GetUserView{
 
     override fun onStart() {
         super.onStart()
-       userget()
+//       userget()
     }
 
     override fun onUserSuccess(code: Int, result: User) {

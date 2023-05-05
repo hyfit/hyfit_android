@@ -2,7 +2,7 @@
 <resources>
     <color name="background_color">#F3F3F3</color>
     <color name="darkgray2">#7E7E7E</color>
-    <color name="main_color">#24629B</color>
+    <color name="main_color">#6079ff</color>
     <color name="lightgray2">#E9E9E9</color>
     <color name="logo_color">#1A14FF</color>
     <color name="lightgray">#C2C2C2</color>

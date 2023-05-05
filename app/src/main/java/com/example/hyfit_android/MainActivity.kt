@@ -12,6 +12,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.community.CommunityFragment
@@ -27,7 +28,7 @@ import com.example.hyfit_android.home.MainFragment
 import kotlin.properties.Delegates
 
 
-class MainActivity : AppCompatActivity() , Observer {
+class MainActivity : AppCompatActivity() , Observer{
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
@@ -40,7 +41,9 @@ class MainActivity : AppCompatActivity() , Observer {
     private lateinit var sdkMessageObservable: SdkStatusNotification
     private lateinit var altitudeObservable: AltitudeContextNotification
 
+    lateinit var userNickName : String
     var initCode = 0
+    var usergetCode = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -51,14 +54,14 @@ class MainActivity : AppCompatActivity() , Observer {
         sdkMessageObservable.addObserver(this)
         altitudeObservable = AltitudeContextNotification.getInstance()
         altitudeObservable.addObserver(this)
-
+        userNickName = intent.getStringExtra("userNickName").toString()
 
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loginActivity=LoginActivity()
 
         // 메인에 들어오자마자 initPinnacle
-        initPinnacle()
+//        initPinnacle()
 
 
         var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
@@ -169,7 +172,9 @@ class MainActivity : AppCompatActivity() , Observer {
     override fun onStart() {
         super.onStart()
         requestPermissions() // 액티비티가 시작되면 권한 요청 실행
+        initPinnacle() // initPinnacle
     }
+
 
     private fun getJwt():String?{
         val spf = getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
@@ -196,10 +201,7 @@ class MainActivity : AppCompatActivity() , Observer {
             }
         }
 
-//    // fragment에서 다른 fragment로 화면전환
-//    public fun replaceFragment(fragment: Fragment) {
-//        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
-//    }
+
 
     }
 
