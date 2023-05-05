@@ -28,7 +28,7 @@ import com.example.hyfit_android.home.MainFragment
 import kotlin.properties.Delegates
 
 
-class MainActivity : AppCompatActivity() , Observer{
+class MainActivity : AppCompatActivity() , Observer, GetUserView{
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
@@ -43,7 +43,6 @@ class MainActivity : AppCompatActivity() , Observer{
 
     lateinit var userNickName : String
     var initCode = 0
-    var usergetCode = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -55,7 +54,6 @@ class MainActivity : AppCompatActivity() , Observer{
         altitudeObservable = AltitudeContextNotification.getInstance()
         altitudeObservable.addObserver(this)
         userNickName = intent.getStringExtra("userNickName").toString()
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loginActivity=LoginActivity()
@@ -175,6 +173,14 @@ class MainActivity : AppCompatActivity() , Observer{
         initPinnacle() // initPinnacle
     }
 
+    private fun userget() {
+        val jwt: String? = getJwt()
+        Log.d("jwtjwt", jwt.toString())
+
+        val usService = UserRetrofitService()
+        usService.setgetuserView(this)
+        usService.userget(jwt)
+    }
 
     private fun getJwt():String?{
         val spf = getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
@@ -201,8 +207,14 @@ class MainActivity : AppCompatActivity() , Observer{
             }
         }
 
-
-
+    override fun onUserSuccess(code: Int, result: User) {
     }
+
+    override fun onUserFailure(code: Int, msg: String) {
+        Log.d("ONUSERFAILUER",msg)
+    }
+
+
+}
 
 

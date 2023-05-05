@@ -27,6 +27,7 @@ import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.FragmentMainBinding
 import com.example.hyfit_android.exercise.ExerciseActivity
+import com.example.hyfit_android.exercise.StairActivity
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
@@ -35,6 +36,9 @@ import com.nextnav.nn_app_sdk.zservice.WarningMessages
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import java.util.*
 import kotlin.properties.Delegates
 
@@ -59,34 +63,54 @@ class MainFragment : Fragment(), GetUserView{
         savedInstanceState: Bundle?
     ): View? {
 
+
+        userget()
         // pinnacle setting
         sdk = NextNavSdk.getInstance()
         sdkMessageObservable = SdkStatusNotification.getInstance()
-
         val mainActivity = activity as MainActivity
         binding = FragmentMainBinding.inflate(inflater, container, false)
 
         binding.progressBar.visibility = ProgressBar.GONE
-//        val startBtn = binding.mainStartBtn
-        binding.welcomeText.text = "Welcome, ${mainActivity.userNickName}"
-//        startBtn.setOnClickListener {
-//            if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
-//                val intent = Intent(requireActivity(), ExerciseActivity::class.java)
-//                startActivity(intent)
-//            }
-//            else {
-//                binding.progressBar.visibility = ProgressBar.VISIBLE
-//                lifecycleScope.launch {
-//
-//                    while(mainActivity.initCode != 800 ) {
-//                        Log.d("STATUSCODE",mainActivity.initCode.toString())
-//                        delay(1000)
-//                    }
-//                    val intent = Intent(requireActivity(), ExerciseActivity::class.java)
-//                    startActivity(intent)
-//                }
-//            }
-//        }
+        val startBtn = binding.outdoorStartBtn
+
+        startBtn.setOnClickListener {
+            if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
+                val intent = Intent(requireActivity(), ExerciseActivity::class.java)
+                startActivity(intent)
+            }
+            else {
+                binding.progressBar.visibility = ProgressBar.VISIBLE
+                lifecycleScope.launch {
+
+                    while(mainActivity.initCode != 800 ) {
+                        Log.d("STATUSCODE",mainActivity.initCode.toString())
+                        delay(1000)
+                    }
+                    val intent = Intent(requireActivity(), ExerciseActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
+
+        binding.stairStartBtn.setOnClickListener {
+            if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
+                val intent = Intent(requireActivity(), StairActivity::class.java)
+                startActivity(intent)
+            }
+            else {
+                binding.progressBar.visibility = ProgressBar.VISIBLE
+                lifecycleScope.launch {
+
+                    while(mainActivity.initCode != 800 ) {
+                        Log.d("STATUSCODE",mainActivity.initCode.toString())
+                        delay(1000)
+                    }
+                    val intent = Intent(requireActivity(), StairActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+        }
 
         return binding.root
     }
@@ -96,6 +120,7 @@ class MainFragment : Fragment(), GetUserView{
         val spf = requireActivity().getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
         return spf!!.getString("jwt","0")
     }
+
     private fun userget() {
         val jwt: String? = getJwt()
         Log.d("jwtjwt", jwt.toString())
@@ -117,7 +142,7 @@ class MainFragment : Fragment(), GetUserView{
 
     override fun onStart() {
         super.onStart()
-//       userget()
+
     }
 
     override fun onUserSuccess(code: Int, result: User) {

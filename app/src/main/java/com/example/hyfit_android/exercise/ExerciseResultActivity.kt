@@ -1,10 +1,15 @@
 package com.example.hyfit_android.exercise
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.Bitmap
+import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.Paint
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -12,6 +17,7 @@ import androidx.core.app.ActivityCompat
 import com.example.hyfit_android.MainActivity
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.ActivityExerciseResultBinding
+import com.example.hyfit_android.home.MainFragment
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -30,7 +36,7 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var polyline: Polyline
     private var latLngList: MutableList<LatLng> = mutableListOf()
     private lateinit var locationList : ArrayList<String>
-    private var  totalTime by Delegates.notNull<Int>()
+    private var  totalTime by Delegates.notNull<Long>()
     private lateinit var firstList: LatLng
     private lateinit var lastList: LatLng
     private lateinit var mapFragment : SupportMapFragment
@@ -72,11 +78,14 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
             lastList = LatLng(lastLatLngArr[0].toDouble(), lastLatLngArr[1].toDouble())
         }
 
-
         // 시간 가져오기
-        totalTime = intent.getIntExtra("totalTime",0)
 
-        binding.exerciseDistanceText.text="distance : " + distanceResult.toString() + "km"
+        totalTime = intent.getStringExtra("totalTime")!!.toLong()
+        binding.resultTimeText.text = formatTime(totalTime)
+        Log.d("TIMEORIGIN",totalTime.toString())
+        Log.d("TIMECURRENT",formatTime(totalTime.toLong()))
+
+        binding.exerciseDistanceText.text=distanceResult + "km"
 
         // 메인 이동
         binding.goToMain.setOnClickListener{
@@ -87,6 +96,7 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
     }
 
 
+    @SuppressLint("ResourceAsColor")
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
         if (ActivityCompat.checkSelfPermission(
@@ -101,8 +111,22 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
         }
 
         // 마커
-        mMap.addMarker(MarkerOptions().position(firstList).title("start").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
-        mMap.addMarker(MarkerOptions().position(lastList).title("end").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
+         fun vectorToBitmap(vector: Drawable): BitmapDescriptor {
+            val bitmap = Bitmap.createBitmap(vector.intrinsicWidth, vector.intrinsicHeight, Bitmap.Config.ARGB_8888)
+            val canvas = Canvas(bitmap)
+            vector.setBounds(0, 0, canvas.width, canvas.height)
+            vector.draw(canvas)
+            return BitmapDescriptorFactory.fromBitmap(bitmap)
+        }
+
+// 마커 아이콘으로 vector_icon.xml 설정
+        val vectorIcon = resources.getDrawable(R.drawable.ic_location_marker, null)
+        val bitmapIcon = vectorToBitmap(vectorIcon)
+        mMap.addMarker(MarkerOptions().position(firstList).title("start").icon(bitmapIcon))
+        mMap.addMarker(MarkerOptions().position(lastList).title("end").icon(bitmapIcon))
+
+//        mMap.addMarker(MarkerOptions().position(firstList).title("start").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
+//        mMap.addMarker(MarkerOptions().position(lastList).title("end").icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE)))
 
 //        mMap.addMarker(MarkerOptions().position(firstList).title("start"))
 //        mMap.addMarker(MarkerOptions().position(lastList).title("end"))
@@ -126,6 +150,13 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
         }
 
 
+    }
+
+    fun formatTime(totalSeconds: Long): String {
+        val hours = totalSeconds / 3600
+        val minutes = (totalSeconds % 3600) / 60
+        val seconds = totalSeconds % 60
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
 
