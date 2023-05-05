@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.WindowManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -16,6 +17,9 @@ import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
+import kotlin.math.cos
+import kotlin.math.pow
+import kotlin.math.sqrt
 
 class MainActivity : AppCompatActivity() {
     lateinit var binding: ActivityMainBinding
@@ -26,6 +30,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loginActivity=LoginActivity()
+        Log.d("sibalhere", getJwt()!!)
 
 
         var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
@@ -84,7 +89,31 @@ class MainActivity : AppCompatActivity() {
             )
             return
         }
+        Log.d("babalogloglog", calDistance("35.522", "129.134", "42", "35.521", "129.134", "113").toString())
     }
+
+    private fun calDistance(Lat1: String, Lon1: String, Alt1: String, Lat2: String, Lon2: String, Alt2: String): Double{
+        // DCMA 알고리즘 사용
+        val lat1 = Lat1.toDouble()
+        val lat2 = Lat2.toDouble()
+        val lon1 = Lon1.toDouble()
+        val lon2 = Lon2.toDouble()
+        val alt1 = kotlin.math.abs(Alt1.toDouble())/1000
+        val alt2 = kotlin.math.abs(Alt2.toDouble())/1000
+
+        val ML = (lat1 + lat2) / 2
+        val KPD1 = 111.13209 - 0.56605 * cos(2 * ML) + 0.00120 * cos(4 * ML)
+        val KPD2 = 111.41513 * cos(ML) - 0.09455 * cos(3 * ML) + 0.00012 * (5 * ML)
+        val NS = KPD1 * (lat1 - lat2)
+        val EW = KPD2 * (lon1 - lon2)
+        val DISR = sqrt(NS.pow(2) + EW.pow(2))
+        val DIFFalt = alt1 - alt2
+        val DISTANCEmove = sqrt(DISR.pow(2) + DIFFalt.pow(2))
+
+        return DISTANCEmove
+    }
+
+
 
 
     private fun getJwt():String?{
@@ -111,6 +140,7 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+
 
 //    // fragment에서 다른 fragment로 화면전환
 //    public fun replaceFragment(fragment: Fragment) {
