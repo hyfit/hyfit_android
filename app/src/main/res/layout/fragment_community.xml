@@ -165,7 +165,7 @@
                 android:textStyle="normal" />
 
             <Button
-                android:id="@+id/riding_btn"
+                android:id="@+id/biking_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
                 android:background="@drawable/tag_btn_back"
