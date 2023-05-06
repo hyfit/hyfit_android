@@ -59,8 +59,6 @@ class SetFragment : Fragment(), GetUserView {
 
         }
 
-
-
         return binding.root
     }
 

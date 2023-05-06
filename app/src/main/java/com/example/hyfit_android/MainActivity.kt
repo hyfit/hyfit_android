@@ -2,35 +2,64 @@ package com.example.hyfit_android
 
 
 import android.Manifest
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.WindowManager
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LoginActivity
-import com.example.hyfit_android.Login.LogoutActivity
+import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.goal.GoalFragment
-import kotlin.math.cos
-import kotlin.math.pow
-import kotlin.math.sqrt
+import com.nextnav.nn_app_sdk.NextNavSdk
+import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
+import com.nextnav.nn_app_sdk.notification.SdkStatus
+import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
+import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import java.util.*
+import com.example.hyfit_android.home.MainFragment
+import kotlin.properties.Delegates
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity() , Observer{
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
+
+    // pinncale
+    private lateinit var context: Context
+    private lateinit var sdk: NextNavSdk
+    private val NEXTNAV_SERVICE_URL = "api.nextnav.io"
+    private val API_KEY = BuildConfig.KEY_VALUE
+    private lateinit var sdkMessageObservable: SdkStatusNotification
+    private lateinit var altitudeObservable: AltitudeContextNotification
+
+    lateinit var userNickName : String
+    var initCode = 0
+    var usergetCode = 0
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // pinnacle setting
+        context = applicationContext
+        sdkMessageObservable = SdkStatusNotification.getInstance()
+        sdkMessageObservable.addObserver(this)
+        altitudeObservable = AltitudeContextNotification.getInstance()
+        altitudeObservable.addObserver(this)
+        userNickName = intent.getStringExtra("userNickName").toString()
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         loginActivity=LoginActivity()
-        Log.d("sibalhere", getJwt()!!)
 
 
         var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
@@ -89,31 +118,61 @@ class MainActivity : AppCompatActivity() {
             )
             return
         }
-        Log.d("babalogloglog", calDistance("35.522", "129.134", "42", "35.521", "129.134", "113").toString())
+    }
+    // 권한 요청
+    private fun requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACTIVITY_RECOGNITION), PERMISSIONS_REQUEST_LOCATION)
+        }
     }
 
-    private fun calDistance(Lat1: String, Lon1: String, Alt1: String, Lat2: String, Lon2: String, Alt2: String): Double{
-        // DCMA 알고리즘 사용
-        val lat1 = Lat1.toDouble()
-        val lat2 = Lat2.toDouble()
-        val lon1 = Lon1.toDouble()
-        val lon2 = Lon2.toDouble()
-        val alt1 = kotlin.math.abs(Alt1.toDouble())/1000
-        val alt2 = kotlin.math.abs(Alt2.toDouble())/1000
+    private fun initPinnacle() {
+        sdk = NextNavSdk.getInstance()
+        sdk.init(context, NEXTNAV_SERVICE_URL, API_KEY)
+    }
+    override fun update(o: Observable?, p: Any?) {
 
-        val ML = (lat1 + lat2) / 2
-        val KPD1 = 111.13209 - 0.56605 * cos(2 * ML) + 0.00120 * cos(4 * ML)
-        val KPD2 = 111.41513 * cos(ML) - 0.09455 * cos(3 * ML) + 0.00012 * (5 * ML)
-        val NS = KPD1 * (lat1 - lat2)
-        val EW = KPD2 * (lon1 - lon2)
-        val DISR = sqrt(NS.pow(2) + EW.pow(2))
-        val DIFFalt = alt1 - alt2
-        val DISTANCEmove = sqrt(DISR.pow(2) + DIFFalt.pow(2))
+        if (o is SdkStatusNotification) {
+            // initCode update
+            initCode = o.code
+            when (o.code) {
+                SdkStatus.STATUS_MESSAGES.INIT_SUCCESS.code -> {
+//                    // SDK is initialized successfully, it’s ready to start altitude calculation
+                }
+            }
+        }
+        if (o is AltitudeContextNotification) {
+            Log.d("current Location" , sdk.currentLocation.toString())
+            Log.d("second status code is ", o.statusCode.toString())
+            Log.d("second error code is ", o.errorCode.toString())
+            if (Date().time - o.timestamp <= 1000) {
+                when (o.statusCode) {
+                    200 -> {
 
-        return DISTANCEmove
+                    }
+                }
+                when(o.warningCode){
+                    WarningMessages.HIGH_DELTA_LOCATION.code -> {
+                        Log.w(
+                            ContentValues.TAG, "update: " +
+                                    WarningMessages.HIGH_DELTA_LOCATION.code)
+                    }
+                    WarningMessages.HIGH_DELTA_PRESSURE.code -> {
+                        Log.w(
+                            ContentValues.TAG, "update: " +
+                                    WarningMessages.HIGH_DELTA_PRESSURE.code)
+                    }
+                }
+            }
+        }
     }
 
-
+    override fun onStart() {
+        super.onStart()
+        requestPermissions() // 액티비티가 시작되면 권한 요청 실행
+        initPinnacle() // initPinnacle
+    }
 
 
     private fun getJwt():String?{
@@ -140,7 +199,6 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-
 
 //    // fragment에서 다른 fragment로 화면전환
 //    public fun replaceFragment(fragment: Fragment) {

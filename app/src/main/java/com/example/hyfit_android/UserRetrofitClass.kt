@@ -1,5 +1,6 @@
 package com.example.hyfit_android
 
+import androidx.appcompat.app.AppCompatActivity
 import retrofit2.Retrofit
 import com.example.hyfit_android.BuildConfig.BASE_URL
 import okhttp3.Interceptor

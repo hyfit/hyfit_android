@@ -8,12 +8,14 @@ import android.util.Log
 import android.widget.Toast
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.MainActivity
+import com.example.hyfit_android.User
+import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.UserInfo.ValidExpiredActivity
 import com.example.hyfit_android.UserInfo.ValidView
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.ActivityLoginBinding
 
-class LoginActivity : AppCompatActivity(), LoginView, ValidView {
+class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
 
     lateinit var binding: ActivityLoginBinding
 
@@ -83,19 +85,29 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView {
         binding.textPassword.text = null
     }
 
+    private fun userget() {
+        val jwt: String? = getJwt()
+        Log.d("jwtjwt", jwt.toString())
+
+        val usService = UserRetrofitService()
+        usService.setgetuserView(this)
+        usService.userget(jwt)
+    }
+
+
 
     override fun onLoginSuccess(code: Int, jwt: String) {
         when(code){
             1000->{
                 Log.d("Success", code.toString())
                 saveJwt(jwt)
-                val intent=Intent(this, MainActivity::class.java)
                 init()
-                startActivity(intent)
-                if (intent.component?.className == "com.example.hyfit_android.MainActivity") {
-                    // MainActivity로 전환된 경우에만 타이머 시작
-                    startTimer()
-                }
+                userget()
+//                startActivity(intent)
+//                if (intent.component?.className == "com.example.hyfit_android.MainActivity") {
+//                    // MainActivity로 전환된 경우에만 타이머 시작
+//                    startTimer()
+//                }
             }
             else->{
                 Log.d("error", code.toString())
@@ -182,6 +194,20 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView {
         editor.clear()
         editor.apply()
         editor.commit()
+    }
+
+    override fun onUserSuccess(code: Int, result: User) {
+        val intent=Intent(this, MainActivity::class.java)
+        intent.putExtra("userNickName",result.nickName)
+        startActivity(intent)
+                if (intent.component?.className == "com.example.hyfit_android.MainActivity") {
+                    // MainActivity로 전환된 경우에만 타이머 시작
+                    startTimer()
+                }
+    }
+
+    override fun onUserFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
     }
 
 }
