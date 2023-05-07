@@ -2,13 +2,16 @@ package com.example.hyfit_android
 
 
 import android.Manifest
+import android.app.PendingIntent.getActivity
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -17,6 +20,8 @@ import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
+import com.example.hyfit_android.databinding.FragmentReportBinding
+import com.example.hyfit_android.databinding.FragmentSetBinding
 import com.example.hyfit_android.goal.GoalFragment
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
@@ -25,6 +30,10 @@ import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
 import java.util.*
 import com.example.hyfit_android.home.MainFragment
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import kotlin.properties.Delegates
 
 
@@ -32,6 +41,8 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
+    //val reportxml=ReportFragment().binding.puthere
+
 
     // pinncale
     private lateinit var context: Context
@@ -43,6 +54,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
 
     lateinit var userNickName : String
     var initCode = 0
+    var usergetCode = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -54,7 +66,10 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
         altitudeObservable = AltitudeContextNotification.getInstance()
         altitudeObservable.addObserver(this)
         userNickName = intent.getStringExtra("userNickName").toString()
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
+        //bindingrp = FragmentReportBinding.inflate(inflater, container, false)
         setContentView(binding.root)
         loginActivity=LoginActivity()
 
@@ -74,6 +89,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
                     true
                 }
                 R.id.ReportFragment -> {
+
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ReportFragment()).commit()
                     true
                 }
@@ -118,6 +134,11 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
             return
         }
     }
+
+//    private fun report(){
+//        val rpService=ReportRetrofitService()
+//        rpService.report()
+//    }
     // 권한 요청
     private fun requestPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
@@ -215,6 +236,6 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
     }
 
 
-}
+    }
 
 

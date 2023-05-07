@@ -164,6 +164,10 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
             1000->{
                 if(result=="invalid"){
                     Log.d("jwt invalid", result)
+//                    Log.d("after 5 seconds", "you out")
+//
+//                    var logoutac=LogoutActivity()
+//                    logoutac.logout(getJwt())
                     val intent=Intent(this, ValidExpiredActivity::class.java)
                     intent.putExtra("invalid", true)
                     startActivity(intent)

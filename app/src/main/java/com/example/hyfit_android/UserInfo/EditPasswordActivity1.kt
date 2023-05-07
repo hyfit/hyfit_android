@@ -23,7 +23,9 @@ class EditPasswordActivity1 : AppCompatActivity(), PasswordCheckView, PasswordUp
 
 
         binding.prev.setOnClickListener {
-            Log.d("good", "Good")
+            val intent=Intent(this, MainActivity::class.java)
+            intent.putExtra("showSetFragment", true)
+            startActivity(intent)
         }
 
         binding.joinNext.setOnClickListener{
