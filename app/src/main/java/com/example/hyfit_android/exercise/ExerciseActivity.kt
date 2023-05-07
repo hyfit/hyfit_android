@@ -8,9 +8,8 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.*
 import android.location.Location
-import android.location.LocationListener
-import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.os.CountDownTimer
@@ -22,29 +21,27 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.lifecycle.lifecycleScope
 import com.example.hyfit_android.BuildConfig
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.ActivityExerciseBinding
 import com.example.hyfit_android.location.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.google.android.gms.maps.CameraUpdateFactory
-import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.OnMapReadyCallback
-import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.Polyline
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.*
+import com.google.android.gms.maps.model.*
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.PhoneMetaData.mContext
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
 import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import kotlinx.coroutines.launch
 import java.lang.Math.cos
 import java.lang.Math.sqrt
 import java.time.LocalDateTime
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.pow
 import kotlin.properties.Delegates
 
@@ -61,12 +58,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
     private lateinit var mMap: GoogleMap
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-//    private lateinit var polyline: Polyline
-    private var polylines: MutableList<Polyline> = mutableListOf()
-
-    private  var startLatLng = LatLng(0.0, 0.0) //polyline 시작점
-    private var endLatLng = LatLng(0.0, 0.0) //polyline 끝점
-
+    private lateinit var polyline: Polyline
     private lateinit var binding: ActivityExerciseBinding
     private lateinit var mapFragment : SupportMapFragment
     private var timer: CountDownTimer? = null
@@ -74,6 +66,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     private var totalTime by Delegates.notNull<Long>()
     var mLocationManager: LocationManager? = null
     var mLocationListener: LocationListener? = null
+    private var mCircle: Circle? = null
     private var exerciseId = 0
     private var isReady by Delegates.notNull<Int>()
     private var isEnd by Delegates.notNull<Int>()
@@ -155,35 +148,32 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
 
 
         mLocationListener = object : LocationListener {
-            var previousLocation: Location? = null
             override fun onLocationChanged(location: Location) {
-                if (location != null) {
-                    if (previousLocation == null) {
-                        previousLocation = location
-                    }
-                    val latitude = location.latitude
-                    val longitude = location.longitude
-                    if (exerciseId > 0) {
-                        calculateAlt(latitude.toString(), longitude.toString(), "5")
-                    }
-                    val currentLocation = LatLng(latitude, longitude)
-                    if (previousLocation != location) {
-                        startLatLng = LatLng(previousLocation!!.latitude, previousLocation!!.longitude)
-                        endLatLng = LatLng(currentLocation.latitude, currentLocation.longitude)
-                        drawPath()
-                    }
-                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18f))
-                    previousLocation = location
-                } else {
+                var latitude = 0.0
+                var longitude = 0.0
+                if (location == null) {
                     Toast.makeText(
                         this@ExerciseActivity,
                         "I think you are currently indoors.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
+                if (location != null) {
+                    latitude = location.latitude
+                    longitude = location.longitude
+                    if (exerciseId > 0) {
+                        calculateAlt(latitude.toString(), longitude.toString(), "5")
+                    }
+                    var currentLocation = LatLng(latitude, longitude)
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18f))
+                    if (polyline == null) {
+                        polyline = mMap.addPolyline(PolylineOptions().width(10f).color(Color.BLUE))
+                    }
+                    polyline.points = polyline.points.plus(currentLocation)
+                }
             }
 
-        override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
             override fun onProviderEnabled(provider: String) {}
             override fun onProviderDisabled(provider: String) {}
 
@@ -230,31 +220,26 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         val exerciseService = ExerciseService()
         exerciseService.setExerciseStartView(this)
         exerciseService.startExercise(jwt!!,ExerciseStartReq("running",current.toString(),0 ))
-    }
 
-    //polyline을 그려주는 메소드
-    private fun drawPath() {
-        val options = PolylineOptions().add(startLatLng).add(endLatLng).width(15f).color(Color.BLUE).geodesic(true)
-        polylines.add(mMap.addPolyline(options))
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(startLatLng, 18f))
+
     }
-        fun startTimer() {
-            object : CountDownTimer(Long.MAX_VALUE, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    if (isReady == 1) {
-                        timeInSeconds++
-                        val hours = timeInSeconds / 3600
-                        val minutes = (timeInSeconds % 3600) / 60
-                        val seconds = timeInSeconds % 60
-                        val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                        binding.timerText.text = timeString
-                    }
+    fun startTimer() {
+        object : CountDownTimer(Long.MAX_VALUE, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                if (isReady == 1) {
+                    timeInSeconds++
+                    val hours = timeInSeconds / 3600
+                    val minutes = (timeInSeconds % 3600) / 60
+                    val seconds = timeInSeconds % 60
+                    val timeString = String.format("%02d:%02d:%02d", hours, minutes, seconds)
+                    binding.timerText.text = timeString
                 }
-                override fun onFinish() {
-                    // 카운트다운이 끝났을 때 실행할 작업
-                }
-            }.start()
-        }
+            }
+            override fun onFinish() {
+                // 카운트다운이 끝났을 때 실행할 작업
+            }
+        }.start()
+    }
     fun stopTimer() {
         totalTime = timeInSeconds
         Log.d("TOTALTIME",totalTime.toString())
@@ -334,12 +319,12 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         ) {
             return
         }
-//        polyline = mMap.addPolyline(
-//            PolylineOptions()
-//                .color(Color.BLUE)
-//                .width(15f)
-//                .geodesic(true)
-//        )
+        polyline = mMap.addPolyline(
+            PolylineOptions()
+                .color(Color.BLUE)
+                .width(15f)
+                .geodesic(true)
+        )
         mMap.isMyLocationEnabled = true // 현재 위치 표시 활성화
         // 현재 위치 가져와서 지도 중심으로 설정
         fusedLocationClient.lastLocation.addOnSuccessListener { location ->
@@ -484,8 +469,8 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
                             saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), "9.0")
                         }
                         else {
-                                Log.d("KOREACODE", o.statusCode.toString())
-                                saveRedis(9.0)
+                            Log.d("KOREACODE", o.statusCode.toString())
+                            saveRedis(9.0)
                         }
 
                     }
@@ -538,6 +523,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
             return
         }
         mLocationListener?.let { mLocationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, it) }
+
     }
 
     override fun onExerciseStartFailure(code: Int, msg: String) {
