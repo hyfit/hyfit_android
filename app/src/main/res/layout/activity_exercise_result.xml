@@ -134,7 +134,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/inter_medium"
-                android:text="10'3''"
+                android:text=""
                 android:textColor="@color/main_color"
                 android:textSize="20sp" />
         </LinearLayout>
