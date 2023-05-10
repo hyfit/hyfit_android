@@ -30,37 +30,35 @@
         android:textSize="20sp"
         android:textStyle="bold" />
 
+
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:id="@+id/layoutdashboard"
         android:layout_height="801dp"
         android:layout_marginTop="90dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
-
-        <Button
-            android:id="@+id/pushbutton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="touch"
+        <View
+            android:layout_width="390dp"
+            android:layout_height="417dp"
+            android:background="@drawable/rounded_corner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.473"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.499" />
-
-        <ImageView
-            android:id="@+id/puthere"
-            android:layout_width="400dp"
-            android:layout_height="200dp"
-            android:src="@drawable/rectangle_24"
+            app:layout_constraintVertical_bias="0.76"
+            />
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/chart"
+            android:layout_width="370dp"
+            android:layout_height="400dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.52" />
+            app:layout_constraintVertical_bias="0.74" />
 
         <ImageView
             android:id="@+id/menubar"
@@ -319,11 +317,51 @@
         android:layout_width="match_parent"
         android:layout_height="801dp"
         android:layout_marginTop="90dp"
-        android:visibility="gone">
+        android:visibility="visible">
+
+        <View
+            android:layout_width="160dp"
+            android:layout_height="215dp"
+            android:background="@drawable/rounded_corner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.13"
+            app:layout_constraintVertical_bias="0.782" />
 
 
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChart1"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.145"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.798" />
+        <View
+            android:layout_width="160dp"
+            android:layout_height="215dp"
+            android:background="@drawable/rounded_corner"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.86"
+            app:layout_constraintVertical_bias="0.782" />
 
-
+        <com.github.mikephil.charting.charts.PieChart
+            android:id="@+id/pieChart2"
+            android:layout_width="150dp"
+            android:layout_height="200dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.85"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.798" />
 
         <ImageView
             android:id="@+id/menubar2"
@@ -582,7 +620,7 @@
             app:layout_constraintHorizontal_bias="0.228"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.572" />
+            app:layout_constraintVertical_bias="0.533" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

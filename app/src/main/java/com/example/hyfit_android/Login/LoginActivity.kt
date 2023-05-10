@@ -139,7 +139,7 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
     }
 
     private fun startTimer() {
-        val timer = object : CountDownTimer(50*1000, 100) {
+        val timer = object : CountDownTimer(29*1000*60, 100) {
             override fun onTick(millisUntilFinished: Long) {
             }
 

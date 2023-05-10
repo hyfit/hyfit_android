@@ -9,40 +9,41 @@ import retrofit2.Callback
 import retrofit2.Response
 import com.example.hyfit_android.ReportFragment
 import com.example.hyfit_android.databinding.FragmentReportBinding
+import com.github.mikephil.charting.charts.BarChart
 
 class ReportRetrofitService {
     private lateinit var reportView:ReportView
     private lateinit var binding:FragmentReportBinding
 
 
+
     fun setReportView(reportView: ReportView){
         this.reportView=reportView
     }
 
-    fun report(){
+
+    fun report(email:String?){
         val reportService = getreportRetrofit().create(ReportRetrofitInterface::class.java)
-//        Log.d("email: ", loginRequest.email)
-//        Log.d("password: ", loginRequest.password)
-        reportService.report().enqueue(object : Callback<ResponseBody> {
-            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-                //val resp = response.body()?.bytes()
-                val inputStream=response.body()?.bytes()
-                Log.d("resbody", inputStream.toString())
-                //여기까지 잘들어감, 밑에 bitmap부터 안됨.. 에러 다시 찾아보기
-                val prior = inputStream
-                    //Log.d("prior", prior.size.toString())
-                    //if (prior.isNotEmpty()){
-
-                var bitmap = BitmapFactory.decodeByteArray(prior, 0, prior!!.size)
-                //Log.d("bitmapbitmapbitmap", bitmap.toString())
-                //binding.puthere.setImageBitmap(bitmap)
-                reportView.onReportSuccess(bitmap)
-
+        reportService.report(email!!).enqueue(object : Callback<ReportResponse> {
+            override fun onResponse(call: Call<ReportResponse>, response: Response<ReportResponse>) {
+                if (response.isSuccessful) {
+                    Log.d("bargraphget", "goodgood")
+                    val resp: ReportResponse? = response.body()
+                    if (resp != null) {
+                        when (val code = resp.code) {
+                            1000 -> reportView.onReportSuccess(resp.totaltime,resp.pace,resp.distance)
+                            else -> reportView.onReportFailure(code)
+                        }
+                    } else {
+                        // 서버로부터 받은 응답이 null인 경우 처리
+                        Log.d("GetuserFailure", "Response body is null.")
+                    }
+                }
             }
 
-            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            override fun onFailure(call: Call<ReportResponse>, t: Throwable) {
 
-                Log.d("Failurehhhhh", t.message.toString())
+                Log.d("BarChartFailure", t.message.toString())
             }
 
         })
