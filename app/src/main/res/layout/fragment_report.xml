@@ -7,6 +7,13 @@
              android:layout_height="match_parent"
             android:background="#F5F5F5"
              tools:context=".ReportFragment">
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="clickhere"
+        android:id="@+id/clickhere"
+        android:visibility="visible"
+        />
     <ProgressBar
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -37,7 +44,7 @@
         android:id="@+id/layoutdashboard"
         android:layout_height="801dp"
         android:layout_marginTop="90dp"
-        android:visibility="gone">
+        android:visibility="visible">
 
         <View
             android:layout_width="390dp"
@@ -317,7 +324,7 @@
         android:layout_width="match_parent"
         android:layout_height="801dp"
         android:layout_marginTop="90dp"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <View
             android:layout_width="160dp"

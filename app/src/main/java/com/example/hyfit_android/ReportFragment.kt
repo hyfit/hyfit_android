@@ -46,6 +46,7 @@ class ReportFragment : Fragment(), ReportView{
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReportBinding.inflate(inflater, container, false)
+
         progressBar = binding.progressBar
         binding.change.setOnClickListener {
             binding.layoutdashboard.visibility = View.GONE
@@ -71,8 +72,28 @@ class ReportFragment : Fragment(), ReportView{
             binding.layoutranking.visibility = View.GONE
             binding.layoutchange.visibility = View.VISIBLE
         }
+        binding.clickhere.setOnClickListener {
+            report("dkdud203@naver.com")
+            //여기 Getuser로 해서 이메일 따와야함
+            //그리고 자동으로 버튼눌러지게 fragment들어와서 1초후에 버튼 누르게..하면 동기화 잘 될라나 ㅎ?
+            
+        }
 
 
+
+
+
+        ///////////////////PIECHART
+
+        //declare a function for pie chart activity
+        pieChart1=binding.pieChart1
+        pieChart2=binding.pieChart2
+        setUpSelectionPieChart(pieChart1)
+        setUpSelectionPieChart(pieChart2)
+        return binding.root
+    }
+
+    private fun setUpBarchart(time:ArrayList<Float>, pace:ArrayList<Float>, distance:ArrayList<Float>){
         mChart = binding.chart
         mChart.setDrawBarShadow(false)
         mChart.description.isEnabled = false
@@ -103,9 +124,9 @@ class ReportFragment : Fragment(), ReportView{
         mChart.legend.isEnabled = false
         mChart.setBackgroundColor(Color.WHITE)
 
-        val valOne = floatArrayOf(10f, 20f, 30f, 40f, 50f)
-        val valTwo = floatArrayOf(60f, 50f, 40f, 30f, 20f)
-        val valThree = floatArrayOf(50f, 60f, 20f, 10f, 30f)
+        val valOne = distance
+        val valTwo = pace
+        val valThree = time
 
         val barOne = ArrayList<BarEntry>()
         val barTwo = ArrayList<BarEntry>()
@@ -160,15 +181,6 @@ class ReportFragment : Fragment(), ReportView{
         mChart.groupBars(1f, groupSpace, barSpace)
         mChart.invalidate()
 
-
-        ///////////////////PIECHART
-
-        //declare a function for pie chart activity
-        pieChart1=binding.pieChart1
-        pieChart2=binding.pieChart2
-        setUpSelectionPieChart(pieChart1)
-        setUpSelectionPieChart(pieChart2)
-        return binding.root
     }
     private fun setUpSelectionPieChart(pie:PieChart) {
 
@@ -214,16 +226,14 @@ class ReportFragment : Fragment(), ReportView{
 
     override fun onReportSuccess(totaltime: List<Float>, pace: List<Float>,distance: List<Float>) {
         if(distance!=null){
-            progressBar.visibility=ProgressBar.GONE
-            Log.d("GetreportSuccess", "cong")
-            val chartshared = context?.getSharedPreferences("chart", Context.MODE_PRIVATE)
-            val editor = chartshared!!.edit()
-            editor.putString("key", "value")
-            editor.putInt("count", 10)
-            editor.putBoolean("is_logged_in", true)
-            editor.apply()
 
-            //binding.puthere.setImageBitmap(code)
+            Log.d("GetreportSuccess", "cong")
+            val time: ArrayList<Float> = ArrayList(totaltime)
+            val apace : ArrayList<Float> = ArrayList(pace)
+            val dist : ArrayList<Float> = ArrayList(distance)
+            Log.d("ReportSuccess", "good!")
+            setUpBarchart(time,apace,dist)
+            progressBar.visibility=ProgressBar.GONE
         }
     }
 
