@@ -1,12 +1,12 @@
 package com.example.hyfit_android.goal
 
 import android.annotation.SuppressLint
+import android.app.Dialog
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -32,7 +32,9 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     private lateinit var goalDetailRVAdapter: GoalDetailRVAdapter
     private lateinit var goalList : ArrayList<Goal>
     private val deleteFragment = GoalModalDelete()
+    private lateinit var loadingDialog : Dialog
 
+    @SuppressLint("ResourceAsColor")
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -46,14 +48,31 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
             val dialogFragment = GoalModalFragment()
             dialogFragment.show(parentFragmentManager, "dialog1")
         }
+        binding.goalInProgress.setTextColor(R.color.black)
 
         binding.goalDone.setOnClickListener{
+            binding.goalDone.setBackgroundResource(R.drawable.ic_rectangle_66)
+            binding.goalInProgress.setBackgroundResource(R.drawable.ic_rectangle_65)
+
             getGoalDone()
         }
         binding.goalInProgress.setOnClickListener{
+            binding.goalInProgress.setBackgroundResource(R.drawable.ic_rectangle_66)
+            binding.goalDone.setBackgroundResource(R.drawable.ic_rectangle_65)
             getGoalProgress()
         }
         return binding.root
+    }
+
+    // 로딩화면 띄우는 로직
+    private fun showLoading(){
+        loadingDialog = Dialog(requireContext())
+        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        loadingDialog.setCancelable(false)
+        loadingDialog.setContentView(R.layout.loading_result)
+        loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        loadingDialog.show()
     }
     private fun initRecyclerView(result : ArrayList<Goal>){
         goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), result,this)
@@ -70,7 +89,8 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         val jwt = getJwt()
         val goalService = GoalService()
         goalService.setGetGoalView(this)
-         goalService.getGoalProgress(jwt!!)
+        goalService.getGoalProgress(jwt!!)
+        showLoading()
 
     }
     private fun getGoalDone(){
@@ -80,14 +100,16 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         val goalService = GoalService()
         goalService.setGetDoneGoalView(this)
         goalService.getGoalDone(jwt!!)
+        showLoading()
     }
     @SuppressLint("ResourceAsColor")
     override fun onGetGoalSuccess(result: ArrayList<Goal>) {
 //        initProgressRecyclerView(result)
+        loadingDialog.dismiss()
+        binding.emptyText.visibility = View.GONE
         goalList = result
         initRecyclerView(result)
-        binding.goalInProgress.setBackgroundResource(R.drawable.tag_btn_back_blue)
-        binding.goalInProgress.setTextColor(Color.parseColor("#f3f3f3"))
+        binding.goalInProgress.setBackgroundResource(R.drawable.ic_rectangle_66)
         binding.goalDone.setBackgroundResource(R.drawable.ic_rectangle_65)
         binding.goalDone.setTextColor(Color.parseColor("#FF000000"))
     }
@@ -95,34 +117,42 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     override fun onGetGoalFailure(code: Int, msg: String) {
         if(code==2203){
             val goalList = ArrayList<Goal>()
+            binding.emptyText.visibility = View.VISIBLE
             initRecyclerView(goalList)
+            loadingDialog.dismiss()
         }
         if(code==2202){
             val goalList = ArrayList<Goal>()
+            binding.emptyText.visibility = View.VISIBLE
             initRecyclerView(goalList)
+            loadingDialog.dismiss()
         }
     }
 
     @SuppressLint("ResourceAsColor")
     override fun onGetDoneGoalSuccess(result: ArrayList<Goal>) {
 //        goalList = result
-//
+        loadingDialog.dismiss()
+        binding.emptyText.visibility = View.GONE
         initRecyclerView(result)
-        binding.goalDone.setBackgroundResource(R.drawable.tag_btn_back_blue)
-        binding.goalDone.setTextColor(Color.parseColor("#f3f3f3"))
+        binding.goalDone.setBackgroundResource(R.drawable.ic_rectangle_66)
         binding.goalInProgress.setBackgroundResource(R.drawable.ic_rectangle_65)
-       binding.goalInProgress.setTextColor(Color.parseColor("#FF000000"))
+        binding.goalInProgress.setTextColor(Color.parseColor("#FF000000"))
 
     }
 
     override fun onGetDoneGoalFailure(code: Int, msg: String) {
         if(code==2203){
             val goalList = ArrayList<Goal>()
+            binding.emptyText.visibility = View.VISIBLE
             initRecyclerView(goalList)
+            loadingDialog.dismiss()
         }
         if(code==2202){
             val goalList = ArrayList<Goal>()
+            binding.emptyText.visibility = View.VISIBLE
             initRecyclerView(goalList)
+            loadingDialog.dismiss()
         }
     }
 
@@ -146,14 +176,15 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     }
 
     override fun onSaveGoalSuccess(result: Goal) {
+
         GlobalScope.launch {
             getGoalProgress()
             withContext(Dispatchers.Main){
                 for (fragment in childFragmentManager.fragments) {
                     if (fragment is DialogFragment) {
-                         fragment.dismiss()
-                     }
-                 }
+                        fragment.dismiss()
+                    }
+                }
             }
         }
         getGoalProgress()

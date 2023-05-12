@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:id="@+id/select_goal_layout"
+    android:paddingTop="20dp"
+    android:paddingBottom="20dp"
+    android:background="@drawable/ic_rectangle_148"
+    tools:context=".home.GoalSelectFragment">
+
+    <LinearLayout
+        android:id="@+id/goal_search_goal_text_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center"
+        android:orientation="vertical"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+        <TextView
+            android:id="@+id/goal_search_goal_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="sans-serif"
+            android:text="Select Your Goal"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:textColor="@color/darkgray2"
+            />
+        <TextView
+            android:gravity="center"
+            android:id="@+id/goal_search_optional_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/roboto_light"
+            android:text="This is optional."
+            android:textSize="10sp"
+            android:textColor="@color/darkgray2"
+            />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/select_goal_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="10dp"
+        android:layout_marginLeft="20dp"
+        android:src="@drawable/ic_close"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/goal_search_goal_text_layout"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/goal_select_type_layout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_search_goal_text_layout"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <Button
+            android:id="@+id/goal_mountain_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_goal_type2"
+            android:textColor="@color/black"
+            android:textSize="10sp"
+            android:fontFamily="@font/inter_light"
+            android:layout_marginHorizontal="10dp"
+            android:text="mountain"/>
+        <Button
+            android:id="@+id/goal_building_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:background="@drawable/ic_goal_type2"
+            android:textColor="@color/black"
+            android:layout_marginHorizontal="10dp"
+            android:fontFamily="@font/inter_light"
+            android:textSize="10sp"
+            android:text="building"/>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/search_recycler_layout"
+        android:layout_width="300dp"
+        android:layout_height="match_parent"
+        android:layout_marginHorizontal="40dp"
+        android:orientation="vertical"
+        android:background="#ffffff"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/goal_select_type_layout"
+        android:gravity="center_horizontal"
+        android:layout_marginTop="10dp"
+        >
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/select_goal_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_recycler_layout">
+        <Button
+            android:id="@+id/select_btn"
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:background="@drawable/ic_goal_type"
+            android:textColor="@color/white"
+            android:text="Next Step"
+            />
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

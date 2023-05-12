@@ -1,12 +1,15 @@
 package com.example.hyfit_android.exercise
 
+import android.Manifest
 import android.app.Dialog
 import android.content.ContentValues
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.AnimationDrawable
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Build
@@ -16,14 +19,19 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
+import androidx.core.app.ActivityCompat
 import com.example.hyfit_android.BuildConfig
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.ActivityStairBinding
 import com.example.hyfit_android.home.MainFragment
 import com.example.hyfit_android.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.PolylineOptions
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.PhoneMetaData
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
@@ -56,10 +64,13 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     var mLocationManager: LocationManager? = null
     var mLocationListener: LocationListener? = null
     private var previousAlt: String? = null
+    private var goalId = -1
     private var exerciseId = 0
     private var isReady by Delegates.notNull<Int>()
     private var isEnd by Delegates.notNull<Int>()
     private lateinit var animationDrawable : AnimationDrawable
+
+    private lateinit var loadingDialog : Dialog
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -88,6 +99,9 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         isEnd = 0
         distance = 0.0
 
+        // goalId
+        goalId = intent.getIntExtra("goalId",-1)
+
         // 준비 다이얼로그
         val dialog = Dialog(this)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
@@ -112,14 +126,52 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         }
         countDownTimer.start()
 
+        mLocationManager = PhoneMetaData.mContext.getSystemService(LOCATION_SERVICE) as LocationManager
+
+        mLocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                Log.d("LOCATION11111",location.toString())
+                var latitude = 0.0
+                var longitude = 0.0
+                if (location == null) {
+                    Toast.makeText(
+                        this@StairActivity,
+                        "I think you are currently indoors.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                if (location != null) {
+                    Log.d("LOCATION",location.toString())
+                    latitude = location.latitude
+                    longitude = location.longitude
+                    if (exerciseId > 0) {
+                        calculateAlt(latitude.toString(), longitude.toString(), "5")
+                    }
+                }
+            }
+            override fun onStatusChanged(provider: String?, status: Int, extras: Bundle?) {}
+            override fun onProviderEnabled(provider: String) {}
+            override fun onProviderDisabled(provider: String) {}
+
+        }
+
         // 종료버튼
         binding.exerciseEndBtn.setOnClickListener{
             if(isReady == 1){
+                stopTimer()
                 saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
                 isEnd = 1
-                stopTimer()
-                endExercise()
-            }
+
+                // 로딩화면 띄우기
+                loadingDialog = Dialog(this)
+                loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                loadingDialog.setCancelable(false)
+                loadingDialog.setContentView(R.layout.loading_result)
+                loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+                loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                loadingDialog.show()
+
+                endExercise() }
             else{
                 binding.progressBar.visibility = View.VISIBLE
                 binding.exerciseEndBtn.isEnabled = false
@@ -128,6 +180,15 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
                         binding.progressBar.visibility = View.GONE
                         binding.exerciseEndBtn.isEnabled = true
                         isEnd = 1
+                        // 로딩화면 띄우기
+                        val dialog = Dialog(this)
+                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                        dialog.setCancelable(false)
+                        dialog.setContentView(R.layout.loading_result)
+                        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                        dialog.show()
+
                         stopTimer()
                         endExercise()
                         saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
@@ -155,7 +216,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setExerciseStartView(this)
-        exerciseService.startExercise(jwt!!,ExerciseStartReq("stair",current.toString(),0 ))
+        exerciseService.startExercise(jwt!!,ExerciseStartReq("stair",current.toString(),goalId.toLong() ))
     }
     fun startTimer() {
         object : CountDownTimer(Long.MAX_VALUE, 1000) {
@@ -183,11 +244,13 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     fun stopCalculate(){
         sdk = NextNavSdk.getInstance()
         sdk.stopAltitudeCalculation()
+        sdk.stop()
     }
 
     // exercise end
     @RequiresApi(Build.VERSION_CODES.O)
     private fun endExercise(){
+        mLocationListener?.let { mLocationManager?.removeUpdates(it) }
         stopCalculate()
         animationDrawable.stop() // 애니메이션 종료
         val current = LocalDateTime.now()
@@ -263,17 +326,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         locationService.setGetAllRedisExerciseView(this)
         locationService.getAllRedisExercise(exerciseId)
     }
-//    private fun saveRedisLoc(hat : Double) {
-//        if(exerciseId!=0) {
-//            saveExerciseRedisLoc(
-//                exerciseId.toLong(),
-//                sdk.currentLocation.latitude.toString(),
-//                sdk.currentLocation.longitude.toString(),
-//                hat.toString()
-//            )
-//            Thread.sleep(60000) // 1분 대기
-//        }
-//    }
+
 
 
     // pinnacle
@@ -377,8 +430,18 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
 
     override fun onExerciseStartSuccess(result: Exercise) {
         exerciseId = result.exerciseId?.toInt() ?: 0
-        // 우선 기본 위치 nextNav으로 하고 고도만 받기
-        calculateAlt("37.3840208214713","-121.98749410182668","5")
+        if (ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                this,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        mLocationListener?.let { mLocationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, it) }
+
     }
 
     override fun onExerciseStartFailure(code: Int, msg: String) {
@@ -425,6 +488,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         intent.putExtra("distance", distance)
         intent.putStringArrayListExtra("locationList",result)
         intent.putExtra("totalTime",totalTime.toString())
+        loadingDialog.dismiss()
         startActivity(intent)
     }
 

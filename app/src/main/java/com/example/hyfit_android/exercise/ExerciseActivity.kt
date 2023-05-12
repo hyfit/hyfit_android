@@ -16,11 +16,13 @@ import android.os.CountDownTimer
 import android.util.Log
 import android.view.View
 import android.view.Window
+import android.view.WindowManager
 import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.lifecycle.lifecycleScope
 import com.example.hyfit_android.BuildConfig
 import com.example.hyfit_android.R
@@ -66,34 +68,41 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     private var totalTime by Delegates.notNull<Long>()
     var mLocationManager: LocationManager? = null
     var mLocationListener: LocationListener? = null
-    private var mCircle: Circle? = null
     private var exerciseId = 0
     private var isReady by Delegates.notNull<Int>()
     private var isEnd by Delegates.notNull<Int>()
+
+    private var goalId = -1
+    private var ExerciseType: String? = null
 
     // distance에 사용
     private var previousLat: String? = null
     private var previousLong: String? = null
     private var previousAlt: String? = null
-//    private var currentLat: String? = null
-//    private var currentLong: String? = null
-//    private var currentAlt: String?  = null
 
 
     // 운동량
     private var distance by Delegates.notNull<Double>()
-    private var pace = "null"
+    private var pace = "0"
 
     // 운동 위치
     private lateinit var firstList :List<String>
     private lateinit  var middleList :List<String>
     private  lateinit var lastList:List<String>
 
+    private lateinit var loadingDialog : Dialog
+
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(
         savedInstanceState: Bundle?) {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         super.onCreate(savedInstanceState)
+
+        // goalId
+        goalId =  intent.getIntExtra("goalId",-1)
+        ExerciseType =  intent.getStringExtra("type")
+
         // distance
         context = applicationContext
         mContext = this
@@ -182,9 +191,18 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         // 종료버튼
         binding.exerciseEndBtn.setOnClickListener{
             if(isReady == 1){
+                stopTimer()
                 saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
                 isEnd = 1
-                stopTimer()
+                // 로딩화면 띄우기
+                loadingDialog = Dialog(this)
+                loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+                loadingDialog.setCancelable(false)
+                loadingDialog.setContentView(R.layout.loading_result)
+                loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+                loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                loadingDialog.show()
+
                 endExercise()
             }
             else{
@@ -219,12 +237,11 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setExerciseStartView(this)
-        exerciseService.startExercise(jwt!!,ExerciseStartReq("running",current.toString(),0 ))
-
-
+        exerciseService.startExercise(jwt!!,ExerciseStartReq(ExerciseType.toString(),current.toString(),goalId.toLong() ))
     }
+
     fun startTimer() {
-        object : CountDownTimer(Long.MAX_VALUE, 1000) {
+        timer = object : CountDownTimer(Long.MAX_VALUE, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 if (isReady == 1) {
                     timeInSeconds++
@@ -249,6 +266,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
     fun stopCalculate(){
         sdk = NextNavSdk.getInstance()
         sdk.stopAltitudeCalculation()
+        sdk.stop()
     }
     // exercise end
     @RequiresApi(Build.VERSION_CODES.O)
@@ -597,6 +615,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
         intent.putExtra("distance", distance)
         intent.putStringArrayListExtra("locationList",result )
         intent.putExtra("totalTime",totalTime.toString())
+        loadingDialog.dismiss()
         startActivity(intent)
     }
 

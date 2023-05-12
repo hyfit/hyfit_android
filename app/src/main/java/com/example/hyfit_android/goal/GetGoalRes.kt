@@ -1,7 +1,8 @@
 package com.example.hyfit_android.goal
 
+
 import com.google.gson.annotations.SerializedName
-import java.time.LocalDateTime
+import java.io.Serializable
 
 data class GetGoalRes(
     @SerializedName("isSuccess")val isSuccess:Boolean,
@@ -19,7 +20,8 @@ data class Goal(
     @SerializedName("place")val place:String?=null,
     @SerializedName("type")val type:String?=null,
     @SerializedName("goalStatus")val goalStatus:Int?=null,
-    @SerializedName("rate")val rate:Int?=null,
+    @SerializedName("rate")val rate:String?=null,
     @SerializedName("description")val description:String?=null,
+    @SerializedName("gain")val gain:String?=null,
     @SerializedName("createdAt") val createdAt:String?=null
-    )
+    ): Serializable

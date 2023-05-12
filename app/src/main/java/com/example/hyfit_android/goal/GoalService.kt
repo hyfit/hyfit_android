@@ -11,6 +11,9 @@ class GoalService {
     private lateinit var getDoneGoalView: GetDoneGoalView
     private lateinit var saveGoalView: SaveGoalView
     private lateinit var deleteGoalView: DeleteGoalView
+    private lateinit var getBuildingView: GetBuildingView
+    private lateinit var getMountainView: GetMountainView
+    private lateinit var modifyGoalView: ModifyGoalView
 
     fun setGetGoalView(getGoalView: GetGoalView){
         this.getGoalView = getGoalView
@@ -24,6 +27,16 @@ class GoalService {
     }
     fun setDeleteGoalView(deleteGoalView: DeleteGoalView){
         this.deleteGoalView = deleteGoalView
+    }
+
+    fun setGetBuildingView(getBuildingView: GetBuildingView){
+        this.getBuildingView = getBuildingView
+    }
+    fun setGetMountainView(getMountainView: GetMountainView){
+        this.getMountainView = getMountainView
+    }
+    fun setModifyGoalView(modifyGoalView: ModifyGoalView){
+        this.modifyGoalView = modifyGoalView
     }
     fun getGoalProgress(jwt:String){
         val postService = getRetrofit().create(GoalRetrofitInterface::class.java)
@@ -43,6 +56,62 @@ class GoalService {
         })
     }
 
+    // get mountain
+    fun getMountainProgress(jwt:String){
+        val postService = getRetrofit().create(GoalRetrofitInterface::class.java)
+        postService.getMountain(jwt).enqueue(object: Callback<GetGoalRes> {
+            override fun onResponse(call: Call<GetGoalRes>, response: Response<GetGoalRes>) {
+                Log.d("MOUNTAINGOAL/SUCCESS", response.toString())
+                val resp: GetGoalRes = response.body()!!
+                Log.d("MOUNTAINGOAL/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> getMountainView.onGetMountainSuccess(resp.result)
+                    else-> getMountainView.onGetMountainFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<GetGoalRes>, t: Throwable) {
+                Log.d("MOUNTAINGOAL/FAILURE", t.message.toString())
+            }
+        })
+    }
+
+    // get building
+    fun getBuildingProgress(jwt:String){
+        val postService = getRetrofit().create(GoalRetrofitInterface::class.java)
+        postService.getBuilding(jwt).enqueue(object: Callback<GetGoalRes> {
+            override fun onResponse(call: Call<GetGoalRes>, response: Response<GetGoalRes>) {
+                Log.d("BUILDINGGOAL/SUCCESS", response.toString())
+                val resp: GetGoalRes = response.body()!!
+                Log.d("BUILDINGGOAL/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> getBuildingView.onGetBuildingSuccess(resp.result)
+                    else-> getBuildingView.onGetBuildingFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<GetGoalRes>, t: Throwable) {
+                Log.d("BUILDINGGOAL/FAILURE", t.message.toString())
+            }
+        })
+    }
+
+    // modify building
+    fun saveGoal(jwt : String,id:Long,gain:String){
+        val postService = getRetrofit().create(GoalRetrofitInterface::class.java)
+        postService.modifyGoal(jwt,id,gain).enqueue(object : Callback<SaveGoalRes>{
+            override fun onResponse(call : Call<SaveGoalRes>, response : Response<SaveGoalRes>){
+                Log.d("MODIFYGOAL/SUCCESS", response.toString())
+                val resp: SaveGoalRes = response.body()!!
+                Log.d("MODIFYGOAL/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> modifyGoalView.onModifyGoalSuccess(resp.result)
+                    else-> modifyGoalView.onModifyGoalFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<SaveGoalRes>, t: Throwable) {
+                Log.d("MODIFYGOAL/FAILURE", t.message.toString())
+            }
+        })
+    }
     fun getGoalDone(jwt:String){
         val postService = getRetrofit().create(GoalRetrofitInterface::class.java)
         postService.getGoalDone(jwt).enqueue(object: Callback<GetGoalRes> {

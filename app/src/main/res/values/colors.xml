@@ -26,4 +26,7 @@
     <color name="string_gray">#949494</color>
     <color name="string_white">#f3f3f3</color>
     <color name="place_list_color">#ffffff</color>
+
+    <color name="type_select">#c2c2c2</color>
+    <color name="type_unselect">#FAFBFD</color>
 </resources>

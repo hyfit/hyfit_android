@@ -28,27 +28,30 @@ import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.FragmentMainBinding
 import com.example.hyfit_android.exercise.ExerciseActivity
 import com.example.hyfit_android.exercise.StairActivity
+import com.example.hyfit_android.goal.GetBuildingView
+import com.example.hyfit_android.goal.GetMountainView
+import com.example.hyfit_android.goal.Goal
+import com.example.hyfit_android.goal.GoalService
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
 import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
-/**
- * A simple [Fragment] subclass.
- * Use the [MainFragment.newInstance] factory method to
- * create an instance of this fragment.
- */
-class MainFragment : Fragment(), GetUserView{
+class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView{
     lateinit var binding: FragmentMainBinding
+
     // pinncale
     private lateinit var sdk: NextNavSdk
     private val NEXTNAV_SERVICE_URL = "api.nextnav.io"
@@ -56,6 +59,13 @@ class MainFragment : Fragment(), GetUserView{
 
     private lateinit var sdkMessageObservable: SdkStatusNotification
     private lateinit var altitudeObservable: AltitudeContextNotification
+
+    // modal
+    private val goalSelectModal = GoalSelectFragment()
+    private val goalSelectFragment2 = GoalSelectFragment2()
+    private lateinit var bundle : Bundle
+    private  var mountainList: ArrayList<Goal>? = null
+    private  var buildingList:  ArrayList<Goal>?= null
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -65,6 +75,9 @@ class MainFragment : Fragment(), GetUserView{
 
 
         userget()
+        getMountainProgress()
+        getBuildingProgress()
+
         // pinnacle setting
         sdk = NextNavSdk.getInstance()
         sdkMessageObservable = SdkStatusNotification.getInstance()
@@ -75,39 +88,37 @@ class MainFragment : Fragment(), GetUserView{
         val startBtn = binding.outdoorStartBtn
 
         startBtn.setOnClickListener {
-            if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
-                val intent = Intent(requireActivity(), ExerciseActivity::class.java)
-                startActivity(intent)
+            if(mountainList != null && buildingList != null){
+                openGoalSelectModal2()
             }
             else {
                 binding.progressBar.visibility = ProgressBar.VISIBLE
                 lifecycleScope.launch {
-
-                    while(mainActivity.initCode != 800 ) {
-                        Log.d("STATUSCODE",mainActivity.initCode.toString())
+                    while (mountainList == null && buildingList == null) {
                         delay(1000)
+                        Log.d("MOUNTAIN", mountainList.toString())
+                        Log.d("BUILDING", buildingList.toString())
                     }
-                    val intent = Intent(requireActivity(), ExerciseActivity::class.java)
-                    startActivity(intent)
+                    binding.progressBar.visibility = ProgressBar.GONE
+                    openGoalSelectModal2()
                 }
             }
         }
 
         binding.stairStartBtn.setOnClickListener {
-            if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
-                val intent = Intent(requireActivity(), StairActivity::class.java)
-                startActivity(intent)
-            }
-            else {
+            // 목표 불러와서 dialog 에 넘겨주기
+            if(mountainList != null && buildingList != null) {
+                openGoalSelectModal()
+            } else {
                 binding.progressBar.visibility = ProgressBar.VISIBLE
                 lifecycleScope.launch {
-
-                    while(mainActivity.initCode != 800 ) {
-                        Log.d("STATUSCODE",mainActivity.initCode.toString())
+                    while(mountainList == null && buildingList == null){
                         delay(1000)
+                        Log.d("MOUNTAIN",mountainList.toString())
+                        Log.d("BUILDING",buildingList.toString())
                     }
-                    val intent = Intent(requireActivity(), StairActivity::class.java)
-                    startActivity(intent)
+                    binding.progressBar.visibility = ProgressBar.GONE
+                    openGoalSelectModal()
                 }
             }
         }
@@ -115,6 +126,35 @@ class MainFragment : Fragment(), GetUserView{
         return binding.root
     }
 
+    private fun openGoalSelectModal2() {
+        val bundle = Bundle().apply {
+            putSerializable("building", buildingList)
+            putSerializable("mountain", mountainList)
+        }
+        goalSelectFragment2.arguments = bundle
+        goalSelectFragment2.show(parentFragmentManager, "goalSelect2")
+    }
+    private fun openGoalSelectModal() {
+        val bundle = Bundle().apply {
+            putSerializable("building", buildingList)
+            putSerializable("mountain", mountainList)
+        }
+        goalSelectModal.arguments = bundle
+        goalSelectModal.show(parentFragmentManager, "goalSelect")
+    }
+    private fun getMountainProgress(){
+        val jwt: String? = getJwt()
+        val goalService = GoalService()
+        goalService.setGetMountainView(this)
+        goalService.getMountainProgress(jwt!!)
+    }
+
+    private fun getBuildingProgress(){
+        val jwt: String? = getJwt()
+        val goalService = GoalService()
+        goalService.setGetBuildingView(this)
+        goalService.getBuildingProgress(jwt!!)
+    }
 
     private fun getJwt():String?{
         val spf = requireActivity().getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
@@ -153,6 +193,24 @@ class MainFragment : Fragment(), GetUserView{
       Log.d("USERFAILURE",msg)
     }
 
+    override fun onGetMountainSuccess(result: ArrayList<Goal>) {
+        mountainList = result
+        Log.d("MOUNTAINLIST",mountainList.toString())
+    }
+
+    override fun onGetMountainFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetBuildingSuccess(result: ArrayList<Goal>) {
+        buildingList = result
+        Log.d("BUILDINGLIST",buildingList.toString())
+
+    }
+
+    override fun onGetBuildingFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
 
 
 }

@@ -1,12 +1,7 @@
 package com.example.hyfit_android.goal
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface GoalRetrofitInterface {
 
@@ -21,6 +16,15 @@ interface GoalRetrofitInterface {
 
     @POST("/api/goal/add")
     fun saveGoal(@Header("X-AUTH-TOKEN")token : String, @Body saveGoalReq: SaveGoalReq) : Call<SaveGoalRes>
+
+    @PATCH("/api/goal")
+    fun modifyGoal(@Header("X-AUTH-TOKEN")token : String, @Query("id") id:Long,@Query("gain") gain:String) : Call<SaveGoalRes>
+
+    @GET("/api/goal/mountain")
+    fun getMountain(@Header("X-AUTH-TOKEN")token : String)  : Call<GetGoalRes>
+
+    @GET("/api/goal/building")
+    fun getBuilding(@Header("X-AUTH-TOKEN")token : String)  : Call<GetGoalRes>
 
     @DELETE("/api/goal")
     fun deleteGoal(@Header("X-AUTH-TOKEN")token : String, @Query("id") id: Long) :Call<DeleteGoalRes>
