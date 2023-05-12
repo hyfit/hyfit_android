@@ -7,5 +7,7 @@ data class ReportResponse(
     @SerializedName("totaltime") val totaltime: List<Float>,
     @SerializedName("pace") val pace: List<Float>,
     @SerializedName("distance") val distance: List<Float>,
-    @SerializedName("code") val code:Int
+    @SerializedName("code") val code:Int,
+    @SerializedName("gname") val gname:List<String>,
+    @SerializedName("rate") val rate:List<Float>
 )

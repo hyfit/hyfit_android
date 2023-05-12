@@ -54,7 +54,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.76"
+            app:layout_constraintVertical_bias="0.7"
             />
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
@@ -65,7 +65,7 @@
             app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.74" />
+            app:layout_constraintVertical_bias="0.68" />
 
         <ImageView
             android:id="@+id/menubar"
@@ -314,7 +314,7 @@
             app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.319" />
+            app:layout_constraintVertical_bias="0.297" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>
@@ -325,6 +325,34 @@
         android:layout_height="801dp"
         android:layout_marginTop="90dp"
         android:visibility="gone">
+
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:id="@+id/pie1name"
+            android:gravity="center"
+            android:fontFamily="@font/roboto_medium"
+            android:text="Trump International Sexy Tower"
+            android:textColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.15"
+            app:layout_constraintVertical_bias="0.61"/>
+        <TextView
+            android:layout_width="150dp"
+            android:layout_height="40dp"
+            android:fontFamily="@font/roboto_medium"
+            android:id="@+id/pie2name"
+            android:gravity="center"
+            android:text="goodgood"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintHorizontal_bias="0.84"
+            app:layout_constraintVertical_bias="0.61"/>
 
         <View
             android:layout_width="160dp"

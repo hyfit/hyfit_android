@@ -31,7 +31,7 @@ class ReportRetrofitService {
                     val resp: ReportResponse? = response.body()
                     if (resp != null) {
                         when (val code = resp.code) {
-                            1000 -> reportView.onReportSuccess(resp.totaltime,resp.pace,resp.distance)
+                            1000 -> reportView.onReportSuccess(resp.totaltime,resp.pace, resp.distance, resp.rate, resp.gname)
                             else -> reportView.onReportFailure(code)
                         }
                     } else {

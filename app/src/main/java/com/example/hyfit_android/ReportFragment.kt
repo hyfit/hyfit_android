@@ -5,6 +5,8 @@ import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -46,8 +48,12 @@ class ReportFragment : Fragment(), ReportView{
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentReportBinding.inflate(inflater, container, false)
-
         progressBar = binding.progressBar
+        progressBar.bringToFront()
+
+        report("dkdud203@naver.com")
+
+
         binding.change.setOnClickListener {
             binding.layoutdashboard.visibility = View.GONE
             binding.layoutchange.visibility = View.VISIBLE
@@ -83,13 +89,12 @@ class ReportFragment : Fragment(), ReportView{
 
 
 
+
         ///////////////////PIECHART
 
         //declare a function for pie chart activity
         pieChart1=binding.pieChart1
         pieChart2=binding.pieChart2
-        setUpSelectionPieChart(pieChart1)
-        setUpSelectionPieChart(pieChart2)
         return binding.root
     }
 
@@ -180,35 +185,46 @@ class ReportFragment : Fragment(), ReportView{
         mChart.setVisibleXRangeMaximum(6f)
         mChart.groupBars(1f, groupSpace, barSpace)
         mChart.invalidate()
+        progressBar.visibility=View.GONE
 
     }
-    private fun setUpSelectionPieChart(pie:PieChart) {
+    private fun setUpSelectionPieChart(pie:PieChart, rate:Float, cd:Int) {
 
         //Create a dataset
+
         val dataArray = ArrayList<PieEntry>()
-        dataArray.add(PieEntry(38f))
-        dataArray.add(PieEntry(14f))
-        dataArray.add(PieEntry(14f))
-        dataArray.add(PieEntry(34f))
+        dataArray.add(PieEntry(rate))
+        dataArray.add(PieEntry(100f-rate))
         val dataSet = PieDataSet(dataArray, "")
-        dataSet.valueTextSize=15f
+        dataSet.valueTextSize=12f
         dataSet.valueTextColor=Color.WHITE
 
         //Color set for the chart
         val colorSet = java.util.ArrayList<Int>()
-        colorSet.add(Color.rgb(255,107,107))  //red
-        colorSet.add(Color.rgb(173,232,244))  // blue
-        colorSet.add(Color.rgb(216,243,220))  // green
-        colorSet.add(Color.rgb(255,230,109))  // Yellow
+        if(cd==1){
+            colorSet.add(Color.rgb(164,189,245))
+            colorSet.add(Color.rgb(198,198,198))
+        }
+        else{
+            colorSet.add(Color.rgb(246,224,145))
+            colorSet.add(Color.rgb(194,194,194))
+        }
         dataSet.setColors(colorSet)
 
         val data = PieData(dataSet)
 
 
         //chart description
-        pie.description.text = "Pie chart"
-        pie.description.textSize = 20f
-        pie.description.setPosition(300f,40f) //이게 딱 중간에 들어오는듯
+        pie.description.text = ""
+//        if(pie.description.text.length>10) {
+//            pie.description.textSize=10f
+//            pie.description.setPosition(310f,40f)
+//        }
+//        else{
+//            pie.description.textSize = 20f
+//            pie.description.setPosition(290f,40f)
+//        }
+         //이게 딱 중간에 들어오는듯
 
         //Chart data and other styling
         pie.data = data
@@ -216,29 +232,51 @@ class ReportFragment : Fragment(), ReportView{
         pie.isDrawHoleEnabled = true
         pie.legend.isEnabled = false
         pie.description.isEnabled = true
+        progressBar.visibility=View.GONE
     }
 
     private fun report(email:String?){
         val rpService = ReportRetrofitService()
         rpService.setReportView(this)
+        binding.progressBar.visibility=View.VISIBLE
         rpService.report(email)
+
     }
 
-    override fun onReportSuccess(totaltime: List<Float>, pace: List<Float>,distance: List<Float>) {
+    override fun onReportSuccess(totaltime: List<Float>, pace: List<Float>,distance: List<Float>, rate:List<Float>, gname:List<String>) {
         if(distance!=null){
 
             Log.d("GetreportSuccess", "cong")
             val time: ArrayList<Float> = ArrayList(totaltime)
             val apace : ArrayList<Float> = ArrayList(pace)
             val dist : ArrayList<Float> = ArrayList(distance)
+            val rate1:Float = rate[0]
+            val rate2:Float= rate[1]
+            val gname1:String=gname[0]
+            val gname2:String=gname[1]
+            pieChart1=binding.pieChart1
+            pieChart2=binding.pieChart2
             Log.d("ReportSuccess", "good!")
             setUpBarchart(time,apace,dist)
-            progressBar.visibility=ProgressBar.GONE
+            setUpSelectionPieChart(pieChart1,rate1,1)
+            setUpSelectionPieChart(pieChart2,rate2,2)
+            binding.pie1name.bringToFront()
+            binding.pie2name.bringToFront()
+            binding.pie1name.text=gname1
+            binding.pie2name.text=gname2
+
+            executeAfterDelay(3000) {
+                progressBar.visibility = ProgressBar.GONE
+            }
         }
     }
 
     override fun onReportFailure(code: Int) {
         Log.d("GetreportFail", code.toString())
+    }
+    fun executeAfterDelay(delayMillis: Long, code: () -> Unit) {
+        val handler = Handler(Looper.getMainLooper())
+        handler.postDelayed(code, delayMillis)
     }
 
 }
