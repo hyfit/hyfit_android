@@ -2,6 +2,7 @@ package com.example.hyfit_android.goal
 
 import android.annotation.SuppressLint
 import android.app.Dialog
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
@@ -15,6 +16,7 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentGoalBinding
+import com.example.hyfit_android.goal.info.ExerciseDataActivity
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -26,7 +28,7 @@ import kotlinx.coroutines.withContext
  * Use the [GoalFragment.newInstance] factory method to
  * create an instance of this fragment.
  */
-class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeListener,SaveGoalView, DeleteGoalView{
+class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeListener,SaveGoalView, DeleteGoalView,OnGoalClickListener {
     lateinit var binding: FragmentGoalBinding
     private var gson:Gson = Gson()
     private lateinit var goalDetailRVAdapter: GoalDetailRVAdapter
@@ -70,12 +72,12 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         loadingDialog.setCancelable(false)
         loadingDialog.setContentView(R.layout.loading_result)
-        loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+       //  loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
         loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         loadingDialog.show()
     }
     private fun initRecyclerView(result : ArrayList<Goal>){
-        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), result,this)
+        goalDetailRVAdapter = GoalDetailRVAdapter(requireContext(), result,this,this)
         binding.myGoalList.adapter = goalDetailRVAdapter
         binding.myGoalList.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
     }
@@ -204,6 +206,19 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     }
 
     override fun onDeleteGoalFailure(code: Int, msg: String) {
+    }
+
+    // 전체 goal 누렸을때
+    override fun onGoalClick(data: Goal) {
+        val intent = Intent(requireContext(), ExerciseDataActivity::class.java)
+        intent.putExtra("goal_name", data.place)
+        intent.putExtra("goal_id", data.goalId)
+            startActivity(intent)
+
+    }
+
+    override fun onGoalClicked() {
+
     }
 
 }

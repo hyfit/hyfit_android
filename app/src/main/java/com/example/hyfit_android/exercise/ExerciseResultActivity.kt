@@ -41,8 +41,6 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var lastList: LatLng
     private lateinit var mapFragment : SupportMapFragment
 
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         context = applicationContext

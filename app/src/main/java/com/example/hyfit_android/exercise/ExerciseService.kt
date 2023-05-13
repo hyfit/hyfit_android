@@ -10,12 +10,17 @@ import retrofit2.Response
 class ExerciseService {
     private lateinit var exerciseStartView : ExerciseStartView
     private lateinit var endExerciseView : EndExerciseView
+    private lateinit var getExerciseByGoalView: GetExerciseByGoalView
 
     fun setExerciseStartView(exerciseStartView: ExerciseStartView){
         this.exerciseStartView = exerciseStartView
     }
     fun setEndExerciseView(endExerciseView: EndExerciseView){
         this.endExerciseView = endExerciseView
+    }
+
+    fun setGetExerciseByGoalView(getExerciseByGoalView: GetExerciseByGoalView){
+        this.getExerciseByGoalView = getExerciseByGoalView
     }
 
     fun startExercise(jwt:String,exerciseStartReq: ExerciseStartReq){
@@ -53,6 +58,23 @@ class ExerciseService {
             }
             override fun onFailure(call: Call<ExerciseRes>, t: Throwable) {
                 Log.d("EXERCISEEND/FAILURE", t.message.toString())
+            }
+        })
+    }
+    fun getExerciseByGoal(goalId : Long){
+        val exerciseService = getRetrofit().create(ExerciseRetrofitInterface::class.java)
+        exerciseService.getExerciseByGoal(goalId).enqueue(object: Callback<ExerciseListRes> {
+            override fun onResponse(call: Call<ExerciseListRes>, response: Response<ExerciseListRes>) {
+                Log.d("GETBYGOAL/SUCCESS", response.toString())
+                val resp: ExerciseListRes = response.body()!!
+                Log.d("GETBYGOAL/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> getExerciseByGoalView.onGetExerciseByGoalSuccess(resp.result)
+                    else-> getExerciseByGoalView.onGetExerciseByGoalFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<ExerciseListRes>, t: Throwable) {
+                Log.d("GETBYGOAL/FAILURE", t.message.toString())
             }
         })
     }

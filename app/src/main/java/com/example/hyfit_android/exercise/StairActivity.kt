@@ -163,13 +163,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
                 isEnd = 1
 
                 // 로딩화면 띄우기
-                loadingDialog = Dialog(this)
-                loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                loadingDialog.setCancelable(false)
-                loadingDialog.setContentView(R.layout.loading_result)
-                loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-                loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                loadingDialog.show()
+                showLoading()
 
                 endExercise() }
             else{
@@ -327,7 +321,15 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         locationService.getAllRedisExercise(exerciseId)
     }
 
-
+    fun showLoading() {
+        loadingDialog = Dialog(this)
+        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        loadingDialog.setCancelable(false)
+        loadingDialog.setContentView(R.layout.loading_result)
+        //  loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        loadingDialog.show()
+    }
 
     // pinnacle
     private fun initPinnacle() {

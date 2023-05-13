@@ -195,13 +195,7 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
                 saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
                 isEnd = 1
                 // 로딩화면 띄우기
-                loadingDialog = Dialog(this)
-                loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                loadingDialog.setCancelable(false)
-                loadingDialog.setContentView(R.layout.loading_result)
-                loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-                loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                loadingDialog.show()
+                showLoading()
 
                 endExercise()
             }
@@ -256,6 +250,16 @@ class ExerciseActivity :AppCompatActivity(),OnMapReadyCallback, Observer, Exerci
                 // 카운트다운이 끝났을 때 실행할 작업
             }
         }.start()
+    }
+
+    fun showLoading() {
+        loadingDialog = Dialog(this)
+        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        loadingDialog.setCancelable(false)
+        loadingDialog.setContentView(R.layout.loading_result)
+        //  loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        loadingDialog.show()
     }
     fun stopTimer() {
         totalTime = timeInSeconds

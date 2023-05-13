@@ -14,6 +14,7 @@
         <entry key="app/src/main/res/drawable/ic_detail.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_empire_state_building.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_eng_logo.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_exercise_data_block.xml" value="0.447908935546875" />
         <entry key="app/src/main/res/drawable/ic_goal_index.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_goal_rectangle.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_goal_rectangle_building.xml" value="0.1" />
@@ -25,6 +26,7 @@
         <entry key="app/src/main/res/drawable/ic_home_blue.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_home_gray.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_homebtn.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_icon_info.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_left.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.1" />
@@ -92,6 +94,7 @@
         <entry key="app/src/main/res/layout/activity_community_main.xml" value="0.29732513427734375" />
         <entry key="app/src/main/res/layout/activity_edit_password2.xml" value="0.24791666666666667" />
         <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/activity_exercise_data.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_exercise_result.xml" value="0.335" />
         <entry key="app/src/main/res/layout/activity_find_password.xml" value="0.13125" />
         <entry key="app/src/main/res/layout/activity_find_password3.xml" value="0.25052083333333336" />
@@ -126,6 +129,7 @@
         <entry key="app/src/main/res/layout/fragment_type_select.xml" value="0.3463653564453125" />
         <entry key="app/src/main/res/layout/goal.xml" value="0.246875" />
         <entry key="app/src/main/res/layout/goal_detail_list.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/goal_exercise_data_list.xml" value="0.5501866658528646" />
         <entry key="app/src/main/res/layout/goal_list.xml" value="0.1" />
         <entry key="app/src/main/res/layout/goal_search_list.xml" value="0.45" />
         <entry key="app/src/main/res/layout/goal_select_list.xml" value="0.335" />
