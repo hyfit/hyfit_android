@@ -10,6 +10,7 @@ import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.widget.ProgressBar
 import android.widget.Toast
@@ -108,6 +109,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
                 else -> false
             }
         }
+
         // 초기 fragment 설정
         if(showSetFragment){
             supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SetFragment()).commit()
@@ -146,6 +148,8 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACTIVITY_RECOGNITION), PERMISSIONS_REQUEST_LOCATION)
         }
     }
+
+
 
     private fun initPinnacle() {
         sdk = NextNavSdk.getInstance()

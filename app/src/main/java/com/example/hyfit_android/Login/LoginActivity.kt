@@ -1,5 +1,6 @@
 package com.example.hyfit_android.Login
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -199,6 +200,10 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
     override fun onUserSuccess(code: Int, result: User) {
         val intent=Intent(this, MainActivity::class.java)
         intent.putExtra("userNickName",result.nickName)
+        val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPrefs.edit()
+        editor.putString("getEmail", result.email)  // 데이터 추가
+        editor.apply()  // 변경 사항을 저장
         startActivity(intent)
                 if (intent.component?.className == "com.example.hyfit_android.MainActivity") {
                     // MainActivity로 전환된 경우에만 타이머 시작

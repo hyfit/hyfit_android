@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Login.FindPasswordReq
@@ -50,8 +51,9 @@ class ReportFragment : Fragment(), ReportView{
         binding = FragmentReportBinding.inflate(inflater, container, false)
         progressBar = binding.progressBar
         progressBar.bringToFront()
-
-        report("dkdud203@naver.com")
+        val sharedPrefs = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val temail = sharedPrefs.getString("getEmail", "")
+        report(temail)
 
 
         binding.change.setOnClickListener {
@@ -78,12 +80,7 @@ class ReportFragment : Fragment(), ReportView{
             binding.layoutranking.visibility = View.GONE
             binding.layoutchange.visibility = View.VISIBLE
         }
-        binding.clickhere.setOnClickListener {
-            report("dkdud203@naver.com")
-            //여기 Getuser로 해서 이메일 따와야함
-            //그리고 자동으로 버튼눌러지게 fragment들어와서 1초후에 버튼 누르게..하면 동기화 잘 될라나 ㅎ?
-            
-        }
+
 
 
 
@@ -97,6 +94,7 @@ class ReportFragment : Fragment(), ReportView{
         pieChart2=binding.pieChart2
         return binding.root
     }
+
 
     private fun setUpBarchart(time:ArrayList<Float>, pace:ArrayList<Float>, distance:ArrayList<Float>){
         mChart = binding.chart
@@ -242,6 +240,8 @@ class ReportFragment : Fragment(), ReportView{
         rpService.report(email)
 
     }
+
+
 
     override fun onReportSuccess(totaltime: List<Float>, pace: List<Float>,distance: List<Float>, rate:List<Float>, gname:List<String>) {
         if(distance!=null){
