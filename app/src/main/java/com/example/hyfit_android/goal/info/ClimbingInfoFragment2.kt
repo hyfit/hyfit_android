@@ -1,4 +1,4 @@
-package com.example.hyfit_android.exercise
+package com.example.hyfit_android.goal.info
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,9 +9,13 @@ import android.view.View
 import android.view.ViewGroup
 import com.example.hyfit_android.MainActivity
 import com.example.hyfit_android.R
-import com.example.hyfit_android.databinding.ActivityStairResultBinding
-import com.example.hyfit_android.databinding.FragmentClimbingResult1Binding
+import com.example.hyfit_android.databinding.FragmentClimbingInfo1Binding
+import com.example.hyfit_android.databinding.FragmentClimbingInfo2Binding
 import com.example.hyfit_android.databinding.FragmentClimbingResult2Binding
+import com.example.hyfit_android.exercise.ClimbingResultActivity
+import com.example.hyfit_android.exercise.Exercise
+import com.example.hyfit_android.exercise.ExerciseService
+import com.example.hyfit_android.exercise.GetExerciseView
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
@@ -20,34 +24,24 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import kotlin.properties.Delegates
 
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ClimbingResultFragment2.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ClimbingResultFragment2() : Fragment() {
-    private lateinit var binding: FragmentClimbingResult2Binding
+class ClimbingInfoFragment2 : Fragment() , GetExerciseView {
+    private lateinit var binding: FragmentClimbingInfo2Binding
     private lateinit var barChart: BarChart
     private var  totalTime by Delegates.notNull<Long>()
     private var xList = mutableListOf<String>()
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-       binding = FragmentClimbingResult2Binding.inflate(inflater, container, false)
-        val climbingResultActivity = activity as ClimbingResultActivity
-        val locationList = climbingResultActivity.locationList
+        binding = FragmentClimbingInfo2Binding.inflate(inflater, container, false)
+        val climbingInfoActivity = activity as ClimbingInfoActivity
+        val locationList = climbingInfoActivity.locationList
         var index = 0
         var currentTime = 0
         val entries = mutableListOf<BarEntry>()
-
+        getExercise(climbingInfoActivity.exerciseId)
+        binding.exerciseInfoText.text = climbingInfoActivity.title
         Log.d("THISISRESULTLIST",locationList.toString())
         if (locationList != null) {
             for (location in locationList) {
@@ -86,19 +80,9 @@ class ClimbingResultFragment2() : Fragment() {
         barChart.setFitBars(true)
         barChart.invalidate()
 
-        // 상승값
-        val increaseResult = String.format("%.2f", climbingResultActivity.increase.toDouble())
-        binding.exerciseDistanceText.text=increaseResult+ "m"
 
-        // 시간
-        binding.result2Time.text = formatTime(climbingResultActivity.totalTime)
-
-        // 최고
-        binding.resultPeakAlt.text = climbingResultActivity.peakAlt + "m"
-
-        // 메인 이동
-        binding.goToMain.setOnClickListener{
-            launchMainActivity()
+        binding.prevBtn.setOnClickListener{
+            climbingInfoActivity.onBackPressed()
         }
 
         return binding.root
@@ -124,6 +108,25 @@ class ClimbingResultFragment2() : Fragment() {
             minutes > 0 -> String.format("%dm %02ds", minutes, seconds)
             else -> String.format("%ds", seconds)
         }
+    }
+    private fun getExercise(exerciseId : Long){
+        val exerciseService = ExerciseService()
+        exerciseService.setGetExerciseView(this)
+        exerciseService.getExercise(exerciseId)
+    }
+
+    override fun onGetExerciseViewSuccess(result: Exercise) {
+
+        // 시간 변경
+        binding.result2Time.text = result.totalTime?.let { formatTime(it) }
+        //상승
+        binding.exerciseDistanceText.text=result.increase+ "m"
+        // 최고
+        binding.resultPeakAlt.text = result.peakAlt + "m"
+    }
+
+    override fun onGetExerciseViewFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
     }
 
 

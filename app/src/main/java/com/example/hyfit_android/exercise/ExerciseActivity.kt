@@ -286,7 +286,8 @@ class ExerciseActivity:AppCompatActivity(),OnMapReadyCallback, Observer, Exercis
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setEndExerciseView(this)
-        exerciseService.endExercise(ExerciseEndReq(exerciseId.toLong(),timeInSeconds,pace,distance.toString(),current.toString()))
+        pace = calculateAveragePace(timeInSeconds,distance)
+        exerciseService.endExercise(ExerciseEndReq(exerciseId.toLong(),timeInSeconds,pace,distance.toString(),"0","0",current.toString()))
     }
 
     // location save
@@ -396,8 +397,8 @@ class ExerciseActivity:AppCompatActivity(),OnMapReadyCallback, Observer, Exercis
 
     private fun saveRedis(hat :String){
         if(exerciseId!=0){
-            val lat = sdk.currentLocation.latitude.toString()
-            val long = sdk.currentLocation.longitude.toString()
+            val lat = String.format("%.4f", sdk.currentLocation.latitude)
+            val long = String.format("%.4f", sdk.currentLocation.longitude)
             val alt = hat
             runOnUiThread { binding.locationText.text = "($lat , $long , $alt)" }
             if (previousLat == null && previousLong == null && previousAlt == null) {
@@ -524,6 +525,13 @@ class ExerciseActivity:AppCompatActivity(),OnMapReadyCallback, Observer, Exercis
             }
         }
     }
+    fun calculateAveragePace(timeInSeconds: Long, distanceInKm: Double): String {
+        val totalTimeInMinutes = timeInSeconds / 60.0
+        val paceInMinutesPerKm = totalTimeInMinutes / distanceInKm
+        val paceMinutes = paceInMinutesPerKm.toInt()
+        val paceSeconds = ((paceInMinutesPerKm - paceMinutes) * 60).toInt()
+        return String.format("%02d'%02d''", paceMinutes, paceSeconds)
+    }
 
     fun inError(){
         mLocationListener?.let { mLocationManager?.removeUpdates(it) }
@@ -629,6 +637,7 @@ class ExerciseActivity:AppCompatActivity(),OnMapReadyCallback, Observer, Exercis
         intent.putExtra("distance", distance)
         intent.putStringArrayListExtra("locationList",result )
         intent.putExtra("totalTime",totalTime.toString())
+        intent.putExtra("pace",pace)
         loadingDialog.dismiss()
         startActivity(intent)
     }

@@ -190,7 +190,7 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView, 
     }
 
     override fun onGetGoalRecFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        Log.d("GETGOALRECFAILURE",msg)
     }
 
 

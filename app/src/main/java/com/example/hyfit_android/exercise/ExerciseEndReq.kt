@@ -7,5 +7,7 @@ data class ExerciseEndReq(
     val totalTime: Long,
     val pace: String,
     val distance:String,
+    val increase : String,
+    val peakAlt : String,
     val end:String
 )

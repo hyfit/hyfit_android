@@ -60,7 +60,9 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     private var timer: CountDownTimer? = null
     private var timeInSeconds by Delegates.notNull<Long>()
     private var totalTime by Delegates.notNull<Long>()
+    private var increase = 0.0
     private var distance by Delegates.notNull<Double>()
+    private var peakAlt = ""
 
     var mLocationManager: LocationManager? = null
     var mLocationListener: LocationListener? = null
@@ -160,7 +162,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         binding.exerciseEndBtn.setOnClickListener{
             if(isReady == 1){
                 stopTimer()
-                saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString(),distance.toString())
+                saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString(),increase.toString())
                 isEnd = 1
 
                 // 로딩화면 띄우기
@@ -269,7 +271,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setEndExerciseView(this)
-        exerciseService.endExercise(ExerciseEndReq(exerciseId.toLong(),timeInSeconds,distance.toString(),distance.toString(),current.toString()))
+        exerciseService.endExercise(ExerciseEndReq(exerciseId.toLong(),timeInSeconds,"0","0",increase.toString(),peakAlt,current.toString()))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -313,12 +315,10 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         locationService.getAllExerciseList(exerciseId)
     }
 
-    private fun calDistance(alt1:String, alt2:String) : Double{
-        // 지금 고도가 이전 고도보다 크면 계산
-        return if(alt1.toDouble() < alt2.toDouble()) {
-            alt2.toDouble() - alt1.toDouble()
-        } else 0.0
+    private fun calIncrease(alt1:String, alt2:String) : Double{
+            return alt2.toDouble() - alt1.toDouble()
     }
+
     private fun saveRedis(hat : Double){
         if(exerciseId!=0){
             val lat = sdk.currentLocation.latitude.toString()
@@ -327,16 +327,17 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
             runOnUiThread { binding.altitudeText.text = "${alt}m" }
             if ( previousAlt == null) {
                 previousAlt = alt
-            } else if(alt.toDouble() - previousAlt!!.toDouble()>=0) {
-                val currentDistance = calDistance(previousAlt!!, alt)
-                distance += currentDistance
-                runOnUiThread { binding.totalAltitudeText.text = "${String.format("%.2f", distance)}m" }
+            } else {
+                if (alt.toDouble() > previousAlt!!.toDouble()) peakAlt = alt
+                val currentIncrease = calIncrease(previousAlt!!, alt)
+                increase += currentIncrease
+                runOnUiThread { binding.totalAltitudeText.text = "${String.format("%.2f", increase)}m" }
                 previousAlt = alt
             }
 
             // 30초에 한번씩 저장
             if((timeInSeconds % 30).toDouble() == 0.0){
-                saveRedisAltExercise(exerciseId.toLong(), lat, long, alt,distance.toString())
+                saveRedisAltExercise(exerciseId.toLong(), lat, long, alt,increase.toString())
             }
         }
 

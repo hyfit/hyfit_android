@@ -19,6 +19,7 @@ import com.example.hyfit_android.MainActivity
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentGoalModalDeleteBinding
 import com.example.hyfit_android.databinding.FragmentGoalSelectBinding
+import com.example.hyfit_android.exercise.ClimbingActivity
 import com.example.hyfit_android.exercise.ExerciseActivity
 import com.example.hyfit_android.exercise.StairActivity
 import com.example.hyfit_android.goal.*
@@ -50,7 +51,9 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
         val bundle = arguments
         mountainList = bundle?.getSerializable("mountain") as ArrayList<Goal>
         buildingList = bundle.getSerializable("building") as ArrayList<Goal>
+
         type = bundle.getString("type").toString()
+        Log.d("THISISTYPE",type)
 
         initSearchRecyclerView(mountainList)
 
@@ -73,6 +76,7 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
                     activity?.let {
                         val intent = Intent(it, StairActivity::class.java).apply {
                             putExtra("goalId",goalId)
+                            putExtra("type",type)
                         }
 
                         it.startActivity(intent)
@@ -89,6 +93,7 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
                         activity?.let {
                             val intent = Intent(it, StairActivity::class.java).apply {
                                 putExtra("goalId",goalId)
+                                putExtra("type",type)
                             }
 
                             it.startActivity(intent)
@@ -100,7 +105,12 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
             else {
                 if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
                     activity?.let {
-                        // start
+                        val intent = Intent(it, ClimbingActivity::class.java).apply {
+                            putExtra("goalId",goalId)
+                            putExtra("type",type)
+                        }
+
+                        it.startActivity(intent)
                     }
                 }
                 else {
@@ -112,7 +122,12 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
                             delay(1000)
                         }
                         activity?.let {
-                            // start
+                            val intent = Intent(it, ClimbingActivity::class.java).apply {
+                                putExtra("goalId",goalId)
+                                putExtra("type",type)
+                            }
+
+                            it.startActivity(intent)
                         }
                     }
                 }

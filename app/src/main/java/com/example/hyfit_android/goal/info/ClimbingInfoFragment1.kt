@@ -1,7 +1,6 @@
-package com.example.hyfit_android.exercise
+package com.example.hyfit_android.goal.info
 
 import android.Manifest
-import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
@@ -16,35 +15,26 @@ import android.view.ViewGroup
 import androidx.core.app.ActivityCompat
 import com.example.hyfit_android.MainActivity
 import com.example.hyfit_android.R
+import com.example.hyfit_android.databinding.FragmentClimbingInfo1Binding
 import com.example.hyfit_android.databinding.FragmentClimbingResult1Binding
-import com.example.hyfit_android.location.GetAllRedisExerciseView
-import com.example.hyfit_android.location.LocationService
+import com.example.hyfit_android.exercise.ClimbingResultActivity
+import com.example.hyfit_android.exercise.Exercise
+import com.example.hyfit_android.exercise.ExerciseService
+import com.example.hyfit_android.exercise.GetExerciseView
 import com.google.android.gms.maps.*
 import com.google.android.gms.maps.model.*
 
-import kotlin.properties.Delegates
-
-// TODO: Rename parameter arguments, choose names that match
-// the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-private const val ARG_PARAM1 = "param1"
-private const val ARG_PARAM2 = "param2"
-
-/**
- * A simple [Fragment] subclass.
- * Use the [ClimbingResultFragment1.newInstance] factory method to
- * create an instance of this fragment.
- */
-class ClimbingResultFragment1() : Fragment(), OnMapReadyCallback {
-    private lateinit var binding: FragmentClimbingResult1Binding
+class ClimbingInfoFragment1 : Fragment(), OnMapReadyCallback,GetExerciseView {
+    private lateinit var binding: FragmentClimbingInfo1Binding
 
     // google map
-   // private lateinit var context:
+    // private lateinit var context:
     private lateinit var mapView: MapView
     private lateinit var mMap: GoogleMap
     private lateinit var polyline: Polyline
     private var latLngList: MutableList<LatLng> = mutableListOf()
     private lateinit var locationList : ArrayList<String>
-//    private var  totalTime by Delegates.notNull<Long>()
+    //    private var  totalTime by Delegates.notNull<Long>()
     private lateinit var firstList: LatLng
     private lateinit var lastList: LatLng
     private lateinit var mapFragment : SupportMapFragment
@@ -53,23 +43,17 @@ class ClimbingResultFragment1() : Fragment(), OnMapReadyCallback {
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentClimbingResult1Binding.inflate(inflater, container, false)
-        mapFragment = childFragmentManager.findFragmentById(R.id.climbing_result_map) as SupportMapFragment
+        binding = FragmentClimbingInfo1Binding.inflate(inflater, container, false)
+        mapFragment = childFragmentManager.findFragmentById(R.id.climbing_info_map) as SupportMapFragment
         mapFragment.onCreate(savedInstanceState)
         mapFragment.getMapAsync(this)
-        val climbingResultActivity = activity as ClimbingResultActivity
 
-        // MapView 초기화
-//        mapView = view.findViewById(R.id.climbing_result_map)
-//        mapView.onCreate(savedInstanceState)
-//        mapView.getMapAsync(this)
-
-        // 거리
-        val distanceResult = String.format("%.2f", (Math.round(climbingResultActivity.distance * 100000.0) / 100000.0))
-        binding.exerciseDistanceText1.text = distanceResult + "km"
+        val climbingInfoActivity = activity as ClimbingInfoActivity
+        binding.exerciseInfoText.text = climbingInfoActivity.title
+        getExercise(climbingInfoActivity.exerciseId)
 
         // 경로
-        val locationList = climbingResultActivity.locationList
+        val locationList = climbingInfoActivity.locationList
         if (locationList != null) {
             for (location in locationList) {
                 val latLngArr = location.split(",")
@@ -90,13 +74,9 @@ class ClimbingResultFragment1() : Fragment(), OnMapReadyCallback {
             lastList = LatLng(lastLatLngArr[0].toDouble(), lastLatLngArr[1].toDouble())
         }
 
-        // 시간 변경
-        binding.totalTime1.text = formatTime(climbingResultActivity.totalTime)
-        binding.exercisePace1.text = climbingResultActivity.pace
-
-        // 메인이동
-        binding.goToMain1.setOnClickListener{
-            launchMainActivity()
+        binding.prevBtn.setOnClickListener{
+            climbingInfoActivity.onBackPressed()
+           // requireActivity().supportFragmentManager.popBackStack()
         }
 
         return binding.root
@@ -167,7 +147,25 @@ class ClimbingResultFragment1() : Fragment(), OnMapReadyCallback {
         startActivity(intent)
     }
 
+    private fun getExercise(exerciseId : Long){
+        val exerciseService = ExerciseService()
+        exerciseService.setGetExerciseView(this)
+        exerciseService.getExercise(exerciseId)
+    }
 
+    override fun onGetExerciseViewSuccess(result: Exercise) {
+        // 시간 변경
+        binding.totalTime1.text = result.totalTime?.let { formatTime(it) }
+        // 거리
+        val distanceResult = String.format("%.2f", (Math.round((result.distance?.toDouble() ?: 0.0) * 100000.0) / 100000.0))
+        binding.exerciseDistanceText1.text = distanceResult + "km"
+        binding.exercisePace1.text = result.pace
+
+    }
+
+    override fun onGetExerciseViewFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
 
 
 }

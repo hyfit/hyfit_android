@@ -10,11 +10,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hyfit_android.databinding.ActivityExerciseBinding
 import com.example.hyfit_android.databinding.ActivityExerciseDataBinding
 import com.example.hyfit_android.exercise.*
+import com.example.hyfit_android.location.GetAllRedisExerciseView
+import com.example.hyfit_android.location.LocationService
 import java.util.Collections.min
 import kotlin.math.min
 import kotlin.properties.Delegates
 
-class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView, OnExerciseClickListener{
+class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView, OnExerciseClickListener,
+    GetAllRedisExerciseView {
 
     private lateinit var binding: ActivityExerciseDataBinding
     private lateinit var header : String
@@ -28,6 +31,10 @@ class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView, OnExer
     private var currentPage = 1
     private var listSize by Delegates.notNull<Int>()
     private var totalPage =1
+
+    private var exerciseId = 0L
+    private var type = ""
+    private var date = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -112,17 +119,41 @@ class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView, OnExer
     }
 
     override fun onExerciseClick(data: Exercise) {
-        if(data.type == "stair"){
-            val intent= Intent(this, StairInfoActivity::class.java)
-            intent.putExtra("exerciseId",data.exerciseId)
-            startActivity(intent)
-        }
-        else{
-
-        }
+        data.exerciseId?.let { getAllRedisExercise(it) }
+        exerciseId = data.exerciseId!!
+        type = data.type.toString()
+        date = (data.start?.substringBefore("T") ?: null) as String
+    }
+    private fun getAllRedisExercise(exerciseId : Long){
+        val locationService = LocationService()
+        locationService.setGetAllRedisExerciseView(this)
+        locationService.getAllRedisExercise(exerciseId.toInt())
     }
 
     override fun onExerciseClicked() {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetAllRedisExerciseSuccess(result: ArrayList<String>) {
+        if(type == "stair"){
+            val intent= Intent(this, StairInfoActivity::class.java)
+            intent.putStringArrayListExtra("locationList",result)
+            intent.putExtra("exerciseId",exerciseId)
+            intent.putExtra("type",type)
+            intent.putExtra("date",date)
+            startActivity(intent)
+        }
+        else {
+            val intent = Intent(this,ClimbingInfoActivity::class.java)
+            intent.putStringArrayListExtra("locationList",result)
+            intent.putExtra("exerciseId",exerciseId)
+            intent.putExtra("type",type)
+            intent.putExtra("date",date)
+            startActivity(intent)
+        }
+    }
+
+    override fun onGetAllRedisExerciseFailure(code: Int, msg: String) {
         TODO("Not yet implemented")
     }
 }

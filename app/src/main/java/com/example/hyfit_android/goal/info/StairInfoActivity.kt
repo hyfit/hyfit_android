@@ -25,23 +25,44 @@ class StairInfoActivity : AppCompatActivity(),GetAllRedisExerciseView,GetExercis
     // chart
     private lateinit var barChart: BarChart
     private var xList = mutableListOf<String>()
-    private var index =0
     private var currentTime = 0
-    private var entries =  mutableListOf<BarEntry>()
-
+    private var type = ""
+    private var date = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         // binding
         binding = ActivityStairInfoBinding.inflate(layoutInflater)
         barChart = binding.stairBarChart
 
-        val dataSet = BarDataSet(entries, "Increase value")
-        val data = BarData(dataSet)
-
         // 뒤로가기 버튼
         binding.prevBtn.setOnClickListener{
             onBackPressed()
         }
+        val result = intent.getStringArrayListExtra("locationList")
+        var index = 0
+        var currentTime = 0
+        val entries = mutableListOf<BarEntry>()
+        date = intent.getStringExtra("date").toString()
+        type = intent.getStringExtra("type").toString()
+
+        binding.exerciseInfoText.text =  "$date / $type"
+
+        if (result != null) {
+            for (location in result) {
+                val latLngArr = location.split(",")
+                if(latLngArr[3] == "0.0") continue
+                else {
+                    val xTime = formatXtime(currentTime)
+                    xList.add(xTime)
+                    entries.add(BarEntry(index.toFloat(),latLngArr[3].toFloat()))
+                    currentTime += 30
+                    index++
+                }
+            }
+        }
+
+        val dataSet = BarDataSet(entries, "Increase value")
+        val data = BarData(dataSet)
 
         // x축
         val xAxis = barChart.xAxis
@@ -61,10 +82,11 @@ class StairInfoActivity : AppCompatActivity(),GetAllRedisExerciseView,GetExercis
         barChart.setFitBars(true)
         barChart.invalidate()
 
+
         exerciseId = intent.getLongExtra("exerciseId", 0L)
 
         if(exerciseId!=null){
-            getAllRedisExercise()
+//            getAllRedisExercise()
             getExercise()
         }
 
@@ -79,17 +101,7 @@ class StairInfoActivity : AppCompatActivity(),GetAllRedisExerciseView,GetExercis
         locationService.getAllRedisExercise(exerciseId.toInt())
     }
     override fun onGetAllRedisExerciseSuccess(result: ArrayList<String>) {
-        for (location in result) {
-            val latLngArr = location.split(",")
-            if(latLngArr[3] == "0.0") continue
-            else {
-                val xTime = formatXtime(currentTime)
-                xList.add(xTime)
-                entries.add(BarEntry(index.toFloat(),latLngArr[3].toFloat()))
-                currentTime += 30
-                index++
-            }
-        }
+
     }
 
     override fun onGetAllRedisExerciseFailure(code: Int, msg: String) {

@@ -4,11 +4,12 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+
     tools:context=".exercise.ClimbingResultFragment1">
 
 
     <LinearLayout
-        android:id="@+id/exercise_result_title"
+        android:id="@+id/exercise_result_title1"
         android:layout_width="wrap_content"
         android:layout_height="50dp"
 
@@ -26,23 +27,29 @@
             android:text="Result Page"
             />
     </LinearLayout>
-
-    <!--    지도-->
     <LinearLayout
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exercise_result_title"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_result_title1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:id="@+id/exercise_result_map_layout">
+        android:id="@+id/exercise_result_map_layout1">
+    <!--    지도-->
+    <FrameLayout
+        android:id="@+id/mapContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
         <fragment
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:id="@+id/exercise_result_map"
+            android:id="@+id/climbing_result_map"
             tools:context=".exercise.ExerciseResultActivity"
             android:name="com.google.android.gms.maps.SupportMapFragment"/>
+    </FrameLayout>
     </LinearLayout>
+
 
 
     <LinearLayout
@@ -51,10 +58,11 @@
         android:background="@drawable/ic_result_page_box"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exercise_result_map_layout"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_result_map_layout1"
         android:orientation="vertical"
         >
         <TextView
+            android:id="@+id/total_time1"
             android:gravity="center"
             android:layout_gravity="center"
             android:layout_width="wrap_content"
@@ -72,7 +80,7 @@
         <!--        페이스 결과값-->
         <LinearLayout
             android:layout_marginTop="20dp"
-            android:id="@+id/result_pace_layout"
+            android:id="@+id/result_pace_layout1"
             android:layout_width="match_parent"
             android:layout_height="50dp"
             android:layout_marginHorizontal="50dp"
@@ -88,6 +96,7 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/exercise_pace1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -122,7 +131,7 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/exercise_distance_text"
+                android:id="@+id/exercise_distance_text1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -133,7 +142,7 @@
         </LinearLayout>
         <ImageView
             android:layout_marginTop="10dp"
-            android:id="@+id/go_to_main"
+            android:id="@+id/go_to_main1"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_homebtn"/>
