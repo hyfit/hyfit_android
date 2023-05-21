@@ -1,16 +1,22 @@
 package com.example.hyfit_android.Login
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
 import android.widget.Toast
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.MainActivity
+import com.example.hyfit_android.User
+import com.example.hyfit_android.UserInfo.GetUserView
+import com.example.hyfit_android.UserInfo.ValidExpiredActivity
+import com.example.hyfit_android.UserInfo.ValidView
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.ActivityLoginBinding
 
-class LoginActivity : AppCompatActivity(), LoginView{
+class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
 
     lateinit var binding: ActivityLoginBinding
 
@@ -19,7 +25,14 @@ class LoginActivity : AppCompatActivity(), LoginView{
         binding= ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
         var ljwt:String = intent.getStringExtra("logoutjwt").toString()
+        var invalid=intent.getBooleanExtra("invalid", false)
         Log.d("logoutjwt", ljwt)
+
+        if(invalid){
+            deleteJwt()
+            Toast.makeText(this, "Token expired", Toast.LENGTH_LONG).show()
+        }
+
 
         binding.join.setOnClickListener {
             init()
@@ -73,15 +86,29 @@ class LoginActivity : AppCompatActivity(), LoginView{
         binding.textPassword.text = null
     }
 
+    private fun userget() {
+        val jwt: String? = getJwt()
+        Log.d("jwtjwt", jwt.toString())
+
+        val usService = UserRetrofitService()
+        usService.setgetuserView(this)
+        usService.userget(jwt)
+    }
+
+
 
     override fun onLoginSuccess(code: Int, jwt: String) {
         when(code){
             1000->{
                 Log.d("Success", code.toString())
                 saveJwt(jwt)
-                val intent=Intent(this, MainActivity::class.java)
                 init()
-                startActivity(intent)
+                userget()
+//                startActivity(intent)
+//                if (intent.component?.className == "com.example.hyfit_android.MainActivity") {
+//                    // MainActivity로 전환된 경우에만 타이머 시작
+//                    startTimer()
+//                }
             }
             else->{
                 Log.d("error", code.toString())
@@ -112,5 +139,80 @@ class LoginActivity : AppCompatActivity(), LoginView{
             }
     }
 
+    private fun startTimer() {
+        val timer = object : CountDownTimer(29*1000*60, 100) {
+            override fun onTick(millisUntilFinished: Long) {
+            }
+
+            override fun onFinish() {
+                valid()
+                //startTimer()
+            }
+        }
+
+        timer.start()
+    }
+
+    private fun valid(){
+        val spf = getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
+        val jwt:String?=spf!!.getString("jwt","0")
+        val usService=UserRetrofitService()
+        usService.setvalidView(this)
+        usService.valid(jwt)
+    }
+    override fun onValidSuccess(code: Int, result: String) {
+        when(code){
+            1000->{
+                if(result=="invalid"){
+                    Log.d("jwt invalid", result)
+//                    Log.d("after 5 seconds", "you out")
+//
+//                    var logoutac=LogoutActivity()
+//                    logoutac.logout(getJwt())
+                    val intent=Intent(this, ValidExpiredActivity::class.java)
+                    intent.putExtra("invalid", true)
+                    startActivity(intent)
+
+                }
+                else{
+                    Log.d("oldone", getJwt().toString())
+                    saveJwt(result)
+                    Log.d("newone", getJwt().toString())
+                    startTimer()
+                }
+            }
+            else->Log.d("validsad", "sadsad")
+        }
+    }
+
+    override fun onValidFailure(code: Int, msg: String) {
+        Log.d("Can't valid", "sadasd")
+
+    }
+    private fun deleteJwt(){
+        val spf=getSharedPreferences("auth", MODE_PRIVATE)
+        val editor=spf.edit()
+        editor.clear()
+        editor.apply()
+        editor.commit()
+    }
+
+    override fun onUserSuccess(code: Int, result: User) {
+        val intent=Intent(this, MainActivity::class.java)
+        intent.putExtra("userNickName",result.nickName)
+        val sharedPrefs = getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
+        val editor = sharedPrefs.edit()
+        editor.putString("getEmail", result.email)  // 데이터 추가
+        editor.apply()  // 변경 사항을 저장
+        startActivity(intent)
+                if (intent.component?.className == "com.example.hyfit_android.MainActivity") {
+                    // MainActivity로 전환된 경우에만 타이머 시작
+                    startTimer()
+                }
+    }
+
+    override fun onUserFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
 
 }

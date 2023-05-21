@@ -2,33 +2,91 @@ package com.example.hyfit_android
 
 
 import android.Manifest
+import android.app.PendingIntent.getActivity
+import android.content.ContentValues
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.graphics.BitmapFactory
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.WindowManager
+import android.os.Handler
+import android.util.Log
+import android.view.View
+import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LoginActivity
-import com.example.hyfit_android.Login.LogoutActivity
+import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
-import com.example.hyfit_android.goal.GoalFragment
+import com.example.hyfit_android.databinding.FragmentReportBinding
+import com.example.hyfit_android.databinding.FragmentSetBinding
+import com.example.hyfit_android.goal.*
+import com.nextnav.nn_app_sdk.NextNavSdk
+import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
+import com.nextnav.nn_app_sdk.notification.SdkStatus
+import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
+import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import java.util.*
+import com.example.hyfit_android.home.MainFragment
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import kotlin.collections.ArrayList
+import kotlin.properties.Delegates
 
-class MainActivity : AppCompatActivity() {
+
+class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainView, GetBuildingView , GetGoalView, GetDoneGoalView{
+
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
+    //val reportxml=ReportFragment().binding.puthere
+
+
+    // pinncale
+    private lateinit var context: Context
+    private lateinit var sdk: NextNavSdk
+    private val NEXTNAV_SERVICE_URL = "api.nextnav.io"
+    private val API_KEY = BuildConfig.KEY_VALUE
+    private lateinit var sdkMessageObservable: SdkStatusNotification
+    private lateinit var altitudeObservable: AltitudeContextNotification
+
+    var userNickName = ""
+
+    var initCode = 0
+
+    // goal List
+    var mountainList: ArrayList<Goal>? = null
+    var buildingList:  ArrayList<Goal>?= null
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        // pinnacle setting
+        context = applicationContext
+        sdkMessageObservable = SdkStatusNotification.getInstance()
+        sdkMessageObservable.addObserver(this)
+        altitudeObservable = AltitudeContextNotification.getInstance()
+        altitudeObservable.addObserver(this)
+        userNickName = intent.getStringExtra("userNickName").toString()
+
+
         binding = ActivityMainBinding.inflate(layoutInflater)
+        //bindingrp = FragmentReportBinding.inflate(inflater, container, false)
         setContentView(binding.root)
         loginActivity=LoginActivity()
 
+        // 메인에 들어오자마자 initPinnacle
+//        initPinnacle()
+        getMountainProgress()
+        getBuildingProgress()
 
-
+        var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
 
 
         // BottomNavigationView 초기화
@@ -40,6 +98,7 @@ class MainActivity : AppCompatActivity() {
                     true
                 }
                 R.id.ReportFragment -> {
+
                     supportFragmentManager.beginTransaction().replace(R.id.fragment_container, ReportFragment()).commit()
                     true
                 }
@@ -58,8 +117,14 @@ class MainActivity : AppCompatActivity() {
                 else -> false
             }
         }
+
         // 초기 fragment 설정
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+        if(showSetFragment){
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, SetFragment()).commit()
+        }
+        else {
+            supportFragmentManager.beginTransaction().replace(R.id.fragment_container, MainFragment()).commit()
+        }
 
         // permission code
         if ((ActivityCompat.checkSelfPermission(
@@ -80,6 +145,104 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+//    private fun report(){
+//        val rpService=ReportRetrofitService()
+//        rpService.report()
+//    }
+    private fun getGoalProgress(){
+    val jwt = getJwt()
+    val goalService = GoalService()
+    goalService.setGetGoalView(this)
+    goalService.getGoalProgress(jwt!!)
+
+}
+    private fun getGoalDone(){
+        val jwt = getJwt()
+//        val goalDoneJson = arguments?.getString("goal")
+//        val goalDone = gson.fromJson(goalDoneJson, Goal::class.java)
+        val goalService = GoalService()
+        goalService.setGetDoneGoalView(this)
+        goalService.getGoalDone(jwt!!)
+    }
+    private fun getMountainProgress(){
+        val jwt: String? = getJwt()
+        val goalService = GoalService()
+        goalService.setGetMountainView(this)
+        goalService.getMountainProgress(jwt!!)
+    }
+
+    private fun getBuildingProgress(){
+        val jwt: String? = getJwt()
+        val goalService = GoalService()
+        goalService.setGetBuildingView(this)
+        goalService.getBuildingProgress(jwt!!)
+    }
+    // 권한 요청
+    private fun requestPermissions() {
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
+            ContextCompat.checkSelfPermission(this, Manifest.permission.ACTIVITY_RECOGNITION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACTIVITY_RECOGNITION), PERMISSIONS_REQUEST_LOCATION)
+        }
+    }
+
+
+
+    private fun initPinnacle() {
+        sdk = NextNavSdk.getInstance()
+        sdk.init(context, NEXTNAV_SERVICE_URL, API_KEY)
+    }
+    override fun update(o: Observable?, p: Any?) {
+
+        if (o is SdkStatusNotification) {
+            // initCode update
+            initCode = o.code
+            when (o.code) {
+                SdkStatus.STATUS_MESSAGES.INIT_SUCCESS.code -> {
+//                    // SDK is initialized successfully, it’s ready to start altitude calculation
+                }
+            }
+        }
+        if (o is AltitudeContextNotification) {
+            Log.d("current Location" , sdk.currentLocation.toString())
+            Log.d("second status code is ", o.statusCode.toString())
+            Log.d("second error code is ", o.errorCode.toString())
+            if (Date().time - o.timestamp <= 1000) {
+                when (o.statusCode) {
+                    200 -> {
+
+                    }
+                }
+                when(o.warningCode){
+                    WarningMessages.HIGH_DELTA_LOCATION.code -> {
+                        Log.w(
+                            ContentValues.TAG, "update: " +
+                                    WarningMessages.HIGH_DELTA_LOCATION.code)
+                    }
+                    WarningMessages.HIGH_DELTA_PRESSURE.code -> {
+                        Log.w(
+                            ContentValues.TAG, "update: " +
+                                    WarningMessages.HIGH_DELTA_PRESSURE.code)
+                    }
+                }
+            }
+        }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        requestPermissions() // 액티비티가 시작되면 권한 요청 실행
+        initPinnacle() // initPinnacle
+
+    }
+
+    private fun userget() {
+        val jwt: String? = getJwt()
+        Log.d("jwtjwt", jwt.toString())
+
+        val usService = UserRetrofitService()
+        usService.setgetuserView(this)
+        usService.userget(jwt)
+    }
 
     private fun getJwt():String?{
         val spf = getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
@@ -106,11 +269,60 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-//    // fragment에서 다른 fragment로 화면전환
-//    public fun replaceFragment(fragment: Fragment) {
-//        supportFragmentManager.beginTransaction().replace(R.id.fragment_container, fragment).commit()
-//    }
-
+    override fun onUserSuccess(code: Int, result: User) {
     }
+
+    override fun onUserFailure(code: Int, msg: String) {
+        Log.d("ONUSERFAILUER",msg)
+    }
+
+    override fun onGetBuildingSuccess(result: ArrayList<Goal>) {
+        buildingList = result
+        Log.d("MAINBUILDINGLIST",buildingList.toString())
+    }
+
+    override fun onGetBuildingFailure(code: Int, msg: String) {
+        if(code==2203){
+            buildingList = ArrayList<Goal>()
+
+        }
+        if(code==2202){
+            buildingList = ArrayList<Goal>()
+        }
+    }
+
+    override fun onGetMountainSuccess(result: ArrayList<Goal>) {
+        mountainList = result
+        Log.d("MAINMOUNTAINLIST",mountainList.toString())
+    }
+
+    override fun onGetMountainFailure(code: Int, msg: String) {
+        if(code==2203){
+            mountainList = ArrayList<Goal>()
+
+        }
+        if(code==2202){
+            mountainList = ArrayList<Goal>()
+        }
+    }
+
+    override fun onGetDoneGoalSuccess(result: ArrayList<Goal>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetDoneGoalFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetGoalSuccess(result: ArrayList<Goal>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetGoalFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
+
+}
 
 

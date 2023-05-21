@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".exercise.StairResultActivity">
+
+
+
+
+    <LinearLayout
+        android:id="@+id/exercise_result_title"
+        android:layout_width="wrap_content"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:orientation="vertical">
+        <TextView
+            android:fontFamily="@font/inter_medium"
+            android:textSize="20sp"
+            android:textColor="#5b5b5b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="Result Page"
+            />
+
+    </LinearLayout>
+    <TextView
+        android:id="@+id/chart_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_result_title"
+        android:fontFamily="@font/inter_light"
+        android:textSize="15sp"
+        android:textColor="#5b5b5b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Increase Chart"
+        />
+
+    <!--    지도-->
+    <LinearLayout
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/chart_title"
+        android:layout_width="match_parent"
+        android:layout_height="350dp"
+        android:orientation="vertical"
+        android:gravity="center"
+        android:id="@+id/exercise_result_chart_layout">
+        <com.github.mikephil.charting.charts.BarChart
+            android:id="@+id/stair_bar_chart"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+<!--        <fragment-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="350dp"-->
+<!--            android:id="@+id/exercise_result_map"-->
+<!--            tools:context=".exercise.ExerciseResultActivity"-->
+<!--            android:name="com.google.android.gms.maps.SupportMapFragment"/>-->
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_result_page_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_result_chart_layout"
+        android:orientation="vertical"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginLeft="50dp"
+            android:textSize="16sp"
+            android:fontFamily="@font/inter_medium"
+            android:text="Result"
+            android:textColor="@color/black" />
+
+
+
+        <!--        시간 결과값-->
+        <LinearLayout
+            android:id="@+id/result_time_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:fontFamily="@font/inter_medium"
+                android:text="time"
+                android:textColor="#969696"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/result_time_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_medium"
+                android:text="00:00:00"
+                android:textColor="@color/main_color"
+                android:textSize="20sp" />
+
+        </LinearLayout>
+
+        <!--        구분선-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="50dp"
+            android:background="#c3c3c3"/>
+
+        <!--        거리 결과값-->
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:fontFamily="@font/inter_medium"
+                android:text="Increase value"
+                android:textColor="#969696"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/exercise_distance_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_medium"
+                android:text="0.4km"
+                android:textColor="@color/main_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:id="@+id/go_to_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_homebtn"/>
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

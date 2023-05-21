@@ -65,7 +65,7 @@ dependencies {
 
     //used by Pinnacle SDK to determine device activity and location
     implementation 'com.google.android.gms:play-services-awareness:18.0.1'
-    implementation 'com.google.android.gms:play-services-location:17.1.0'
+    implementation 'com.google.android.gms:play-services-location:15.0.1'
 
     implementation 'androidx.lifecycle:lifecycle-runtime-ktx:2.4.0'
     implementation 'com.google.android.gms:play-services-maps:18.1.0'
@@ -96,4 +96,17 @@ dependencies {
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
     implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
+    // pagination
+    implementation 'androidx.recyclerview:recyclerview:1.2.1'
+    implementation 'androidx.paging:paging-runtime:3.1.0'
+
+   // viewpager
+    implementation 'androidx.viewpager2:viewpager2:1.0.0'
+    implementation 'com.tbuonomo:dotsindicator:4.2'
+
+    // 이미지로딩 라이브러리
+    implementation 'com.github.bumptech.glide:glide:4.12.0'
 }

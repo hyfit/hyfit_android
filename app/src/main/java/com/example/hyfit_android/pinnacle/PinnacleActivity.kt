@@ -51,15 +51,6 @@ class PinnacleActivity : AppCompatActivity(), Observer{
         // 우선 init
         initPinnacle()
 
-//        barocalCallback = object : BarocalCallback {
-//            override fun onBrocalSuccess() {
-//                Log.d("result","success")
-//            }
-//
-//            override fun onBarocalError() {
-//                Log.d("result ","fail")
-//            }
-//        }
     }
 
     private fun initPinnacle() {

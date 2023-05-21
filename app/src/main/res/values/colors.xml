@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="background_color">#F3F3F3</color>
+    <color name="darkgray2">#7E7E7E</color>
+    <color name="main_color">#6079ff</color>
+    <color name="lightgray2">#E9E9E9</color>
+    <color name="logo_color">#1A14FF</color>
+    <color name="lightgray">#C2C2C2</color>
+    <color name="darkgray">#949494</color>
+    <color name="colorAxis">#0055FF</color>
+    <color name="distance">#FFC8A0</color>
+    <color name="kcal">#F6E091</color>
+    <color name="time">#A4BDF5</color>
+
     <color name="purple_200">#FFBB86FC</color>
     <color name="purple_500">#FF6200EE</color>
     <color name="purple_700">#FF3700B3</color>
@@ -19,4 +30,7 @@
     <color name="string_gray">#949494</color>
     <color name="string_white">#f3f3f3</color>
     <color name="place_list_color">#ffffff</color>
+
+    <color name="type_select">#c2c2c2</color>
+    <color name="type_unselect">#FAFBFD</color>
 </resources>

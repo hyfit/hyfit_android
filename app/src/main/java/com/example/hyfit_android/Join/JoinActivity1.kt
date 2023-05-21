@@ -25,14 +25,14 @@ class JoinActivity1 : AppCompatActivity() {
             startActivity(intent)
         }
 
-//        if(binding1.textPassword.text.toString().equals(binding1.PasswordAgain.text.toString())){
-//            binding1.correction.setText("Correct Password")
-//        }
-
         binding1.joinNext.setOnClickListener{
             if (binding1.textEmail.text.toString().isEmpty() || binding1.textPassword.text.toString().isEmpty() || binding1.PasswordAgain.text.toString().isEmpty()){
                 Toast.makeText(this,"Fill in all the blanks", Toast.LENGTH_LONG).show()
                 Log.d("test", "fill in all the blanks")
+            }
+            else if(!binding1.textPassword.text.toString().equals(binding1.PasswordAgain.text.toString())){
+                Toast.makeText(this, "Incorrect Password", Toast.LENGTH_LONG).show()
+                Log.d("nonopassword wrong", "wrong")
             }
             else {
                 val intent = Intent(this, JoinActivity2::class.java)

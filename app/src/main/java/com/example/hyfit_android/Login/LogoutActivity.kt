@@ -3,7 +3,9 @@ package com.example.hyfit_android.Login
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import android.widget.Toast
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.ActivityLogoutBinding
 
@@ -24,7 +26,7 @@ class LogoutActivity : AppCompatActivity(), LogoutView {
             startActivity(intent)
         }
     }
-    private fun logout(jwt:String?){
+    fun logout(jwt:String?){
         val usService= UserRetrofitService()
         usService.setLogoutView(this)
         usService.logout(jwt)
@@ -57,4 +59,5 @@ class LogoutActivity : AppCompatActivity(), LogoutView {
     override fun onLogoutFailure(code: Int, msg: String) {
         Log.d("lotoutsadsad", code.toString())
     }
+
 }

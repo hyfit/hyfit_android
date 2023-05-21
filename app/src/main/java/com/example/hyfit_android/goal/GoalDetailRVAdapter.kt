@@ -2,7 +2,9 @@ package com.example.hyfit_android.goal
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
+import android.transition.Visibility
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hyfit_android.R
@@ -10,7 +12,7 @@ import com.example.hyfit_android.databinding.GoalDetailListBinding
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
-class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val listener: OnGoalChangeListener): RecyclerView.Adapter<GoalDetailRVAdapter.ViewHolder>() {
+class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val listener: OnGoalChangeListener, val clickListener: OnGoalClickListener): RecyclerView.Adapter<GoalDetailRVAdapter.ViewHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GoalDetailRVAdapter.ViewHolder {
@@ -27,8 +29,14 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val
         holder.binding.goalDeleteButton.setOnClickListener{
             listener.onItemClick(result[position])
         }
+
+        // 전체 box 누를때
+        holder.binding.goalLayout.setOnClickListener{
+            clickListener.onGoalClick(result[position])
+        }
         // view binding (adapter에 넣은 데이터를 rm_item에 넣어주는)
         holder.bind(result[position])
+
     }
 
     // 전체 리사이클러뷰의 갯수
@@ -58,6 +66,7 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val
             else {
                 goalLayout.setBackgroundResource(com.example.hyfit_android.R.drawable.ic_goal_rectangle_done)
                 TextView!!.setPaintFlags(TextView!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+                binding.goalDeleteButton.visibility = View.INVISIBLE
             }
             TextView.text = goal.place
             TextView2.text = goal.rate.toString() + "%"

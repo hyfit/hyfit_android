@@ -1,12 +1,7 @@
 package com.example.hyfit_android.goal
 
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface GoalRetrofitInterface {
 
@@ -22,6 +17,15 @@ interface GoalRetrofitInterface {
     @POST("/api/goal/add")
     fun saveGoal(@Header("X-AUTH-TOKEN")token : String, @Body saveGoalReq: SaveGoalReq) : Call<SaveGoalRes>
 
+    @PATCH("/api/goal")
+    fun modifyGoal(@Header("X-AUTH-TOKEN")token : String, @Query("id") id:Long,@Query("gain") gain:String) : Call<SaveGoalRes>
+
+    @GET("/api/goal/mountain")
+    fun getMountain(@Header("X-AUTH-TOKEN")token : String)  : Call<GetGoalRes>
+
+    @GET("/api/goal/building")
+    fun getBuilding(@Header("X-AUTH-TOKEN")token : String)  : Call<GetGoalRes>
+
     @DELETE("/api/goal")
     fun deleteGoal(@Header("X-AUTH-TOKEN")token : String, @Query("id") id: Long) :Call<DeleteGoalRes>
 
@@ -30,4 +34,10 @@ interface GoalRetrofitInterface {
 
     @GET("/api/goal/place-page")
     fun getGoalPlacePage(@Query("type") type: String, @Query("continents") continents: String, @Query("page") page:Int) : Call<GetPlaceRes>
+
+    @GET("/api/goal/place-rec")
+    fun getGoalRec(@Header("X-AUTH-TOKEN")token : String) : Call<GetGoalImageRes>
+
+   // @GET("/api/image/place/{placeId}")
+  //  fun getPlaceImage(@Header("X-AUTH-TOKEN")token : String,  @Path("placeId") placeId: Long) : Call<GetGoalImageRes>
 }

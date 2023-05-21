@@ -3,17 +3,36 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="../../../../../../layout/custom_preview.xml" value="0.12411347517730496" />
+        <entry key="app/src/main/res/drawable-v24/baseline_home_20.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ant_design_reload_time_outline.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/community_round_back.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/community_user_blue.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_box.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_close.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_detail.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_empire_state_building.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_eng_logo.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_exercise_data_block.xml" value="0.447908935546875" />
+        <entry key="app/src/main/res/drawable/ic_goal_background1.xml" value="0.1075" />
         <entry key="app/src/main/res/drawable/ic_goal_index.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_goal_rectangle.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_goal_rectangle_building.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_goal_rectangle_done.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_goal_rectangle_mountain.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_goal_select.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_goal_type.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_goal_type2.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_home_blue.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_home_gray.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_homebtn.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_icon_info.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_left.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_logo.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_logo_black.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_logo_black_2.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_logo_nav.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_loop_black_24dp.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_nav_community.xml" value="0.1" />
@@ -31,7 +50,10 @@
         <entry key="app/src/main/res/drawable/ic_nav_report_gray.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_nav_set_blue.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_nav_setting.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_outdoor_exercise.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_prev_btn.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_rectangle_11.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_rectangle_148.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_rectangle_39.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_rectangle_39_done.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_rectangle_39_mountain.xml" value="0.1" />
@@ -40,33 +62,67 @@
         <entry key="app/src/main/res/drawable/ic_rectangle_46.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_rectangle_64.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_rectangle_65.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_rectangle_66.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_result_line.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_result_page_box.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_result_page_titlebox.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_search_bar.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_search_button.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_select_building.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/ic_select_mountain.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/ic_type_select_btn.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/ic_workout_start.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/linear_layout_border.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/logo1.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/main_arrow_selectgoal.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/menu_selector_color.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/my_btn.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/place_selected.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/place_text_select.xml" value="0.1" />
+        <entry key="app/src/main/res/drawable/rectangle_main_select.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/rouded_background.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/selector_community.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_goal.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_main.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_report.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/selector_setting.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/spin.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/stair_animate.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/tag_btn_back.xml" value="0.1" />
         <entry key="app/src/main/res/drawable/tag_btn_back_blue.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/type_selector.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/values.xml" value="0.11" />
+        <entry key="app/src/main/res/layout/activity_climbing.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/activity_climbing_info.xml" value="0.246875" />
+        <entry key="app/src/main/res/layout/activity_climbing_result.xml" value="0.24375" />
         <entry key="app/src/main/res/layout/activity_community_main.xml" value="0.29732513427734375" />
+        <entry key="app/src/main/res/layout/activity_edit_password2.xml" value="0.24791666666666667" />
+        <entry key="app/src/main/res/layout/activity_exercise.xml" value="0.375" />
+        <entry key="app/src/main/res/layout/activity_exercise_data.xml" value="0.25" />
+        <entry key="app/src/main/res/layout/activity_exercise_info_map.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_exercise_result.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_find_password.xml" value="0.13125" />
+        <entry key="app/src/main/res/layout/activity_find_password3.xml" value="0.25052083333333336" />
+        <entry key="app/src/main/res/layout/activity_goal_result.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/activity_join2.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/activity_join3.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/activity_join4.xml" value="0.25364583333333335" />
         <entry key="app/src/main/res/layout/activity_join_email.xml" value="0.253125" />
-        <entry key="app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.10206451416015622" />
+        <entry key="app/src/main/res/layout/activity_main.xml" value="0.25641632080078125" />
+        <entry key="app/src/main/res/layout/activity_maps.xml" value="0.14290161132812496" />
         <entry key="app/src/main/res/layout/activity_my_goal.xml" value="0.14860839843750007" />
         <entry key="app/src/main/res/layout/activity_my_location.xml" value="0.23854166666666668" />
         <entry key="app/src/main/res/layout/activity_navi.xml" value="0.165" />
         <entry key="app/src/main/res/layout/activity_pinnacle.xml" value="0.10104166666666667" />
+        <entry key="app/src/main/res/layout/activity_splash.xml" value="0.24791666666666667" />
+        <entry key="app/src/main/res/layout/activity_stair.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/activity_stair_info.xml" value="0.23645833333333333" />
+        <entry key="app/src/main/res/layout/activity_stair_result.xml" value="0.24791666666666667" />
         <entry key="app/src/main/res/layout/comment_item.xml" value="0.2557291666666667" />
+        <entry key="app/src/main/res/layout/fragment_climbing_info1.xml" value="0.246875" />
+        <entry key="app/src/main/res/layout/fragment_climbing_info2.xml" value="0.246875" />
+        <entry key="app/src/main/res/layout/fragment_climbing_result1.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/fragment_climbing_result2.xml" value="0.25" />
         <entry key="app/src/main/res/layout/fragment_community.xml" value="0.42344045368620037" />
         <entry key="app/src/main/res/layout/fragment_goal.xml" value="0.28427886962890625" />
         <entry key="app/src/main/res/layout/fragment_goal_modal.xml" value="0.335" />
@@ -74,15 +130,27 @@
         <entry key="app/src/main/res/layout/fragment_goal_modal3.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_goal_modal_delete.xml" value="0.351776123046875" />
         <entry key="app/src/main/res/layout/fragment_goal_nav.xml" value="0.1" />
-        <entry key="app/src/main/res/layout/fragment_main.xml" value="0.20246913580246914" />
+        <entry key="app/src/main/res/layout/fragment_goal_rec.xml" value="0.246875" />
+        <entry key="app/src/main/res/layout/fragment_goal_select.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/fragment_goal_select2.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/fragment_main.xml" value="0.43515625" />
         <entry key="app/src/main/res/layout/fragment_maps.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_my_page.xml" value="0.35341949462890626" />
         <entry key="app/src/main/res/layout/fragment_post.xml" value="0.253125" />
         <entry key="app/src/main/res/layout/fragment_set.xml" value="0.1539855072463768" />
+        <entry key="app/src/main/res/layout/fragment_type_select.xml" value="0.3463653564453125" />
+        <entry key="app/src/main/res/layout/goal.xml" value="0.246875" />
         <entry key="app/src/main/res/layout/goal_detail_list.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/goal_exercise_data_list.xml" value="0.5501866658528646" />
         <entry key="app/src/main/res/layout/goal_list.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/goal_rec_per_layout.xml" value="0.24895833333333334" />
         <entry key="app/src/main/res/layout/goal_search_list.xml" value="0.45" />
+        <entry key="app/src/main/res/layout/goal_select_list.xml" value="0.335" />
+        <entry key="app/src/main/res/layout/goal_select_list2.xml" value="0.24375" />
+        <entry key="app/src/main/res/layout/loading_result.xml" value="0.24270833333333333" />
+        <entry key="app/src/main/res/layout/mypost_item.xml" value="0.2453125" />
         <entry key="app/src/main/res/layout/post_item.xml" value="0.25364583333333335" />
+        <entry key="app/src/main/res/layout/ready_dialog.xml" value="0.24947916666666667" />
         <entry key="app/src/main/res/menu/navi_menu.xml" value="0.25" />
       </map>
     </option>
