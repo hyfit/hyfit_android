@@ -32,6 +32,7 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
     private lateinit var buildingList : ArrayList<Goal>
     private var isSelected = 0
     private var goalId = -1
+    private var type = ""
 
 
     override fun onCreateView(
@@ -49,6 +50,7 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
         val bundle = arguments
         mountainList = bundle?.getSerializable("mountain") as ArrayList<Goal>
         buildingList = bundle.getSerializable("building") as ArrayList<Goal>
+        type = bundle.getString("type").toString()
 
         initSearchRecyclerView(mountainList)
 
@@ -65,23 +67,9 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
 
         binding.startWorkout.setOnClickListener{
 
-            if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
-                activity?.let {
-                    val intent = Intent(it, StairActivity::class.java).apply {
-                        putExtra("goalId",goalId)
-                    }
+            if(type== "stair"){
 
-                    it.startActivity(intent)
-                }
-            }
-            else {
-                binding.progressBar.visibility = ProgressBar.VISIBLE
-                lifecycleScope.launch {
-
-                    while(mainActivity.initCode != 800 ) {
-                        Log.d("STATUSCODE",mainActivity.initCode.toString())
-                        delay(1000)
-                    }
+                if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
                     activity?.let {
                         val intent = Intent(it, StairActivity::class.java).apply {
                             putExtra("goalId",goalId)
@@ -90,7 +78,46 @@ class GoalSelectFragment : DialogFragment(),GetMountainView, OnGoalClickListener
                         it.startActivity(intent)
                     }
                 }
+                else {
+                    binding.progressBar.visibility = ProgressBar.VISIBLE
+                    lifecycleScope.launch {
+
+                        while(mainActivity.initCode != 800 ) {
+                            Log.d("STATUSCODE",mainActivity.initCode.toString())
+                            delay(1000)
+                        }
+                        activity?.let {
+                            val intent = Intent(it, StairActivity::class.java).apply {
+                                putExtra("goalId",goalId)
+                            }
+
+                            it.startActivity(intent)
+                        }
+                    }
+                }
             }
+            // climbing
+            else {
+                if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
+                    activity?.let {
+                        // start
+                    }
+                }
+                else {
+                    binding.progressBar.visibility = ProgressBar.VISIBLE
+                    lifecycleScope.launch {
+
+                        while(mainActivity.initCode != 800 ) {
+                            Log.d("STATUSCODE",mainActivity.initCode.toString())
+                            delay(1000)
+                        }
+                        activity?.let {
+                            // start
+                        }
+                    }
+                }
+            }
+
 
         }
         return binding.root

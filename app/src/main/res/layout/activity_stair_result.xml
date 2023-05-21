@@ -8,31 +8,45 @@
 
 
 
+
     <LinearLayout
         android:id="@+id/exercise_result_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_result_page_titlebox"
+        android:layout_height="50dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:gravity="center"
-        android:orientation="horizontal">
+        android:orientation="vertical">
         <TextView
             android:fontFamily="@font/inter_medium"
             android:textSize="20sp"
             android:textColor="#5b5b5b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
             android:text="Result Page"
             />
+
     </LinearLayout>
+    <TextView
+        android:id="@+id/chart_title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_result_title"
+        android:fontFamily="@font/inter_light"
+        android:textSize="15sp"
+        android:textColor="#5b5b5b"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Increase Chart"
+        />
 
     <!--    지도-->
     <LinearLayout
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/exercise_result_title"
+        app:layout_constraintTop_toBottomOf="@+id/chart_title"
         android:layout_width="match_parent"
         android:layout_height="350dp"
         android:orientation="vertical"

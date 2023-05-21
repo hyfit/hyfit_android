@@ -25,6 +25,7 @@ import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.example.hyfit_android.BuildConfig
+import com.example.hyfit_android.MainActivity
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.ActivityStairBinding
 import com.example.hyfit_android.home.MainFragment
@@ -44,7 +45,7 @@ import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerciseView, SaveExerciseRedisLocView,
-    SaveExerciseLocView, GetRedisExerciseView, GetAllExerciseListView, GetAllRedisExerciseView {
+    SaveExerciseLocView, GetRedisExerciseView, GetAllExerciseListView, GetAllRedisExerciseView, SaveAltRedisLocView {
 
     private lateinit var binding: ActivityStairBinding
 
@@ -159,7 +160,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         binding.exerciseEndBtn.setOnClickListener{
             if(isReady == 1){
                 stopTimer()
-                saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
+                saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString(),distance.toString())
                 isEnd = 1
 
                 // 로딩화면 띄우기
@@ -167,33 +168,51 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
 
                 endExercise() }
             else{
-                binding.progressBar.visibility = View.VISIBLE
-                binding.exerciseEndBtn.isEnabled = false
-                binding.exerciseEndBtn.postDelayed({
-                    if(isReady == 1) {
-                        binding.progressBar.visibility = View.GONE
-                        binding.exerciseEndBtn.isEnabled = true
-                        isEnd = 1
-                        // 로딩화면 띄우기
-                        val dialog = Dialog(this)
-                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-                        dialog.setCancelable(false)
-                        dialog.setContentView(R.layout.loading_result)
-                        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
-                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
-                        dialog.show()
 
-                        stopTimer()
-                        endExercise()
-                        saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
-                    } else {
-                        binding.exerciseEndBtn.isEnabled = true
-                    }
-                }, 1000)
+                runOnUiThread {
+                    Toast.makeText(
+                        this@StairActivity,
+                        "I'm sorry, there seems to be an error.",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                }
+                inError()
+
+//                binding.progressBar.visibility = View.VISIBLE
+//                binding.exerciseEndBtn.isEnabled = false
+//                binding.exerciseEndBtn.postDelayed({
+//                    if(isReady == 1) {
+//                        binding.progressBar.visibility = View.GONE
+//                        binding.exerciseEndBtn.isEnabled = true
+//                        isEnd = 1
+//                        // 로딩화면 띄우기
+//                        val dialog = Dialog(this)
+//                        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+//                        dialog.setCancelable(false)
+//                        dialog.setContentView(R.layout.loading_result)
+//                        dialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+//                        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+//                        dialog.show()
+//
+//                        stopTimer()
+//                        endExercise()
+//                        saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString())
+//                    } else {
+//                        binding.exerciseEndBtn.isEnabled = true
+//                    }
+//                }, 1000)
             }
 
         }
     }
+
+    fun inError(){
+        mLocationListener?.let { mLocationManager?.removeUpdates(it) }
+        stopCalculate()
+        val intent= Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
 
     // get jwt
     private fun getJwt():String?{
@@ -250,7 +269,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setEndExerciseView(this)
-        exerciseService.endExercise(ExerciseEndReq(exerciseId.toLong(),timeInSeconds,"0",distance.toString(),current.toString()))
+        exerciseService.endExercise(ExerciseEndReq(exerciseId.toLong(),timeInSeconds,distance.toString(),distance.toString(),current.toString()))
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -277,6 +296,12 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         locationService.saveExerciseRedisLoc(LocationRedisReq(latitude,longitude,altitude,id))
     }
 
+    private fun saveRedisAltExercise(id : Long,latitude : String, longitude : String, altitude : String, increase : String){
+        val locationService = LocationService()
+        locationService.setSaveAltRedisView(this)
+        locationService.saveRedisAltExercise(LocationAltRedisReq(latitude, longitude, altitude, increase,id))
+    }
+
     private fun getRedisExercise(){
         val locationService = LocationService()
         locationService.setGetRedisExerciseView(this)
@@ -289,8 +314,10 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     }
 
     private fun calDistance(alt1:String, alt2:String) : Double{
-        val deltaAlt = alt2.toDouble() - alt1.toDouble()
-        return if (deltaAlt >= 0) deltaAlt else 0.0
+        // 지금 고도가 이전 고도보다 크면 계산
+        return if(alt1.toDouble() < alt2.toDouble()) {
+            alt2.toDouble() - alt1.toDouble()
+        } else 0.0
     }
     private fun saveRedis(hat : Double){
         if(exerciseId!=0){
@@ -309,7 +336,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
 
             // 30초에 한번씩 저장
             if((timeInSeconds % 30).toDouble() == 0.0){
-                saveExerciseRedisLoc(exerciseId.toLong(), lat, long, alt)
+                saveRedisAltExercise(exerciseId.toLong(), lat, long, alt,distance.toString())
             }
         }
 
@@ -361,15 +388,15 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
                         // pinnacle ready
                         if(isReady == 0) {
                             isReady = 1
-                            val hat = String.format("%.1f", o.heightHat.toDouble()).toDouble()
-                            saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hat.toString())
+                            val hat = String.format("%.1f", o.height).toDouble()
+                            saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hat.toString(),"0.0")
                         }
 
                         else {
                             if (o.heightHat != null && o.heightHatUncertainty != null && o.height != null &&
                                 o.heightUncertainty != null
                             ) {
-                                val hat = String.format("%.1f", o.heightHat.toDouble()).toDouble()
+                                val hat = String.format("%.1f", o.height.toDouble()).toDouble()
                                 saveRedis(hat)
                             }
                         }
@@ -384,24 +411,25 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
 //                            ).show()
 //                        }
 //                        endExerciseInKorea()
-                        if(isReady == 0) {
-                            isReady = 1
-                            saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), "9.0")
-                        }
-                        else {
-                            Log.d("KOREACODE", o.statusCode.toString())
-                            saveRedis(9.0)
-                        }
+//                        if(isReady == 0) {
+//                            isReady = 1
+//                            saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), "9.0")
+//                        }
+//                        else {
+//                            Log.d("KOREACODE", o.statusCode.toString())
+//                            saveRedis(9.0)
+//                        }
 
                     }
                     else -> {
-                        runOnUiThread {
-                            Toast.makeText(
-                                this@StairActivity,
-                                o.statusCode.toString(),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+                        Log.d("ERRORLOG", o.statusCode.toString())
+//                        runOnUiThread {
+//                            Toast.makeText(
+//                                this@StairActivity,
+//                                o.statusCode.toString(),
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
                     }
 
                 }
@@ -451,12 +479,11 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     }
 
     override fun onSaveExerciseLocSuccess(result: com.example.hyfit_android.location.Location) {
-        Log.d("save Loc Result",result.toString())
 
     }
 
     override fun onSaveExerciseLocFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        inError()
     }
 
     override fun onSaveExerciseRedisLocSuccess(result: List<String>) {
@@ -464,7 +491,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     }
 
     override fun onSaveExerciseRedisLocFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        inError()
     }
 
 
@@ -473,7 +500,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     }
 
     override fun onGetRedisExerciseViewFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        inError()
     }
 
     override fun onGetAllExerciseListSuccess(result: ArrayList<String>) {
@@ -482,7 +509,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     }
 
     override fun onGetAllExerciseListFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        inError()
     }
 
     override fun onGetAllRedisExerciseSuccess(result: ArrayList<String>) {
@@ -495,7 +522,16 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     }
 
     override fun onGetAllRedisExerciseFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        inError()
+    }
+
+    // 고도 저장
+    override fun onSaveAltRedisLocSuccess(result: List<String>) {
+        Log.d("SAVEALT",result.toString())
+    }
+
+    override fun onSaveAltRedisLocFailure(code: Int, msg: String) {
+        inError()
     }
 
 

@@ -34,4 +34,10 @@ interface GoalRetrofitInterface {
 
     @GET("/api/goal/place-page")
     fun getGoalPlacePage(@Query("type") type: String, @Query("continents") continents: String, @Query("page") page:Int) : Call<GetPlaceRes>
+
+    @GET("/api/goal/place-rec")
+    fun getGoalRec(@Header("X-AUTH-TOKEN")token : String) : Call<GetGoalImageRes>
+
+   // @GET("/api/image/place/{placeId}")
+  //  fun getPlaceImage(@Header("X-AUTH-TOKEN")token : String,  @Path("placeId") placeId: Long) : Call<GetGoalImageRes>
 }

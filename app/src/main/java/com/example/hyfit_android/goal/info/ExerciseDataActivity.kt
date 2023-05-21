@@ -1,22 +1,34 @@
 package com.example.hyfit_android.goal.info
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.widget.Toast
 import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.hyfit_android.databinding.ActivityExerciseBinding
 import com.example.hyfit_android.databinding.ActivityExerciseDataBinding
-import com.example.hyfit_android.exercise.Exercise
-import com.example.hyfit_android.exercise.ExerciseService
-import com.example.hyfit_android.exercise.GetExerciseByGoalView
+import com.example.hyfit_android.exercise.*
+import java.util.Collections.min
+import kotlin.math.min
 import kotlin.properties.Delegates
 
-class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView{
+class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView, OnExerciseClickListener{
 
     private lateinit var binding: ActivityExerciseDataBinding
     private lateinit var header : String
     private var goalId by Delegates.notNull<Long>()
     private lateinit var exerciseDataRVAdaptor : ExerciseDataRVAdaptor
+
+    private lateinit var exerciseList : List<Exercise>
+
+    // 페이지네이션
+    private var pageSize = 6
+    private var currentPage = 1
+    private var listSize by Delegates.notNull<Int>()
+    private var totalPage =1
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,8 +48,41 @@ class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView{
         binding.prevBtn.setOnClickListener{
             onBackPressed()
         }
+
+        // 페이지네이션 왼쪽
+        binding.exercisePaginationLeft.setOnClickListener{
+            if(currentPage == 1){
+                Toast.makeText(this, "This is the first page.", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                currentPage -= 1
+                binding.exerciseCurrentPage.text="($currentPage/$totalPage)"
+                // init
+                initRecyclerView(paginationList())
+            }
+        }
+
+        // 페이지네이션 오른쪽
+        binding.exercisePaginationRight.setOnClickListener{
+            if(currentPage==totalPage){
+                Toast.makeText(this, "This is the last page.", Toast.LENGTH_SHORT).show()
+            }
+            else{
+                currentPage +=1
+                binding.exerciseCurrentPage.text="($currentPage/$totalPage)"
+                // init
+                initRecyclerView(paginationList())
+            }
+        }
         getExerciseByGoal()
 
+    }
+
+    private fun paginationList() : List<Exercise> {
+        val startIndex = (currentPage - 1) * pageSize
+        val endIndex = min(currentPage * pageSize, listSize) - 1
+        val paginationList = exerciseList.subList(startIndex, endIndex + 1)
+        return paginationList
     }
 
     private fun getExerciseByGoal(){
@@ -48,16 +93,36 @@ class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView{
     }
 
     private fun initRecyclerView(result : List<Exercise>){
-        exerciseDataRVAdaptor = ExerciseDataRVAdaptor(this, result)
+        exerciseDataRVAdaptor = ExerciseDataRVAdaptor(this, result,this)
         binding.myExerciseList.adapter = exerciseDataRVAdaptor
         binding.myExerciseList.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false)
     }
 
     override fun onGetExerciseByGoalSuccess(result: List<Exercise>) {
-        initRecyclerView(result)
+        exerciseList = result
+        listSize = result.size
+        totalPage = (listSize + pageSize - 1) / pageSize
+        if(totalPage == 0) totalPage = 1
+        initRecyclerView(paginationList())
+        binding.exerciseCurrentPage.text = "(1/$totalPage)"
     }
 
     override fun onGetExerciseByGoalFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onExerciseClick(data: Exercise) {
+        if(data.type == "stair"){
+            val intent= Intent(this, StairInfoActivity::class.java)
+            intent.putExtra("exerciseId",data.exerciseId)
+            startActivity(intent)
+        }
+        else{
+
+        }
+    }
+
+    override fun onExerciseClicked() {
         TODO("Not yet implemented")
     }
 }

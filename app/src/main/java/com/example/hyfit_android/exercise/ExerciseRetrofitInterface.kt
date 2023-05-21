@@ -16,6 +16,8 @@ interface ExerciseRetrofitInterface {
 
     @GET("/api/exercise/goal")
     fun getExerciseByGoal(@Query("goalId") goalId : Long) : Call<ExerciseListRes>
+    @GET("/api/exercise")
+    fun getExercise(@Query("exerciseId") exerciseId : Long) : Call<ExerciseRes>
 
 
 }

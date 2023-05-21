@@ -180,7 +180,7 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     override fun onSaveGoalSuccess(result: Goal) {
 
         GlobalScope.launch {
-            getGoalProgress()
+         //   getGoalProgress()
             withContext(Dispatchers.Main){
                 for (fragment in childFragmentManager.fragments) {
                     if (fragment is DialogFragment) {
@@ -198,11 +198,12 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
 
     override fun onDeleteGoalSuccess(result: String) {
         GlobalScope.launch {
-            getGoalProgress()
+//            getGoalProgress()
             withContext(Dispatchers.Main) {
                 deleteFragment.dismiss()
             }
         }
+        getGoalProgress()
     }
 
     override fun onDeleteGoalFailure(code: Int, msg: String) {

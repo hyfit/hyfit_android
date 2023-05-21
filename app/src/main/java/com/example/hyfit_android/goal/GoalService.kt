@@ -14,6 +14,8 @@ class GoalService {
     private lateinit var getBuildingView: GetBuildingView
     private lateinit var getMountainView: GetMountainView
     private lateinit var modifyGoalView: ModifyGoalView
+    private lateinit var getGoalRecView : GetGoalRecView
+//    private lateinit var getGoalImageView : GetGoalImageView
 
     fun setGetGoalView(getGoalView: GetGoalView){
         this.getGoalView = getGoalView
@@ -38,6 +40,15 @@ class GoalService {
     fun setModifyGoalView(modifyGoalView: ModifyGoalView){
         this.modifyGoalView = modifyGoalView
     }
+
+    fun setGoalRecView(getGoalRecView: GetGoalRecView){
+        this.getGoalRecView = getGoalRecView
+    }
+//
+//    fun setGoalImageView(getGoalImageView: GetGoalImageView){
+//        this.getGoalImageView = getGoalImageView
+//    }
+
     fun getGoalProgress(jwt:String){
         val postService = getRetrofit().create(GoalRetrofitInterface::class.java)
         postService.getGoalProgress(jwt).enqueue(object: Callback<GetGoalRes> {
@@ -164,6 +175,42 @@ class GoalService {
             }
         })
     }
+    // goal rec
+    fun getGoalRec(jwt : String){
+        val goalService = getRetrofit().create(GoalRetrofitInterface::class.java)
+        goalService.getGoalRec(jwt).enqueue(object: Callback<GetGoalImageRes> {
+            override fun onResponse(call: Call<GetGoalImageRes>, response: Response<GetGoalImageRes>) {
+                Log.d("DONEGOAL/SUCCESS", response.toString())
+                val resp: GetGoalImageRes = response.body()!!
+                Log.d("DONEGOAL/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> getGoalRecView.onGetGoalRecSuccess(resp.result)
+                    else-> getGoalRecView.onGetGoalRecFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<GetGoalImageRes>, t: Throwable) {
+                Log.d("DONEGOAL/FAILURE", t.message.toString())
+            }
+        })
+    }
+
+//    fun getGoalImage(jwt:String, placeId : Long){
+//        val goalService = getRetrofit().create(GoalRetrofitInterface::class.java)
+//        goalService.getPlaceImage(jwt,placeId).enqueue(object: Callback<GetGoalImageRes> {
+//            override fun onResponse(call: Call<GetGoalImageRes>, response: Response<GetGoalImageRes>) {
+//                Log.d("DONEGOAL/SUCCESS", response.toString())
+//                val resp: GetGoalImageRes = response.body()!!
+//                Log.d("DONEGOAL/SUCCESS", resp.toString())
+//                when(val code = resp.code){
+//                    1000-> getGoalImageView.onGetGoalImageViewSuccess(resp.result)
+//                    else-> getGoalImageView.onGetGoalImageViewFailure(code, resp.message)
+//                }
+//            }
+//            override fun onFailure(call: Call<GetGoalImageRes>, t: Throwable) {
+//                Log.d("DONEGOAL/FAILURE", t.message.toString())
+//            }
+//        })
+//    }
 
     }
 

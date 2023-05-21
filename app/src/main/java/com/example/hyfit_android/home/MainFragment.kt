@@ -18,6 +18,8 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.viewpager.widget.ViewPager
+import androidx.viewpager2.widget.ViewPager2
 import com.example.hyfit_android.BuildConfig
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LogoutActivity
@@ -28,10 +30,7 @@ import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.FragmentMainBinding
 import com.example.hyfit_android.exercise.ExerciseActivity
 import com.example.hyfit_android.exercise.StairActivity
-import com.example.hyfit_android.goal.GetBuildingView
-import com.example.hyfit_android.goal.GetMountainView
-import com.example.hyfit_android.goal.Goal
-import com.example.hyfit_android.goal.GoalService
+import com.example.hyfit_android.goal.*
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
@@ -47,9 +46,8 @@ import retrofit2.Callback
 import retrofit2.Response
 import java.util.*
 import kotlin.collections.ArrayList
-import kotlin.properties.Delegates
 
-class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView{
+class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView, GetGoalRecView{
     lateinit var binding: FragmentMainBinding
 
     // pinncale
@@ -62,34 +60,39 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView{
 
     // modal
     private val goalSelectModal = GoalSelectFragment()
-    private val goalSelectFragment2 = GoalSelectFragment2()
+    private val typeSelectFragment = TypeSelectFragment()
     private lateinit var bundle : Bundle
     private  var mountainList: ArrayList<Goal>? = null
     private  var buildingList:  ArrayList<Goal>?= null
+
+    private lateinit var viewPager: ViewPager2
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
-
         userget()
         getMountainProgress()
         getBuildingProgress()
+     //   getGoalRec()
 
         // pinnacle setting
         sdk = NextNavSdk.getInstance()
         sdkMessageObservable = SdkStatusNotification.getInstance()
         val mainActivity = activity as MainActivity
         binding = FragmentMainBinding.inflate(inflater, container, false)
+        getGoalRec()
+        // viewpager
+        viewPager = binding.imageViewPager
 
         binding.progressBar.visibility = ProgressBar.GONE
         val startBtn = binding.outdoorStartBtn
 
         startBtn.setOnClickListener {
             if(mountainList != null && buildingList != null){
-                openGoalSelectModal2()
+                openTypeSelectModal()
             }
             else {
                 binding.progressBar.visibility = ProgressBar.VISIBLE
@@ -100,7 +103,7 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView{
                         Log.d("BUILDING", buildingList.toString())
                     }
                     binding.progressBar.visibility = ProgressBar.GONE
-                    openGoalSelectModal2()
+                    openTypeSelectModal()
                 }
             }
         }
@@ -126,22 +129,33 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView{
         return binding.root
     }
 
-    private fun openGoalSelectModal2() {
-        val bundle = Bundle().apply {
+    private fun openTypeSelectModal(){
+                val bundle = Bundle().apply {
             putSerializable("building", buildingList)
             putSerializable("mountain", mountainList)
         }
-        goalSelectFragment2.arguments = bundle
-        goalSelectFragment2.show(parentFragmentManager, "goalSelect2")
+        typeSelectFragment.arguments = bundle
+        typeSelectFragment.show(parentFragmentManager, "goalSelect2")
     }
+
+//    private fun openGoalSelectModal2() {
+//        val bundle = Bundle().apply {
+//            putSerializable("building", buildingList)
+//            putSerializable("mountain", mountainList)
+//        }
+//        goalSelectFragment2.arguments = bundle
+//        goalSelectFragment2.show(parentFragmentManager, "goalSelect2")
+//    }
     private fun openGoalSelectModal() {
         val bundle = Bundle().apply {
             putSerializable("building", buildingList)
             putSerializable("mountain", mountainList)
+            putString("type","stair")
         }
         goalSelectModal.arguments = bundle
         goalSelectModal.show(parentFragmentManager, "goalSelect")
     }
+
     private fun getMountainProgress(){
         val jwt: String? = getJwt()
         val goalService = GoalService()
@@ -155,6 +169,30 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView{
         goalService.setGetBuildingView(this)
         goalService.getBuildingProgress(jwt!!)
     }
+
+    private fun getGoalRec(){
+        val jwt: String? = getJwt()
+        val goalService = GoalService()
+        binding.progressBar1.visibility = ProgressBar.VISIBLE
+        goalService.setGoalRecView(this)
+        goalService.getGoalRec(jwt!!)
+    }
+
+
+
+    override fun onGetGoalRecSuccess(result: ArrayList<PlaceImage>) {
+        Log.d("THISISRESULTT",result.toString())
+        val pageAdapter = ImageAdapter(this,result)
+        viewPager.adapter = pageAdapter
+        binding.progressBar1.visibility = ProgressBar.GONE
+        binding.indicator.setViewPager2(viewPager)
+
+    }
+
+    override fun onGetGoalRecFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
 
     private fun getJwt():String?{
         val spf = requireActivity().getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
@@ -190,7 +228,7 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView{
     }
 
     override fun onUserFailure(code: Int, msg: String) {
-      Log.d("USERFAILURE",msg)
+        Log.d("USERFAILURE",msg)
     }
 
     override fun onGetMountainSuccess(result: ArrayList<Goal>) {

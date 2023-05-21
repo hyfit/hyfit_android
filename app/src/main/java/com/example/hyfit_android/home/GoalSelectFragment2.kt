@@ -65,7 +65,7 @@ class GoalSelectFragment2 : DialogFragment(),GetMountainView, OnGoalClickListene
             typeSelectModal.show(parentFragmentManager, "typeSelect")
         }
 
-            return binding.root
+        return binding.root
     }
 
     private fun initSearchRecyclerView(GoalList : ArrayList<Goal>){

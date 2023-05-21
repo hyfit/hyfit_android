@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -281,7 +282,13 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
     }
 
     override fun onGetBuildingFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        if(code==2203){
+            buildingList = ArrayList<Goal>()
+
+        }
+        if(code==2202){
+            buildingList = ArrayList<Goal>()
+        }
     }
 
     override fun onGetMountainSuccess(result: ArrayList<Goal>) {
@@ -290,7 +297,13 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
     }
 
     override fun onGetMountainFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        if(code==2203){
+            mountainList = ArrayList<Goal>()
+
+        }
+        if(code==2202){
+            mountainList = ArrayList<Goal>()
+        }
     }
 
     override fun onGetDoneGoalSuccess(result: ArrayList<Goal>) {

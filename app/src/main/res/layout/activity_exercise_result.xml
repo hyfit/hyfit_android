@@ -8,8 +8,8 @@
     <LinearLayout
         android:id="@+id/exercise_result_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_result_page_titlebox"
+        android:layout_height="50dp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -182,5 +182,5 @@
 
     </LinearLayout>
 
-/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

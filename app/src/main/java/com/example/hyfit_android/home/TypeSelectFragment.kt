@@ -27,8 +27,12 @@ import kotlinx.coroutines.launch
 
 class TypeSelectFragment : DialogFragment() {
     private lateinit var binding: FragmentTypeSelectBinding
+    private val goalSelectModal = GoalSelectFragment()
     private var isSelected: String? = null;
     private var goalId = -1
+    private lateinit var mountainList : ArrayList<Goal>
+    private lateinit var buildingList : ArrayList<Goal>
+
     @SuppressLint("ResourceAsColor")
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -41,11 +45,9 @@ class TypeSelectFragment : DialogFragment() {
         val running = binding.runningBtn
         val walking = binding.walkingBtn
         val climbing = binding.climbingBtn
-
         val bundle = arguments
-        if (bundle != null) {
-            goalId = bundle.getInt("goalId")
-        }
+        mountainList = bundle?.getSerializable("mountain") as ArrayList<Goal>
+        buildingList = bundle.getSerializable("building") as ArrayList<Goal>
         // X버튼
         binding.selectTypeClose.setOnClickListener{
             dismiss()
@@ -105,18 +107,30 @@ class TypeSelectFragment : DialogFragment() {
             if(isSelected == null){
                 Toast.makeText(requireContext(), "You need to select a type.", Toast.LENGTH_SHORT).show()
             }
+            else if(isSelected == "climbing"){
+                val bundle = Bundle().apply {
+                    putString("type",isSelected)
+                    putSerializable("building", buildingList)
+                    putSerializable("mountain", mountainList)
+                }
+                goalSelectModal.arguments = bundle
+                goalSelectModal.show(parentFragmentManager, "goalSelect")
+                dismiss()
+            }
             else {
                 if(mainActivity.initCode == 800 || mainActivity.initCode == 808 ||mainActivity.initCode == 0 ){
-                    activity?.let {
-                        val intent = Intent(it, ExerciseActivity::class.java).apply {
-                            putExtra("goalId",goalId)
-                            putExtra("type",isSelected)
+
+                        activity?.let {
+                            val intent = Intent(it, ExerciseActivity::class.java).apply {
+                                putExtra("type",isSelected)
+                            }
+
+                            it.startActivity(intent)
                         }
 
-                        it.startActivity(intent)
-                    }
                 }
                 else {
+
                     binding.progressBar.visibility = ProgressBar.VISIBLE
                     lifecycleScope.launch {
 

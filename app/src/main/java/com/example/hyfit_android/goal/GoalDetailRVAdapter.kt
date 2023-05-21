@@ -2,7 +2,9 @@ package com.example.hyfit_android.goal
 import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Paint
+import android.transition.Visibility
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.hyfit_android.R
@@ -64,6 +66,7 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val
             else {
                 goalLayout.setBackgroundResource(com.example.hyfit_android.R.drawable.ic_goal_rectangle_done)
                 TextView!!.setPaintFlags(TextView!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
+                binding.goalDeleteButton.visibility = View.INVISIBLE
             }
             TextView.text = goal.place
             TextView2.text = goal.rate.toString() + "%"
