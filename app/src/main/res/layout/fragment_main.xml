@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,9 +7,25 @@
     android:layout_height="match_parent"
     android:background="@color/background_color"
     tools:context=".home.MainFragment">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/home_top_layout"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        tools:ignore="NotSibling">
 
-<!--    로고 이미지-->
+    <LinearLayout
+        android:id="@+id/home_top_layout"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+    <!--    로고 이미지-->
     <ImageView
+        android:layout_gravity="center"
         android:layout_marginTop="40dp"
         android:id="@+id/logo_imageView"
         android:layout_width="wrap_content"
@@ -89,7 +106,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/stair_pic" />
+                android:src="@drawable/home_stair" />
             <Button
                 android:id="@+id/stair_start_btn"
                 android:layout_width="40dp"
@@ -101,6 +118,7 @@
                 />
 
         </RelativeLayout>
+
 
         <TextView
             android:layout_gravity="center_horizontal"
@@ -151,160 +169,112 @@
 
     </LinearLayout>
 
-    <!-- 목표 추천 -->
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/home_recommend_goal"
-        android:layout_marginTop="20dp"
-        android:layout_marginHorizontal="25dp"
-        android:orientation="vertical"
-        app:layout_constraintTop_toBottomOf="@+id/home_start_image_layout"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent">
-        <TextView
-            android:layout_width="wrap_content"
+        <!--    지도-->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_bold"
-            android:textSize="18sp"
-            android:textColor="@color/black"
-            android:text="Recommended Goal"/>
-
-        <RelativeLayout
+            android:id="@+id/home_map_layout"
             android:layout_marginTop="10dp"
-            android:id="@+id/home_goal_image"
-            android:layout_width="wrap_content"
-            android:layout_height="180dp"
-            android:gravity="center_vertical"
-            android:orientation="horizontal">
-            <Button
-                android:id="@+id/goal_next_1"
-                android:layout_width="40dp"
-                android:layout_height="45dp"
-                android:background="@drawable/ic_goal_next_1"
+            android:layout_marginHorizontal="25dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/home_start_image_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@drawable/home_followingmap"/>
+
+            <TextView
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
-                android:layout_alignParentStart="true"
-                android:layout_margin="20dp"
+                android:layout_alignParentBottom="true"
+                android:textColor="@color/black"
+                android:fontFamily="@font/roboto_medium"
+                android:text="Recent workout location of following"
                 />
 
-            <ImageView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:src="@drawable/empire_pic" />
+        </LinearLayout>
 
-            <Button
-                android:id="@+id/goal_next_2"
-                android:layout_width="40dp"
-                android:layout_height="45dp"
-                android:layout_alignParentEnd="true"
-                android:layout_centerInParent="true"
-               android:layout_margin="20dp"
-                android:background="@drawable/ic_goal_next_2" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/home_recommend_goal"
+            android:layout_marginTop="20dp"
+            android:layout_marginHorizontal="25dp"
+            android:orientation="vertical"
+            app:layout_constraintTop_toBottomOf="@+id/home_map_layout"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:textSize="18sp"
+                android:textColor="@color/black"
+                android:text="Recommended Goal"/>
+            <ProgressBar
+
+                android:id="@+id/progressBar1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="invisible"
+                />
+    <!-- 목표 추천 -->
+        <RelativeLayout
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="25dp"
+            android:layout_marginBottom="20dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+
+            <androidx.viewpager2.widget.ViewPager2
+                android:id="@+id/imageViewPager"
+                android:layout_width="380dp"
+                android:layout_height="wrap_content" />
+
+            <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                android:id="@+id/indicator"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_centerHorizontal="true"
+                app:dotsColor="@color/string_gray"
+                app:dotsCornerRadius="8dp"
+                app:dotsSize="10dp"
+                app:dotsSpacing="4dp"
+                app:selectedDotColor="@color/main_color"
+                />
+
         </RelativeLayout>
+        </LinearLayout>
+<!--    <LinearLayout-->
+<!--        android:gravity="center_horizontal"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:id="@+id/home_recommend_goal"-->
+<!--        android:layout_marginTop="10dp"-->
+<!--        android:layout_marginHorizontal="25dp"-->
+<!--        android:orientation="vertical"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/home_map_layout"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent">-->
 
+<!--        <androidx.viewpager.widget.ViewPager-->
+<!--            android:id="@+id/imageViewPager"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content" />-->
+
+<!--    </LinearLayout>-->
     </LinearLayout>
 
-<!--    달성 직전 목표-->
-
-
-<!--    <ImageView-->
-<!--        android:id="@+id/imageView2"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:src="@drawable/empirestatebuilding"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.495"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.416" />-->
-
-
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/roboto_light"-->
-<!--        android:text="Empire State Building"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="20dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.291"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.332" />-->
-
-<!--    <androidx.appcompat.widget.AppCompatButton-->
-<!--        android:id="@+id/main_startBtn"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginHorizontal="25dp"-->
-<!--        android:background="@drawable/main_startbtn_rectangle"-->
-<!--        android:fontFamily="@font/roboto_bold"-->
-<!--        android:text="Start Exercise"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="20dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.655" />-->
-
-<!--    <TextView-->
-<!--        android:id="@+id/textView4"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/roboto_medium"-->
-<!--        android:text="It's not long before the goal !"-->
-<!--        android:textColor="@color/black"-->
-<!--        android:textSize="20dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.15"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.741" />-->
-
-<!--    <ImageButton-->
-<!--        android:id="@+id/imageView3"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:src="@drawable/everest"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.497"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.955" />-->
-
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/roboto_light"-->
-<!--        android:text="Everest"-->
-<!--        android:textColor="@color/white"-->
-<!--        android:textSize="20dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.283"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.832" />-->
-
-<!--    &lt;!&ndash; 달성률 불러오기 &ndash;&gt;-->
-<!--    <TextView-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:fontFamily="@font/roboto_bold"-->
-<!--        android:text="91%"-->
-<!--        android:textColor="@color/background_color"-->
-<!--        android:textSize="32dp"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintHorizontal_bias="0.498"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent"-->
-<!--        app:layout_constraintVertical_bias="0.89" />-->
+    </ScrollView>
 
     <ProgressBar
         app:layout_constraintLeft_toLeftOf="parent"
@@ -317,16 +287,6 @@
         android:layout_gravity="center"
         android:visibility="invisible"
         />
-
-<!--    <TextView-->
-<!--        android:id="@+id/init_text"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:text="Initializing Pinnacle"-->
-<!--        android:visibility="invisible"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/progressBar" />-->
 
 
 

@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.util.Log
+import android.view.View
 import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
@@ -23,7 +24,7 @@ import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.databinding.FragmentReportBinding
 import com.example.hyfit_android.databinding.FragmentSetBinding
-import com.example.hyfit_android.goal.GoalFragment
+import com.example.hyfit_android.goal.*
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
@@ -35,10 +36,12 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
 
 
-class MainActivity : AppCompatActivity() , Observer, GetUserView{
+class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainView, GetBuildingView , GetGoalView, GetDoneGoalView{
+
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
@@ -53,9 +56,13 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
     private lateinit var sdkMessageObservable: SdkStatusNotification
     private lateinit var altitudeObservable: AltitudeContextNotification
 
-    lateinit var userNickName : String
+    var userNickName = ""
+
     var initCode = 0
-    var usergetCode = 0
+
+    // goal List
+    var mountainList: ArrayList<Goal>? = null
+    var buildingList:  ArrayList<Goal>?= null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -76,7 +83,8 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
 
         // 메인에 들어오자마자 initPinnacle
 //        initPinnacle()
-
+        getMountainProgress()
+        getBuildingProgress()
 
         var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
         var showMainFragment = intent.getBooleanExtra("showMainFragment", false)
@@ -141,6 +149,34 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
 //        val rpService=ReportRetrofitService()
 //        rpService.report()
 //    }
+    private fun getGoalProgress(){
+    val jwt = getJwt()
+    val goalService = GoalService()
+    goalService.setGetGoalView(this)
+    goalService.getGoalProgress(jwt!!)
+
+}
+    private fun getGoalDone(){
+        val jwt = getJwt()
+//        val goalDoneJson = arguments?.getString("goal")
+//        val goalDone = gson.fromJson(goalDoneJson, Goal::class.java)
+        val goalService = GoalService()
+        goalService.setGetDoneGoalView(this)
+        goalService.getGoalDone(jwt!!)
+    }
+    private fun getMountainProgress(){
+        val jwt: String? = getJwt()
+        val goalService = GoalService()
+        goalService.setGetMountainView(this)
+        goalService.getMountainProgress(jwt!!)
+    }
+
+    private fun getBuildingProgress(){
+        val jwt: String? = getJwt()
+        val goalService = GoalService()
+        goalService.setGetBuildingView(this)
+        goalService.getBuildingProgress(jwt!!)
+    }
     // 권한 요청
     private fun requestPermissions() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED ||
@@ -196,6 +232,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
         super.onStart()
         requestPermissions() // 액티비티가 시작되면 권한 요청 실행
         initPinnacle() // initPinnacle
+
     }
 
     private fun userget() {
@@ -239,7 +276,53 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
         Log.d("ONUSERFAILUER",msg)
     }
 
-
+    override fun onGetBuildingSuccess(result: ArrayList<Goal>) {
+        buildingList = result
+        Log.d("MAINBUILDINGLIST",buildingList.toString())
     }
+
+    override fun onGetBuildingFailure(code: Int, msg: String) {
+        if(code==2203){
+            buildingList = ArrayList<Goal>()
+
+        }
+        if(code==2202){
+            buildingList = ArrayList<Goal>()
+        }
+    }
+
+    override fun onGetMountainSuccess(result: ArrayList<Goal>) {
+        mountainList = result
+        Log.d("MAINMOUNTAINLIST",mountainList.toString())
+    }
+
+    override fun onGetMountainFailure(code: Int, msg: String) {
+        if(code==2203){
+            mountainList = ArrayList<Goal>()
+
+        }
+        if(code==2202){
+            mountainList = ArrayList<Goal>()
+        }
+    }
+
+    override fun onGetDoneGoalSuccess(result: ArrayList<Goal>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetDoneGoalFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetGoalSuccess(result: ArrayList<Goal>) {
+        TODO("Not yet implemented")
+    }
+
+    override fun onGetGoalFailure(code: Int, msg: String) {
+        TODO("Not yet implemented")
+    }
+
+
+}
 
 

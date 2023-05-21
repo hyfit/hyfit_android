@@ -19,4 +19,7 @@ interface LocationRetrofitInterface {
     @GET("/api/location/redis-all")
     fun getAllRedisExercise(@Query("id") id : Int): Call<LocationRedisRes>
 
+    @POST("/api/location/redis-alt")
+    fun saveRedisAltExercise(@Body locationAltRedisReq : LocationAltRedisReq) : Call<LocationRedisRes>
+
 }

@@ -12,12 +12,16 @@ class LocationService {
     private lateinit var saveExerciseLocView: SaveExerciseLocView
     private lateinit var saveExerciseRedisLocView: SaveExerciseRedisLocView
     private lateinit var getAllRedisExerciseView: GetAllRedisExerciseView
+    private lateinit var saveAltRedisLocView: SaveAltRedisLocView
 
     fun setGetAllExerciseListView(getAllExerciseListView: GetAllExerciseListView){
         this.getAllExerciseListView = getAllExerciseListView
     }
     fun setGetRedisExerciseView(getRedisExerciseView: GetRedisExerciseView){
         this.getRedisExerciseView = getRedisExerciseView
+    }
+    fun setSaveAltRedisView(saveAltRedisLocView: SaveAltRedisLocView){
+        this.saveAltRedisLocView = saveAltRedisLocView
     }
     fun setSaveExerciseLocView(saveExerciseLocView: SaveExerciseLocView){
         this.saveExerciseLocView = saveExerciseLocView
@@ -58,6 +62,24 @@ class LocationService {
                 when(val code = resp.code){
                     1000-> saveExerciseRedisLocView.onSaveExerciseRedisLocSuccess(resp.result)
                     else-> saveExerciseRedisLocView.onSaveExerciseRedisLocFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<LocationRedisRes>, t: Throwable) {
+                Log.d("LOCATION/FAILURE", t.message.toString())
+            }
+        })
+    }
+
+    fun saveRedisAltExercise(locationAltRedisReq : LocationAltRedisReq){
+        val locationService = getRetrofit().create(LocationRetrofitInterface::class.java)
+        locationService.saveRedisAltExercise(locationAltRedisReq).enqueue(object: Callback<LocationRedisRes> {
+            override fun onResponse(call: Call<LocationRedisRes>, response: Response<LocationRedisRes>) {
+                Log.d("LOCATION/SUCCESS", response.toString())
+                val resp: LocationRedisRes = response.body()!!
+                Log.d("LOCATION/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> saveAltRedisLocView.onSaveAltRedisLocSuccess(resp.result)
+                    else-> saveAltRedisLocView.onSaveAltRedisLocFailure(code, resp.message)
                 }
             }
             override fun onFailure(call: Call<LocationRedisRes>, t: Throwable) {

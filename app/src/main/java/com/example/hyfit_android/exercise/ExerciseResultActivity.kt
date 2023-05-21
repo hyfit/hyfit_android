@@ -40,8 +40,7 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
     private lateinit var firstList: LatLng
     private lateinit var lastList: LatLng
     private lateinit var mapFragment : SupportMapFragment
-
-
+    private var pace = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +54,9 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
         mapFragment.getMapAsync(this)
         val distance:Double= (intent.getDoubleExtra("distance", 0.0))
         val distanceResult = String.format("%.2f", (Math.round(distance * 100000.0) / 100000.0))
+        pace = intent.getStringExtra("pace").toString()
 
+        binding.paceText.text = pace
         // 경로 지정
         val locationList = intent.getStringArrayListExtra("locationList")
         if (locationList != null) {

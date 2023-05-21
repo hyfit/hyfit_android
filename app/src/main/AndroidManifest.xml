@@ -28,6 +28,24 @@
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
         <activity
+            android:name=".goal.info.ClimbingInfoActivity"
+            android:exported="true" />
+        <activity
+            android:name=".goal.info.StairInfoActivity"
+            android:exported="true" />
+        <activity
+            android:name=".exercise.ClimbingResultActivity"
+            android:exported="true" />
+        <activity
+            android:name=".exercise.ClimbingActivity"
+            android:exported="true" />
+        <activity
+            android:name=".goal.info.ExerciseInfoMapActivity"
+            android:exported="true" />
+        <activity
+            android:name=".goal.info.ExerciseDataActivity"
+            android:exported="true" />
+        <activity
             android:name=".exercise.StairResultActivity"
             android:exported="true" />
         <activity
@@ -46,7 +64,6 @@
                 android:name="android.app.lib_name"
                 android:value="" />
         </activity>
-
         <activity
             android:name=".SplashActivity"
             android:exported="true"

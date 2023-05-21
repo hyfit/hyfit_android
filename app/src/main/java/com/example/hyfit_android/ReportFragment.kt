@@ -188,7 +188,7 @@ class ReportFragment : Fragment(), ReportView{
         val set1 = BarDataSet(barOne, "Distance")
         set1.color =ContextCompat.getColor(requireContext(),R.color.distance)
 
-        val set2 = BarDataSet(barTwo, "kcal")
+        val set2 = BarDataSet(barTwo, "avg pace")
         set2.color = ContextCompat.getColor(requireContext(),R.color.kcal)
         val set3 = BarDataSet(barThree, "Time")
         set3.color = ContextCompat.getColor(requireContext(),R.color.time)
