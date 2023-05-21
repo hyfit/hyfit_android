@@ -18,12 +18,14 @@ import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Login.FindPasswordReq
 import com.example.hyfit_android.databinding.FragmentReportBinding
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.Legend
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
 import com.github.mikephil.charting.data.*
+import com.github.mikephil.charting.formatter.IAxisValueFormatter
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
@@ -42,6 +44,7 @@ class ReportFragment : Fragment(), ReportView{
     private lateinit var mChart: BarChart
     private lateinit var pieChart1 : PieChart
     private lateinit var pieChart2 : PieChart
+    private lateinit var linechart:LineChart
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -92,7 +95,48 @@ class ReportFragment : Fragment(), ReportView{
         //declare a function for pie chart activity
         pieChart1=binding.pieChart1
         pieChart2=binding.pieChart2
+        linechart=binding.lineChart
         return binding.root
+    }
+
+    private fun setUpLineChart(weight: List<Double>,bodydate: List<String>, line_chart:LineChart){
+        val entries: MutableList<Entry> = ArrayList()
+        val valued=weight
+        for (i in valued.indices) {
+            entries.add(Entry(i.toFloat(), valued[i].toFloat()))
+
+        }
+
+        val dataSet = LineDataSet(entries, "Weight Changes")
+        dataSet.color = ContextCompat.getColor(requireContext(), R.color.time)
+        dataSet.valueTextColor = ContextCompat.getColor(requireContext(), R.color.black)
+
+        //****
+        // Controlling X axis
+        val xAxis = line_chart.xAxis
+        // Set the xAxis position to bottom. Default is top
+        xAxis.position = XAxis.XAxisPosition.BOTTOM
+        //Customizing x axis value
+        val months = bodydate
+
+        val formatter = IAxisValueFormatter { value, axis -> months[value.toInt()] }
+        xAxis.granularity = 1f // minimum axis-step (interval) is 1
+       // xAxis.valueFormatter = formatter
+
+        //***
+        // Controlling right side of y axis
+        val yAxisRight = line_chart.axisRight
+        yAxisRight.isEnabled = false
+
+        //***
+        // Controlling left side of y axis
+        val yAxisLeft = line_chart.axisLeft
+        yAxisLeft.granularity = 1f
+
+        // Setting Data
+        val data = LineData(dataSet)
+        line_chart.data = data
+        line_chart.invalidate()
     }
 
 
@@ -233,6 +277,29 @@ class ReportFragment : Fragment(), ReportView{
         progressBar.visibility=View.GONE
     }
 
+    private fun measurement(weight:Double, height:Double){
+        binding.weightnum.text=weight.toString()
+        binding.heightnum.text=height.toString()
+        val bmi=weight/((height/100.0)*(height/100.0))
+        binding.bminum.text=("%.1f".format(bmi).toDouble()).toString()
+    }
+    private fun changesetting(recentweight:Double,changeweight:Double,goalweight:Double){
+        if(changeweight>0){
+            binding.changedweightnum.text="+" + changeweight.toInt().toString()
+        }
+        else{
+            binding.changedweightnum.text=changeweight.toInt().toString()
+        }
+        val untilgoal=(recentweight-goalweight).toInt()
+        if(untilgoal<=0) {
+            binding.untilgoalnum.text="0"
+        }
+        else{
+            binding.untilgoalnum.text="+"+ untilgoal
+        }
+        binding.goalweightnum.text=goalweight.toInt().toString()
+    }
+
     private fun report(email:String?){
         val rpService = ReportRetrofitService()
         rpService.setReportView(this)
@@ -243,7 +310,7 @@ class ReportFragment : Fragment(), ReportView{
 
 
 
-    override fun onReportSuccess(totaltime: List<Float>, pace: List<Float>,distance: List<Float>, rate:List<Float>, gname:List<String>) {
+    override fun onReportSuccess(weight:List<Double>,height:List<Double>,bodydate: List<String>,goal_weight:Double,totaltime: List<Float>, pace: List<Float>,distance: List<Float>, rate:List<Float>, gname:List<String>) {
         if(distance!=null){
 
             Log.d("GetreportSuccess", "cong")
@@ -256,6 +323,7 @@ class ReportFragment : Fragment(), ReportView{
             val gname2:String=gname[1]
             pieChart1=binding.pieChart1
             pieChart2=binding.pieChart2
+            linechart=binding.lineChart
             Log.d("ReportSuccess", "good!")
             setUpBarchart(time,apace,dist)
             setUpSelectionPieChart(pieChart1,rate1,1)
@@ -264,6 +332,16 @@ class ReportFragment : Fragment(), ReportView{
             binding.pie2name.bringToFront()
             binding.pie1name.text=gname1
             binding.pie2name.text=gname2
+            setUpLineChart(weight,bodydate,linechart)
+
+            //weight추가
+            val recentweight:Double=weight[0]
+            val recentheight:Double=height[0]
+            measurement(recentweight,recentheight)
+            val changeweight:Double=weight[0]-weight[1]
+            changesetting(recentweight,changeweight,goal_weight)
+
+
 
             executeAfterDelay(3000) {
                 progressBar.visibility = ProgressBar.GONE

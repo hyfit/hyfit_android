@@ -1,14 +1,19 @@
 package com.example.hyfit_android
 
-import okhttp3.ResponseBody
-import retrofit2.http.GET;
+
+import com.example.hyfit_android.report.UserbodyReq
 import retrofit2.Call
-import retrofit2.http.Header;
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ReportRetrofitInterface {
-    @GET("/rocket")
+    @GET("/justtry")
     fun report(@Header("email") email:String): Call<ReportResponse>
+
+    @POST("/bodydata")
+    fun bodydata(@Body userbodyReq: UserbodyReq): Call<UserResponse>
+
+    @GET("/bmi")
+    fun bmi(@Header("email") email:String): Call<ReportResponse>
 
 
 }

@@ -79,7 +79,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView{
 
 
         var showSetFragment = intent.getBooleanExtra("showSetFragment", false)
-
+        var showMainFragment = intent.getBooleanExtra("showMainFragment", false)
 
         // BottomNavigationView 초기화
         binding.navigationView.selectedItemId = R.id.MainFragment

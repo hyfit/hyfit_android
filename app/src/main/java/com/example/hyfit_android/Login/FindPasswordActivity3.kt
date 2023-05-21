@@ -4,8 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import com.example.hyfit_android.Join.JoinActivity4
-import com.example.hyfit_android.R
 import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.ActivityFindPassword3Binding
 

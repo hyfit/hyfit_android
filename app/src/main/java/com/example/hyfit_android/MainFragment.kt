@@ -13,12 +13,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.databinding.ActivityMapsBinding
 import com.example.hyfit_android.databinding.FragmentMainBinding
 import com.example.hyfit_android.exercise.ExerciseActivity
+import com.example.hyfit_android.report.UserbodyActivity
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
 import com.nextnav.nn_app_sdk.NextNavSdk
@@ -48,14 +50,19 @@ class MainFragment : Fragment(), Observer {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
+        binding = FragmentMainBinding.inflate(inflater, container, false)
         sdkMessageObservable = SdkStatusNotification.getInstance()
         sdkMessageObservable.addObserver(this)
         altitudeObservable = AltitudeContextNotification.getInstance()
         altitudeObservable.addObserver(this)
-        binding = FragmentMainBinding.inflate(inflater, container, false)
+
 
         return binding.root
+    }
+
+    private fun getEmail():String?{
+        val spf = requireContext().getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
+        return spf!!.getString("email","0")
     }
 
     private fun initPinnacle() {
