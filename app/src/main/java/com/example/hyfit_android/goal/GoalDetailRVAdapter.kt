@@ -52,8 +52,9 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val
             val goalLayout = binding.goalLayout
             val TextView = binding.goalPlaceTitle
             val TextView2 = binding.goalRate
-            val TextView3 = binding.goalDescription
-            val Textview4 = binding.goalCreatedAt
+            val progressBar = binding.progressBar
+            val progress = (goal.rate?.toDouble())?.toInt()
+
 
             if(goal.goalStatus != 0){
                 if(goal.type == "mountain"){
@@ -68,12 +69,16 @@ class GoalDetailRVAdapter(val context: Context, val result: ArrayList<Goal>, val
                 TextView!!.setPaintFlags(TextView!!.getPaintFlags() or Paint.STRIKE_THRU_TEXT_FLAG)
                 binding.goalDeleteButton.visibility = View.INVISIBLE
             }
+            if (progress != null) {
+                progressBar.progress = progress
+            }
             TextView.text = goal.place
             TextView2.text = goal.rate.toString() + "%"
-            TextView3.text = goal.description
-            val createdAtString = goal.createdAt.toString()
 
-            Textview4.text = createdAtString.substringBefore("T")
+//            TextView3.text = goal.description
+//            val createdAtString = goal.createdAt.toString()
+//
+//            Textview4.text = createdAtString.substringBefore("T")
         }
     }
 

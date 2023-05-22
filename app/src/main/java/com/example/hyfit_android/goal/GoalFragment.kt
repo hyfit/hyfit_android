@@ -72,7 +72,7 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         loadingDialog.setCancelable(false)
         loadingDialog.setContentView(R.layout.loading_result)
-       //  loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
+        //  loadingDialog.window?.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.MATCH_PARENT)
         loadingDialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
         loadingDialog.show()
     }
@@ -180,7 +180,7 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
     override fun onSaveGoalSuccess(result: Goal) {
 
         GlobalScope.launch {
-         //   getGoalProgress()
+            //   getGoalProgress()
             withContext(Dispatchers.Main){
                 for (fragment in childFragmentManager.fragments) {
                     if (fragment is DialogFragment) {
@@ -214,7 +214,7 @@ class GoalFragment : Fragment() , GetGoalView, GetDoneGoalView, OnGoalChangeList
         val intent = Intent(requireContext(), ExerciseDataActivity::class.java)
         intent.putExtra("goal_name", data.place)
         intent.putExtra("goal_id", data.goalId)
-            startActivity(intent)
+        startActivity(intent)
 
     }
 
