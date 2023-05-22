@@ -203,12 +203,7 @@ class UserRetrofitService {
         if (jwt != null) {
             userService.userget(jwt).enqueue(object : Callback<GetResponse> {
                 override fun onResponse(call: Call<GetResponse>, response: Response<GetResponse>) {
-//                    Log.d("userget", "goodgood")
-//                    val resp: GetResponse = response.body()!!
-//                    when (val code = resp.code) {
-//                        1000 -> getUserView.onUserSuccess(code, resp.result)
-//                        else -> getUserView.onUserFailure(code, resp.message)
-//                    }
+
                     if (response.isSuccessful) {
                         Log.d("userget", "goodgood")
                         val resp: GetResponse? = response.body()

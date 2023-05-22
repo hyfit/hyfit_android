@@ -19,6 +19,8 @@ data class Exercise(
     @SerializedName("pace")val pace:String?=null,
     @SerializedName("start")val start:String?=null,
     @SerializedName("end")val end:String?=null,
-    @SerializedName("totalTime")val Long:Long?=null,
-    @SerializedName("distance") val distance:String?=null
+    @SerializedName("totalTime")val totalTime:Long?=null,
+    @SerializedName("distance") val distance:String?=null,
+    @SerializedName("increase") val increase:String?=null,
+    @SerializedName("peakAlt") val peakAlt:String?=null
 )

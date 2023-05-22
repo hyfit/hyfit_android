@@ -8,8 +8,8 @@
     <LinearLayout
         android:id="@+id/exercise_result_title"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@drawable/ic_result_page_titlebox"
+        android:layout_height="50dp"
+
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -130,11 +130,12 @@
                 android:textSize="15sp" />
 
             <TextView
+                android:id="@+id/pace_text"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:fontFamily="@font/inter_medium"
-                android:text="10'3''"
+                android:text=""
                 android:textColor="@color/main_color"
                 android:textSize="20sp" />
         </LinearLayout>
@@ -182,5 +183,5 @@
 
     </LinearLayout>
 
-/>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

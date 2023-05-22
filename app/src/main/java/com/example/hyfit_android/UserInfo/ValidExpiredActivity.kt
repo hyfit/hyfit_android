@@ -17,6 +17,7 @@ class ValidExpiredActivity : AppCompatActivity() {
 
         var logoutac=LogoutActivity()
         logoutac.logout(getJwt())
+        Thread.sleep(5000)
         val intent= Intent(this, LoginActivity::class.java)
         startActivity(intent)
 
