@@ -237,7 +237,14 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView, 
     }
 
     override fun onGetMountainFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        if(code==2203){
+            mountainList = ArrayList<Goal>()
+
+        }
+        if(code==2202){
+            mountainList = ArrayList<Goal>()
+
+        }
     }
 
     override fun onGetBuildingSuccess(result: ArrayList<Goal>) {
@@ -247,7 +254,14 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView, 
     }
 
     override fun onGetBuildingFailure(code: Int, msg: String) {
-        TODO("Not yet implemented")
+        if(code==2203){
+            buildingList = ArrayList<Goal>()
+
+        }
+        if(code==2202){
+            buildingList = ArrayList<Goal>()
+
+        }
     }
 
 

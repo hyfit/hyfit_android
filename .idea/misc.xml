@@ -8,6 +8,8 @@
         <entry key="app/src/main/res/drawable/ant_design_reload_time_outline.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/community_round_back.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/community_user_blue.xml" value="0.11" />
+        <entry key="app/src/main/res/drawable/goal_select_btn.xml" value="0.113" />
+        <entry key="app/src/main/res/drawable/goal_select_btn_text.xml" value="0.113" />
         <entry key="app/src/main/res/drawable/ic_baseline_location_on_24.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_box.xml" value="0.11" />
         <entry key="app/src/main/res/drawable/ic_close.xml" value="0.1" />
