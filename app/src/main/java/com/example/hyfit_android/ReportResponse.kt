@@ -13,6 +13,7 @@ import com.google.gson.annotations.SerializedName
 //)
 data class ReportResponse(
     @SerializedName("body") val body: BodyData,
+    @SerializedName("rank") val rank: RankingData,
     @SerializedName("report") val report: ReportData
 )
 
@@ -22,7 +23,20 @@ data class BodyData(
     @SerializedName("weight") val weight: List<Double>,
     @SerializedName("goal_weight") val goal_weight:Double
 )
-
+data class RankingData(
+    @SerializedName("ranking") val ranking: List<RankInfo>,
+    @SerializedName("gender_ranking") val genderRanking: List<RankInfo>,
+    @SerializedName("requested_rank") val requestedRank: Int,
+    @SerializedName("gender_request_ranking") val genderRequestRanking: Int,
+    @SerializedName("age_ranking") val ageRanking: List<RankInfo>,
+    @SerializedName("age_requested_rank") val ageRequestedRank: Int,
+    @SerializedName("requested_dist") val requestedDist:Double
+)
+data class RankInfo(
+    @SerializedName("distance") val distance: Double,
+    @SerializedName("email") val email: String,
+    @SerializedName("rank") val rank: Int
+)
 data class ReportData(
     @SerializedName("code") val code: Int,
     @SerializedName("distance") val distance: List<Float>,

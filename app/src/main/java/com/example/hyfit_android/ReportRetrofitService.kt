@@ -38,7 +38,8 @@ class ReportRetrofitService {
                     val resp: ReportResponse? = response.body()
                     if (resp != null) {
                         when (val code = resp.report.code) {
-                            1000 -> reportView.onReportSuccess(resp.body.weight,resp.body.height,resp.body.bodydate,resp.body.goal_weight,resp.report.totaltime,resp.report.pace, resp.report.distance, resp.report.rate, resp.report.gname)
+                            1000 -> reportView.onReportSuccess(resp.body.weight,resp.body.height,resp.body.bodydate,resp.body.goal_weight,resp.report.totaltime,resp.report.pace, resp.report.distance, resp.report.rate,
+                                resp.report.gname, resp.rank.ranking, resp.rank.requestedRank, resp.rank.genderRanking, resp.rank.genderRequestRanking, resp.rank.ageRanking, resp.rank.ageRequestedRank, resp.rank.requestedDist)
                             else -> reportView.onReportFailure(code)
                         }
                     } else {

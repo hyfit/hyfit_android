@@ -40,6 +40,7 @@ import com.github.mikephil.charting.renderer.BarChartRenderer
 class ReportFragment : Fragment(), ReportView{
     lateinit var binding: FragmentReportBinding
     lateinit var progressBar: ProgressBar
+    lateinit var hemail:String
 
     private lateinit var mChart: BarChart
     private lateinit var pieChart1 : PieChart
@@ -55,9 +56,18 @@ class ReportFragment : Fragment(), ReportView{
         progressBar = binding.progressBar
         progressBar.bringToFront()
         val sharedPrefs = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE)
-        val temail = sharedPrefs.getString("getEmail", "")
-        report(temail)
+        hemail = sharedPrefs.getString("getEmail", "")!!
+        report(hemail)
 
+        binding.total1.bringToFront()
+        binding.total2.bringToFront()
+        binding.total3.bringToFront()
+        binding.sex1.bringToFront()
+        binding.sex2.bringToFront()
+        binding.sex3.bringToFront()
+        binding.age1.bringToFront()
+        binding.age2.bringToFront()
+        binding.age3.bringToFront()
 
         binding.change.setOnClickListener {
             binding.layoutdashboard.visibility = View.GONE
@@ -85,6 +95,33 @@ class ReportFragment : Fragment(), ReportView{
         }
 
 
+        binding.sex1.setOnClickListener {
+            binding.totalranking.visibility=View.GONE
+            binding.genderranking.visibility=View.VISIBLE
+        }
+        binding.age1.setOnClickListener {
+            binding.totalranking.visibility=View.GONE
+            binding.ageranking.visibility=View.VISIBLE
+        }
+
+        binding.total2.setOnClickListener {
+            binding.genderranking.visibility=View.GONE
+            binding.totalranking.visibility=View.VISIBLE
+        }
+        binding.age2.setOnClickListener {
+            binding.genderranking.visibility=View.GONE
+            binding.ageranking.visibility=View.VISIBLE
+        }
+        binding.total3.setOnClickListener {
+            binding.ageranking.visibility=View.GONE
+            binding.totalranking.visibility=View.VISIBLE
+        }
+        binding.sex3.setOnClickListener {
+            binding.ageranking.visibility=View.GONE
+            binding.genderranking.visibility=View.VISIBLE
+        }
+
+
 
 
 
@@ -99,17 +136,17 @@ class ReportFragment : Fragment(), ReportView{
         return binding.root
     }
 
-    private fun setUpLineChart(weight: List<Double>,bodydate: List<String>, line_chart:LineChart){
+    private fun setUpLineChart(weight: List<Double>, bodydate: List<String>, line_chart:LineChart){
         val entries: MutableList<Entry> = ArrayList()
-        val valued=weight
+        val valued=weight.reversed()
         for (i in valued.indices) {
             entries.add(Entry(i.toFloat(), valued[i].toFloat()))
-
         }
 
         val dataSet = LineDataSet(entries, "Weight Changes")
         dataSet.color = ContextCompat.getColor(requireContext(), R.color.time)
         dataSet.valueTextColor = ContextCompat.getColor(requireContext(), R.color.black)
+        line_chart.description.isEnabled = false
 
         //****
         // Controlling X axis
@@ -117,11 +154,26 @@ class ReportFragment : Fragment(), ReportView{
         // Set the xAxis position to bottom. Default is top
         xAxis.position = XAxis.XAxisPosition.BOTTOM
         //Customizing x axis value
-        val months = bodydate
+        val months =bodydate
+        val arrayList: ArrayList<String> = ArrayList(months)
+        arrayList.add(0,"")
 
-        val formatter = IAxisValueFormatter { value, axis -> months[value.toInt()] }
+        arrayList.add("")
+
+        val formatter = object : ValueFormatter() {
+            override fun getFormattedValue(value: Float): String {
+                val index = value.toInt()
+                return if (index >= 0 && index < arrayList.size-1) {
+                    arrayList[index]
+                } else {
+                    ""
+                }
+            }
+        }
+
         xAxis.granularity = 1f // minimum axis-step (interval) is 1
-       // xAxis.valueFormatter = formatter
+        xAxis.valueFormatter = formatter
+        xAxis.textSize=5f
 
         //***
         // Controlling right side of y axis
@@ -131,7 +183,8 @@ class ReportFragment : Fragment(), ReportView{
         //***
         // Controlling left side of y axis
         val yAxisLeft = line_chart.axisLeft
-        yAxisLeft.granularity = 1f
+        //yAxisLeft.granularity = 1f 원래 잇던거 내가 죽임
+        yAxisLeft.axisLineColor = Color.TRANSPARENT
 
         // Setting Data
         val data = LineData(dataSet)
@@ -308,11 +361,78 @@ class ReportFragment : Fragment(), ReportView{
 
     }
 
+    private fun setTotalRanking(ranking:List<RankInfo>, myrank:Int,reqDist:Double){
+        val rankingemail= arrayListOf<String>("")
+        val rankingdist= arrayListOf<String>("")
+        for (rankInfo in ranking) {
+            rankingdist.add((rankInfo.distance).toInt().toString())
+            rankingemail.add(rankInfo.email)
+        }
+        binding.best11.text=rankingemail[1]
+        binding.best12.text=rankingemail[2]
+        binding.best13.text=rankingemail[3]
+        binding.best14.text=rankingemail[4]
+        binding.best15.text=rankingemail[5]
+        binding.myranknum1.text=(myrank.toString() + ".")
+        binding.mynum1.text=reqDist.toInt().toString()
+
+        binding.best11num.text=rankingdist[1]
+        binding.best12num.text=rankingdist[2]
+        binding.best13num.text=rankingdist[3]
+        binding.best14num.text=rankingdist[4]
+        binding.best15num.text=rankingdist[5]
+
+    }
+    private fun setGenderRanking(ranking:List<RankInfo>, myrank:Int,reqDist:Double){
+        val rankingemail= arrayListOf<String>("")
+        val rankingdist= arrayListOf<String>("")
+        for (rankInfo in ranking) {
+            rankingdist.add((rankInfo.distance).toInt().toString())
+            rankingemail.add(rankInfo.email)
+        }
+        binding.best21.text=rankingemail[1]
+        binding.best22.text=rankingemail[2]
+        binding.best23.text=rankingemail[3]
+        binding.best24.text=rankingemail[4]
+        binding.best25.text=rankingemail[5]
+        binding.myranknum2.text=(myrank.toString() + ".")
+        binding.mynum2.text=reqDist.toInt().toString()
+
+        binding.best21num.text=rankingdist[1]
+        binding.best22num.text=rankingdist[2]
+        binding.best23num.text=rankingdist[3]
+        binding.best24num.text=rankingdist[4]
+        binding.best25num.text=rankingdist[5]
+
+    }
+    private fun setAgeRanking(ranking:List<RankInfo>, myrank:Int,reqDist:Double){
+        val rankingemail= arrayListOf<String>("")
+        val rankingdist= arrayListOf<String>("")
+        for (rankInfo in ranking) {
+            rankingdist.add((rankInfo.distance).toInt().toString())
+            rankingemail.add(rankInfo.email)
+        }
+        binding.best31.text=rankingemail[1]
+        binding.best32.text=rankingemail[2]
+        binding.best33.text=rankingemail[3]
+        binding.best34.text=rankingemail[4]
+        binding.best35.text=rankingemail[5]
+        binding.myranknum3.text=(myrank.toString() + ".")
+        binding.mynum3.text=reqDist.toInt().toString()
+
+        binding.best31num.text=rankingdist[1]
+        binding.best32num.text=rankingdist[2]
+        binding.best33num.text=rankingdist[3]
+        binding.best34num.text=rankingdist[4]
+        binding.best35num.text=rankingdist[5]
+
+    }
 
 
-    override fun onReportSuccess(weight:List<Double>,height:List<Double>,bodydate: List<String>,goal_weight:Double,totaltime: List<Float>, pace: List<Float>,distance: List<Float>, rate:List<Float>, gname:List<String>) {
+
+    override fun onReportSuccess(weight:List<Double>,height:List<Double>,bodydate: List<String>,goal_weight:Double,totaltime: List<Float>, pace: List<Float>,distance: List<Float>, rate:List<Float>,
+                                 gname:List<String>,ranking:List<RankInfo>,requestedRank:Int, genderRanking:List<RankInfo>, genderRequestRanking:Int, ageRanking:List<RankInfo>, ageRequestedRank:Int, requestedDist:Double) {
         if(distance!=null){
-
             Log.d("GetreportSuccess", "cong")
             val time: ArrayList<Float> = ArrayList(totaltime)
             val apace : ArrayList<Float> = ArrayList(pace)
@@ -334,12 +454,27 @@ class ReportFragment : Fragment(), ReportView{
             binding.pie2name.text=gname2
             setUpLineChart(weight,bodydate,linechart)
 
+
+            val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
+            val email = sharedPreferences.getString("email", "")
             //weight추가
             val recentweight:Double=weight[0]
             val recentheight:Double=height[0]
             measurement(recentweight,recentheight)
             val changeweight:Double=weight[0]-weight[1]
             changesetting(recentweight,changeweight,goal_weight)
+
+            ////////ranking
+            //all ranking
+            binding.myid.text=email
+            binding.myid.bringToFront()
+            setTotalRanking(ranking,requestedRank,requestedDist)
+            setGenderRanking(genderRanking,genderRequestRanking,requestedDist)
+            setAgeRanking(ageRanking,ageRequestedRank,requestedDist)
+
+
+
+
 
 
 
