@@ -153,8 +153,8 @@ class CommunityFragment: Fragment(), View.OnClickListener {
             R.id.walking_btn -> {
                 onTagClicked(binding.walkingBtn)
             }
-            R.id.riding_btn -> {
-                onTagClicked(binding.ridingBtn)
+            R.id.biking_btn -> {
+                onTagClicked(binding.bikingBtn)
             }
             R.id.stair_climbing_btn -> {
                 onTagClicked(binding.stairClimbingBtn)

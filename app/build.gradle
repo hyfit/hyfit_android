@@ -23,6 +23,8 @@ android {
         buildConfigField "String", "BASE_URL", properties['base_url']
         // sdk key
         buildConfigField "String", "KEY_VALUE",  properties['key_value']
+        // stomp url
+        buildConfigField "String", "STOMP_URL",  properties['stomp_url']
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -88,14 +90,13 @@ dependencies {
     implementation "androidx.navigation:navigation-ui-ktx:$nav_version"
     implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
+    // implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 
     // circleimageview
     implementation 'de.hdodenhof:circleimageview:2.2.0'
 
-    implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
+    // implementation 'com.squareup.okhttp3:logging-interceptor:3.11.0'
 
-    implementation 'com.squareup.okhttp3:okhttp:3.11.0'
 
     implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
 
@@ -109,4 +110,17 @@ dependencies {
 
     // 이미지로딩 라이브러리
     implementation 'com.github.bumptech.glide:glide:4.12.0'
+
+    // websocket
+    // socket io
+    implementation('io.socket:socket.io-client:1.0.0') {
+        exclude group: 'org.json', module: 'json'
+    }
+
+    // stomp
+    implementation 'com.github.bishoybasily:stomp:2.0.5'
+    //okHttp
+    implementation "com.squareup.okhttp3:okhttp:4.9.0"
+    implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+
 }

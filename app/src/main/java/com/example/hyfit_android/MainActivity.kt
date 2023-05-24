@@ -2,42 +2,34 @@ package com.example.hyfit_android
 
 
 import android.Manifest
-import android.app.PendingIntent.getActivity
 import android.content.ContentValues
 import android.content.Context
-import android.content.Intent
 import android.content.pm.PackageManager
-import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.os.Handler
 import android.util.Log
-import android.view.View
-import android.widget.ProgressBar
-import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.example.hyfit_android.BuildConfig.STOMP_URL
 import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
-import com.example.hyfit_android.databinding.FragmentReportBinding
-import com.example.hyfit_android.databinding.FragmentSetBinding
+import com.example.hyfit_android.exercise.exerciseWith.RequestFragment
 import com.example.hyfit_android.goal.*
+import com.example.hyfit_android.home.MainFragment
+import com.gmail.bishoybasily.stomp.lib.Event.Type.*
+import com.gmail.bishoybasily.stomp.lib.StompClient
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
 import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import io.reactivex.disposables.Disposable
+import okhttp3.OkHttpClient
+import org.json.JSONObject
 import java.util.*
-import com.example.hyfit_android.home.MainFragment
-import okhttp3.ResponseBody
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import kotlin.collections.ArrayList
-import kotlin.properties.Delegates
 
 
 class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainView, GetBuildingView , GetGoalView, GetDoneGoalView{
@@ -45,7 +37,6 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
     val PERMISSIONS_REQUEST_LOCATION = 1000
-    //val reportxml=ReportFragment().binding.puthere
 
 
     // pinncale
@@ -63,6 +54,20 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
     // goal List
     var mountainList: ArrayList<Goal>? = null
     var buildingList:  ArrayList<Goal>?= null
+
+    // websocket
+    lateinit var stompConnection: Disposable
+    lateinit var topic: Disposable
+    private val intervalMillis = 1000L
+    private val client = OkHttpClient()
+    private val stomp = StompClient(client, intervalMillis)
+
+    private lateinit var email : String
+    // 나한테 메세지를 보낸 사람 (sender)
+    private lateinit var receiver : String
+    private var exerciseWithId =0
+
+    private var requestFragment  = RequestFragment()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -83,6 +88,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
 
         // 메인에 들어오자마자 initPinnacle
 //        initPinnacle()
+        userget()
         getMountainProgress()
         getBuildingProgress()
 
@@ -145,10 +151,81 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
         }
     }
 
-//    private fun report(){
-//        val rpService=ReportRetrofitService()
-//        rpService.report()
-//    }
+    // websocket
+    private fun send(type:String,sender : String,receiver:  String, data : Int){
+        val jsonObject = JSONObject()
+        jsonObject.put("type",type)
+        jsonObject.put("sender",sender)
+        jsonObject.put("receiver",receiver)
+        jsonObject.put("data",data)
+        val jsonString = jsonObject.toString()
+
+        stomp.send("/pub/request", jsonString).subscribe {
+            if(it){ }
+        }
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        send("QUIT", email,receiver,exerciseWithId)
+        topic.dispose()
+        stompConnection.dispose()
+    }
+
+    private fun subscribe(email : String) {
+        stomp.url =STOMP_URL
+        stompConnection = stomp.connect().subscribe {
+            when (it.type) {
+                OPENED -> {
+                    Log.d("CONNECT", "OPENED")
+                }
+                CLOSED -> {
+                    Log.d("CONNECT", "CLOSED")
+                }
+                ERROR -> {
+                    Log.d("CONNECT", "ERROR")
+                }
+
+                null -> TODO()
+            }
+        }
+
+        // exerciseWith 채널 구독
+        topic = stomp.join("/sub/channel/${email}")
+            .doOnError { error -> Log.d("ERROR", "subscribe error") }
+            .subscribe { chatData ->
+                val chatObject = JSONObject(chatData)
+                Log.d("MAINDATA!!!", chatObject.toString())
+                // 운동 요청 알림
+                if(chatObject.getString("type").equals("REQUEST")){
+                    val bundle = Bundle().apply{
+                        putString("email",chatObject.getString("sender"))
+                        putString("nickName",chatObject.getString("sender_nickName"))
+                        putInt("exerciseWithId",chatObject.getInt("data"))
+                        putString("workoutType",chatObject.getString("workoutType"))
+
+                    }
+                    requestFragment.arguments = bundle
+                    val fragmentManager: FragmentManager = supportFragmentManager
+                    requestFragment.show(fragmentManager,"requestFragment")
+                }
+                // 운동 승낙 알림
+                else if(chatObject.getString("type").equals("ACCEPT")){
+                    Log.d("THISISACCEPT!!!",chatObject.toString())
+                }
+
+
+            }
+    }
+    override fun onUserSuccess(code: Int, result: User) {
+        email = result.email.toString()
+        subscribe(email)
+    }
+
+    override fun onUserFailure(code: Int, msg: String) {
+        Log.d("ONUSERFAILUER",msg)
+    }
+
+
     private fun getGoalProgress(){
     val jwt = getJwt()
     val goalService = GoalService()
@@ -269,12 +346,6 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
             }
         }
 
-    override fun onUserSuccess(code: Int, result: User) {
-    }
-
-    override fun onUserFailure(code: Int, msg: String) {
-        Log.d("ONUSERFAILUER",msg)
-    }
 
     override fun onGetBuildingSuccess(result: ArrayList<Goal>) {
         buildingList = result
