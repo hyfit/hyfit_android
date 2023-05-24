@@ -63,6 +63,7 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
 
         val email:String=binding.textEmail.text.toString()
         val password:String=binding.textPassword.text.toString()
+        saveEmail(email)
         val usService = UserRetrofitService()
         usService.setLoginView(this)
         usService.login(LoginReq(email, password))
@@ -72,6 +73,13 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
         val spf=getSharedPreferences("auth", MODE_PRIVATE)
         val editor=spf.edit()
         editor.putString("jwt", jwt)
+        editor.apply()
+        editor.commit()
+    }
+    private fun saveEmail(email:String?){
+        val spf=getSharedPreferences("auth", MODE_PRIVATE)
+        val editor=spf.edit()
+        editor.putString("email", email)
         editor.apply()
         editor.commit()
     }

@@ -36,7 +36,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-<!--    welcome 텍스트-->
+
+    <!--    welcome 텍스트-->
+
+
+
     <LinearLayout
 
         android:id="@+id/linearLayout6"
