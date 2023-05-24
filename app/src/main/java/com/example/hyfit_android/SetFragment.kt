@@ -17,6 +17,7 @@ import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.UserInfo.ValidView
 import com.example.hyfit_android.databinding.ActivityEditAccountInfoBinding
 import com.example.hyfit_android.databinding.FragmentSetBinding
+import com.example.hyfit_android.report.UserbodyActivity
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -56,7 +57,10 @@ class SetFragment : Fragment(), GetUserView {
             val intent=Intent(getActivity(), EditPasswordActivity1::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
             startActivity(intent)
-
+        }
+        binding.addbodycondition.setOnClickListener {
+            val intent=Intent(getActivity(), UserbodyActivity::class.java)
+            startActivity(intent)
         }
 
         return binding.root
