@@ -6,5 +6,5 @@ data class UserbodyReq(
     val email:String,
     val weight:String,
     val height:String,
-    val goalweight:String
+    val goal_weight:String
 )
