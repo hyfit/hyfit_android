@@ -189,6 +189,4 @@ class CommunityFragment: Fragment(), View.OnClickListener {
         }
 
     }
-
-
 }
