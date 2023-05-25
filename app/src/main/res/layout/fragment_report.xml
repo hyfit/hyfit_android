@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +7,45 @@
              android:layout_height="match_parent"
             android:background="#F5F5F5"
              tools:context=".ReportFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/modalContainer1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <!-- 모달 창의 레이아웃 파일을 include -->
+        <include
+            layout="@layout/modal_layout"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/modalContainer2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="gone">
+
+        <!-- 모달 창의 레이아웃 파일을 include -->
+        <include
+            layout="@layout/modal_layout"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <ProgressBar
         app:layout_constraintLeft_toLeftOf="parent"
@@ -22,44 +61,53 @@
 
 
     <TextView
+        android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:text="Report"
         android:textColor="@color/black"
-        android:layout_marginTop="50dp"
         android:textSize="20sp"
-        android:textStyle="bold" />
-
-
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.042" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:id="@+id/layoutdashboard"
         android:layout_height="801dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:visibility="gone">
 
         <View
-            android:layout_width="390dp"
-            android:layout_height="417dp"
+            android:layout_width="350dp"
+            android:layout_height="370dp"
             android:background="@drawable/rounded_corner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.7"
+            app:layout_constraintVertical_bias="0.65"
             />
+
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/chart"
-            android:layout_width="370dp"
-            android:layout_height="400dp"
+            android:layout_width="340dp"
+            android:layout_height="360dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.487"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.68" />
+            app:layout_constraintVertical_bias="0.643" />
 
         <ImageView
             android:id="@+id/menubar"
@@ -317,36 +365,41 @@
         android:id="@+id/layoutchange"
         android:layout_width="match_parent"
         android:layout_height="801dp"
-        android:layout_marginTop="90dp"
-        android:visibility="gone">
+        android:layout_marginTop="100dp"
+        android:visibility="visible"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
         <TextView
+            android:id="@+id/pie1name"
             android:layout_width="150dp"
             android:layout_height="40dp"
-            android:id="@+id/pie1name"
-            android:gravity="center"
             android:fontFamily="@font/roboto_medium"
+            android:gravity="center"
             android:text="Trump International Sexy Tower"
             android:textColor="@color/black"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.15"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.15"
-            app:layout_constraintVertical_bias="0.61"/>
+            app:layout_constraintVertical_bias="0.61" />
+
         <TextView
+            android:id="@+id/pie2name"
             android:layout_width="150dp"
             android:layout_height="40dp"
             android:fontFamily="@font/roboto_medium"
-            android:id="@+id/pie2name"
             android:gravity="center"
             android:text="goodgood"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.84"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.84"
-            app:layout_constraintVertical_bias="0.61"/>
+            app:layout_constraintVertical_bias="0.61" />
 
         <View
             android:layout_width="334dp"
@@ -354,9 +407,9 @@
             android:background="@drawable/rounded_corner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.495"
             app:layout_constraintVertical_bias="0.356" />
 
         <com.github.mikephil.charting.charts.LineChart
@@ -372,14 +425,15 @@
 
 
         <View
+            android:id="@+id/clickchart1"
             android:layout_width="160dp"
             android:layout_height="215dp"
             android:background="@drawable/rounded_corner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.13"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.13"
             app:layout_constraintVertical_bias="0.782" />
 
 
@@ -393,15 +447,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.798" />
+
         <View
+            android:id="@+id/clickchart2"
             android:layout_width="160dp"
             android:layout_height="215dp"
             android:background="@drawable/rounded_corner"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.86"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintHorizontal_bias="0.86"
             app:layout_constraintVertical_bias="0.782" />
 
         <com.github.mikephil.charting.charts.PieChart
@@ -414,6 +470,29 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.798" />
+
+        <ImageView
+            android:id="@+id/click1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/plus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.249"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.877" />
+        <ImageView
+            android:id="@+id/click2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/plus"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.749"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.877" />
 
         <ImageView
             android:id="@+id/menubar2"
@@ -443,15 +522,15 @@
             android:id="@+id/dashboard2"
             android:layout_width="100dp"
             android:layout_height="45dp"
-            android:gravity="center"
             android:fontFamily="sans-serif"
+            android:gravity="center"
             android:text="Dashboard"
             android:textColor="@color/black"
             android:textSize="14sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/menubar2"
             app:layout_constraintEnd_toEndOf="@+id/menubar2"
-            app:layout_constraintHorizontal_bias="0.039"
+            app:layout_constraintHorizontal_bias="0.037"
             app:layout_constraintStart_toStartOf="@+id/menubar2"
             app:layout_constraintTop_toTopOf="@+id/menubar2"
             app:layout_constraintVertical_bias="0.31" />
@@ -460,8 +539,8 @@
             android:id="@+id/change2"
             android:layout_width="100dp"
             android:layout_height="45dp"
-            android:gravity="center"
             android:fontFamily="sans-serif"
+            android:gravity="center"
             android:text="Change"
             android:textColor="@color/white"
             android:textSize="14sp"
@@ -544,6 +623,7 @@
             app:layout_constraintVertical_bias="0.469" />
 
         <TextView
+            android:id="@+id/textView9"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto_medium"
@@ -680,9 +760,13 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="801dp"
-        android:layout_marginTop="90dp"
+        android:layout_marginTop="100dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/layoutranking"
-        android:visibility="visible">
+        android:visibility="gone">
 
         <ImageView
             android:id="@+id/menubar3"
@@ -779,7 +863,7 @@
             android:id="@+id/totalranking"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -1883,7 +1967,7 @@
             android:id="@+id/ageranking"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -2433,9 +2517,6 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 
-
-
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-</FrameLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

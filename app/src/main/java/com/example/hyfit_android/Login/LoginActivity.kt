@@ -148,13 +148,13 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
     }
 
     private fun startTimer() {
-        val timer = object : CountDownTimer(29*1000*60, 100) {
+        val timer = object : CountDownTimer(1*1000*60, 100) {
             override fun onTick(millisUntilFinished: Long) {
             }
 
             override fun onFinish() {
                 valid()
-                //startTimer()
+                startTimer()
             }
         }
 
@@ -181,6 +181,9 @@ class LoginActivity : AppCompatActivity(), LoginView, ValidView, GetUserView {
                     intent.putExtra("invalid", true)
                     startActivity(intent)
 
+                }
+                else if(result=="valid"){
+                    Log.d("jwt valid", result)
                 }
                 else{
                     Log.d("oldone", getJwt().toString())

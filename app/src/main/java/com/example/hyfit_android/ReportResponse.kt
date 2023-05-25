@@ -38,13 +38,13 @@ data class RankInfo(
     @SerializedName("rank") val rank: Int
 )
 data class ReportData(
-    @SerializedName("code") val code: Int,
-    @SerializedName("distance") val distance: List<Float>,
-    @SerializedName("exdate") val exdate: List<String>,
-    @SerializedName("gname") val gname: List<String>,
-    @SerializedName("pace") val pace: List<Float>,
-    @SerializedName("rate") val rate: List<Float>,
-    @SerializedName("totaltime") val totaltime: List<Float>,
-    @SerializedName("weight") val weight: List<Double>,
-    @SerializedName("date") val date: List<String>
+    @SerializedName("code") val code: Int,//
+    @SerializedName("distance") val distance: List<Float>, //
+    @SerializedName("exdate") val exdate: List<String>,//
+    @SerializedName("gname") val gname: List<String>,//
+    @SerializedName("pace") val pace: List<Float>,//
+    @SerializedName("rate") val rate: List<Float>,//
+    @SerializedName("totaltime") val totaltime: List<Float>,//
+    @SerializedName("predictdays") val predictdays: List<Int>,
+    @SerializedName("goalnum") val goalnum: List<Int>
 )

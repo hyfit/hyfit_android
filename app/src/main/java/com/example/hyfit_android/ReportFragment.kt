@@ -7,12 +7,15 @@ import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.text.Layout
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ProgressBar
+import android.widget.TextView
 import android.widget.Toast
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Login.FindPasswordReq
@@ -121,13 +124,45 @@ class ReportFragment : Fragment(), ReportView{
             binding.genderranking.visibility=View.VISIBLE
         }
 
+        binding.pieChart1.setOnClickListener {
+            binding.modalContainer1.bringToFront()
+            binding.modalContainer1.visibility=View.VISIBLE
+        }
+        binding.click1.setOnClickListener {
+            binding.modalContainer1.bringToFront()
+            binding.modalContainer1.visibility = View.VISIBLE
+        }
+        binding.click2.setOnClickListener {
+            binding.modalContainer2.bringToFront()
+            binding.modalContainer2.visibility=View.VISIBLE
+        }
+
+
+
+        val modalLayout1: ConstraintLayout = binding.modalContainer1
+        // 모달 레이아웃이 표시된 후에 close 요소에 접근
+        val closeTextView1: TextView = modalLayout1.findViewById(R.id.close)
+        val modalLayout2: ConstraintLayout = binding.modalContainer2
+        // 모달 레이아웃이 표시된 후에 close 요소에 접근
+        val closeTextView2: TextView = modalLayout2.findViewById(R.id.close)
+        // close 요소에 반응을 추가 (예: 클릭 시 모달 닫기)
+        closeTextView1.setOnClickListener {
+            // 모달 닫기 동작을 여기에 작성
+            binding.modalContainer1.visibility = View.GONE
+        }
+        closeTextView2.setOnClickListener {
+            // 모달 닫기 동작을 여기에 작성
+            binding.modalContainer2.visibility = View.GONE
+        }
 
 
 
 
 
 
-        ///////////////////PIECHART
+
+
+            ///////////////////PIECHART
 
         //declare a function for pie chart activity
         pieChart1=binding.pieChart1
@@ -324,7 +359,7 @@ class ReportFragment : Fragment(), ReportView{
         //Chart data and other styling
         pie.data = data
         pie.centerTextRadiusPercent = 0f
-        pie.isDrawHoleEnabled = true
+        pie.isDrawHoleEnabled = true //원래true
         pie.legend.isEnabled = false
         pie.description.isEnabled = true
         progressBar.visibility=View.GONE
@@ -431,7 +466,7 @@ class ReportFragment : Fragment(), ReportView{
 
 
     override fun onReportSuccess(weight:List<Double>,height:List<Double>,bodydate: List<String>,goal_weight:Double,totaltime: List<Float>, pace: List<Float>,distance: List<Float>, rate:List<Float>,
-                                 gname:List<String>,ranking:List<RankInfo>,requestedRank:Int, genderRanking:List<RankInfo>, genderRequestRanking:Int, ageRanking:List<RankInfo>, ageRequestedRank:Int, requestedDist:Double) {
+                                 gname:List<String>,goalnum:List<Int>,predictdays:List<Int>,ranking:List<RankInfo>,requestedRank:Int, genderRanking:List<RankInfo>, genderRequestRanking:Int, ageRanking:List<RankInfo>, ageRequestedRank:Int, requestedDist:Double) {
         if(distance!=null){
             Log.d("GetreportSuccess", "cong")
             val time: ArrayList<Float> = ArrayList(totaltime)
@@ -441,6 +476,7 @@ class ReportFragment : Fragment(), ReportView{
             val rate2:Float= rate[1]
             val gname1:String=gname[0]
             val gname2:String=gname[1]
+
             pieChart1=binding.pieChart1
             pieChart2=binding.pieChart2
             linechart=binding.lineChart
@@ -472,9 +508,20 @@ class ReportFragment : Fragment(), ReportView{
             setGenderRanking(genderRanking,genderRequestRanking,requestedDist)
             setAgeRanking(ageRanking,ageRequestedRank,requestedDist)
 
+            ///////modal page
+            val modalLayout1: ConstraintLayout = binding.modalContainer1
+            // 모달 레이아웃이 표시된 후에 close 요소에 접근
+            val predictTextView1: TextView = modalLayout1.findViewById(R.id.predictday)
+            val groupTextView1: TextView = modalLayout1.findViewById(R.id.peoplenum)
 
-
-
+            val modalLayout2: ConstraintLayout = binding.modalContainer2
+            val predictTextView2: TextView = modalLayout2.findViewById(R.id.predictday)
+            val groupTextView2: TextView = modalLayout2.findViewById(R.id.peoplenum)
+            // close 요소에 반응을 추가 (예: 클릭 시 모달 닫기)
+            predictTextView1.text="       "+goalnum[0].toString()
+            groupTextView1.text="        "+predictdays[0].toString()
+            predictTextView2.text="       "+goalnum[1].toString()
+            groupTextView2.text="        "+predictdays[1].toString()
 
 
 
