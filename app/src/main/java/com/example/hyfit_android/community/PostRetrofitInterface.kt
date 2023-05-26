@@ -16,8 +16,12 @@ interface PostRetrofitInterface {
     @POST(ApiPathConstants.POST_API_PATH + "/save")
     fun savePost(@Header("X-AUTH-TOKEN")token: String, @Body savePostReq: SavePostReq): Call<PostResponse>
 
-    @GET(ApiPathConstants.POST_API_PATH + "")
-    fun getOnePost(@Header("X-AUTH-TOKEN")token:String, @Query("post_id")post_id:Long, @Query("email")email: String): Call<PostResponse>
+    @GET(ApiPathConstants.POST_API_PATH + "/{post_id}")
+    fun getOnePost(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Path("post_id") postId: Long,
+        @Query("email") email: String
+    ): Call<GetOnePostResponse>
 
     @GET(ApiPathConstants.POST_API_PATH + "")
     fun getAllUserPosts(@Query("email")email: String): Call<GetAllUserPostsResponse>
@@ -29,4 +33,22 @@ interface PostRetrofitInterface {
 
     @DELETE(ApiPathConstants.POST_API_PATH + "")
     fun deletePost(@Header("X-AUTH-TOKEN")token: String, @Path("post_id")post_id: Long): Call<DeletePostResponse>
+
+    @POST("/api/post/{id}/like")
+    fun like(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Path("id") id: Long
+    ): Call<LikePostResponse>
+
+    @DELETE("/api/post/{id}/unlike")
+    fun unlike(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Path("id") id: Long
+    ):Call<UnlikePostResponse>
+
+    @POST("/api/follow/add?email={email}")
+    fun follow(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("email") id: Long
+    ): Call<FollowResponse>
 }
