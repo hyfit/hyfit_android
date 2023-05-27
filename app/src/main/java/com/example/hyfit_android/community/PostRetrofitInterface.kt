@@ -1,54 +1,51 @@
 package com.example.hyfit_android.community
 
 import com.example.hyfit_android.ApiPathConstants
+import okhttp3.MultipartBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.DELETE
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.PATCH
-import retrofit2.http.POST
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface PostRetrofitInterface {
 
     @POST(ApiPathConstants.POST_API_PATH + "/save")
-    fun savePost(@Header("X-AUTH-TOKEN")token: String, @Body savePostReq: SavePostReq): Call<PostResponse>
+    fun savePost(@Header("X-AUTH-TOKEN")token: String, @Part file : MultipartBody.Part, @Part("dto")savePostReq: SavePostReq): Call<PostResponse>
 
-    @GET(ApiPathConstants.POST_API_PATH + "/{post_id}")
-    fun getOnePost(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Path("post_id") postId: Long,
-        @Query("email") email: String
-    ): Call<GetOnePostResponse>
+    @GET(ApiPathConstants.POST_API_PATH + "{id}")
+    fun getOnePost(@Path("id")post_id:Long, @Query("email")email: String): Call<GetOnePostRes>
 
-    @GET(ApiPathConstants.POST_API_PATH + "")
-    fun getAllUserPosts(@Query("email")email: String): Call<GetAllUserPostsResponse>
+    // 한 유저의 게시물 목록 조회
+    @GET(ApiPathConstants.POST_API_PATH + "/all-posts")
+    fun getAllPostsOfUser(@Query("email")email: String): Call<GetAllPostsOfUserRes>
 
-    //팔로잉 유저 게시물 조회
+    // 팔로잉 유저 게시물 조회 (운동 타입 별 검색 가능)
+    @GET(ApiPathConstants.POST_API_PATH + "/following-posts")
+    fun getAllPostsOfFollowingUsersWithType(@Header("X-AUTH-TOKEN")token: String, @Query("lastPostId")lastPostId: Long?=null, @Query("searchType")searchType: String?=null, @Query("size")size: Int): Call<PostPageRes>
 
-    @PATCH(ApiPathConstants.POST_API_PATH + "/{post_id}")
-    fun modifyPost(@Header("X-AUTH-TOKEN")token: String, @Path("post_id")post_id: Long, @Body modifyPostReq: ModifyPostReq): Call<PostResponse>
+    // 모든 유저 게시물 조회 (운동 타입 별 검색 가능)
+    @GET(ApiPathConstants.POST_API_PATH + "all-users-posts")
+    fun getAllPostsOfAllUsersWithType(@Header("X-AUTH-TOKEN")token: String, @Query("lastPostId")lastPostId: Long?=null, @Query("searchType")searchType: String?=null, @Query("size")size: Int): Call<PostPageRes>
+
+    // 게시물 내용 수정
+    @PATCH(ApiPathConstants.POST_API_PATH + "/{id}/modify")
+    fun modifyPost(@Header("X-AUTH-TOKEN")token: String, @Path("id")postId: Long, @Query("content")content: String): Call<PostResponse>
+
+    @POST(ApiPathConstants.POST_API_PATH + "/{id}/like")
+    fun likePost(@Header("X-AUTH-TOKEN")token: String, @Path("id")postId: Long): Call<PostLikeRes>
+
+    @DELETE(ApiPathConstants.POST_API_PATH + "/{id}/unlike")
+    fun unlikePost(@Header("X-AUTH-TOKEN")token: String, @Path("id")postId: Long): Call<DefaultCommunityRes>
+
+    @POST(ApiPathConstants.POST_API_PATH + "/{id}/comment/save")
+    fun saveComment(@Header("X-AUTH-TOKEN")token: String, @Path("id")postId: Long, @Body saveCommentReq: SaveCommentReq): Call<SaveCommentRes>
+
+    @GET(ApiPathConstants.POST_API_PATH + "/{id}/comment")
+    fun getCommentList(@Path("id")postId: Long) : Call<GetCommentListRes>
+    @DELETE(ApiPathConstants.POST_API_PATH + "/{id}/comment")
+    fun deleteComment(@Header("X-AUTH-TOKEN")token: String, @Path("id")postId: Long, @Query("commentId")commentId: Long): Call<DefaultCommunityRes>
 
     @DELETE(ApiPathConstants.POST_API_PATH + "")
-    fun deletePost(@Header("X-AUTH-TOKEN")token: String, @Path("post_id")post_id: Long): Call<DeletePostResponse>
+    fun deletePost(@Header("X-AUTH-TOKEN")token: String, @Query("id")post_id: Long): Call<DefaultCommunityRes>
+    @GET(ApiPathConstants.POST_API_PATH + "/profile")
+    fun getCommunityProfile(@Query("email")email: String): Call<PostProfileRes>
 
-    @POST("/api/post/{id}/like")
-    fun like(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Path("id") id: Long
-    ): Call<LikePostResponse>
-
-    @DELETE("/api/post/{id}/unlike")
-    fun unlike(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Path("id") id: Long
-    ):Call<UnlikePostResponse>
-
-    @POST("/api/follow/add?email={email}")
-    fun follow(
-        @Header("X-AUTH-TOKEN") token: String,
-        @Query("email") id: Long
-    ): Call<FollowResponse>
 }

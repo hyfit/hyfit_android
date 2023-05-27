@@ -18,8 +18,8 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
 
     lateinit var binding: FragmentPostBinding
     lateinit var progressBar: ProgressBar
-    var onclicklikepostid=0
-    var postid=36
+    var onclicklikepostid=0L
+    var postid=36L
     val email="oliver08@naver.com"
 
 
@@ -99,21 +99,21 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         postService.setGetOnePostView(this)
         progressBar.bringToFront()
         progressBar.visibility=View.VISIBLE
-        postService.getOnePost(jwt, postId, email)
+        postService.getOnePost( postId, email)
     }
     private fun like(id:Long){
         val jwt=getJwt()!!
         val postService=PostService()
         postService.setLikePostView(this)
         progressBar.visibility=View.VISIBLE
-        postService.like(jwt,id)
+        postService.likePost(jwt,id)
     }
     fun unlike(id:Long){
         val jwt=getJwt()!!
         val postService=PostService()
-        postService.setunlikePostView(this)
+        postService.setUnlikePostView(this)
         progressBar.visibility=View.VISIBLE
-        postService.unlike(jwt,id)
+        postService.unlikePost(jwt,id)
     }
 
     private fun imageset(imageurl:String, imageview: ImageView){
@@ -129,16 +129,16 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     override fun onAddFollowFailure(code: Int, msg: String) {
     }
 
-    override fun onGetOnePostSuccess(result: PostResult) {
+    override fun onGetOnePostSuccess(result: OnePost) {
         Log.d("onGetOnePostSuccess", "hihi")
         val type=result.type
-        val postLikeNumber=result.postLikeNumber
+        val postLikeNumber=result.postLikeNum
         val nickName=result.userProfile.nickName
         val writeremail=result.userProfile.email
         val titlecontent=result.post.content
         val postimage="https://d14okywu7b1q79.cloudfront.net"+result.imageUrl
         val postimageview=binding.postIv
-        val userimage="https://d14okywu7b1q79.cloudfront.net"+result.userProfile.profileImageUrl
+        val userimage="https://d14okywu7b1q79.cloudfront.net"+result.userProfile.profileImgUrl
         val userimageview=binding.profileIv
 
         binding.titleTv.text=titlecontent
@@ -168,25 +168,24 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     override fun onUnfollowFailure(code: Int, msg: String) {
     }
 
-    override fun onLikeSuccess(result: LikePostResult) {
+    override fun onLikePostSuccess(result: PostLike) {
         onclicklikepostid=result.postId
-        getOnePost(postId=result.postId.toLong(), email=email)
-        progressBar.visibility=View.GONE
-
-    }
-
-    override fun onLikeFailure(code: Int) {
-        unlike(postid.toLong())
+        getOnePost(postId=result.postId, email=email)
         progressBar.visibility=View.GONE
     }
 
-    override fun onUnlikeSuccess(result: String) {
+    override fun onLikePostFailure(code: Int, msg: String) {
+        unlike(postid)
+        progressBar.visibility=View.GONE
+    }
+
+    override fun onUnlikePostSuccess(result: String) {
         Log.d("unlikeSuccess", "Cong")
-        getOnePost(postId=postid.toLong(), email=email)
+        getOnePost(postId=postid, email=email)
         progressBar.visibility=View.GONE
     }
 
-    override fun onUnlikeFailure(code: Int) {
+    override fun onUnlikePostFailure(code: Int, msg: String) {
         Log.d("unlikeFailure","sad")
     }
 

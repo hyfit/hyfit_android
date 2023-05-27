@@ -8,9 +8,7 @@
         android:id="@+id/linearLayout3"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
-        android:gravity="bottom"
+        android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -30,20 +28,37 @@
             android:id="@+id/comment_writer_tv"
             android:layout_width="wrap_content"
             android:layout_height="20dp"
-            android:gravity="bottom"
+            android:gravity="center"
+            android:layout_marginRight="120dp"
             android:fontFamily="@font/roboto_medium"
             android:text="Ariana"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="10sp" />
 
+        <ImageView
+            android:layout_width="9dp"
+            android:layout_height="9dp"
+            android:layout_marginRight="5dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/ant_design_reload_time_outline" />
+
+        <TextView
+            android:id="@+id/date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/roboto_regular"
+            android:text="1 days ago"
+            android:textColor="#7e7e7e"
+            android:textSize="10sp" />
+
+
     </LinearLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="60dp"
-        android:layout_marginRight="60dp"
         android:gravity="center_vertical"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,30 +66,16 @@
 
         <TextView
             android:id="@+id/comment_tv"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginLeft="27dp"
-            android:layout_marginRight="60dp"
+            android:layout_marginRight="8dp"
             android:fontFamily="@font/roboto_medium"
-            android:text="Gooooooooood!!"
+            android:text="Goooooooooodd!!"
             android:textAllCaps="false"
             android:textColor="@color/black"
             android:textSize="13sp" />
 
-        <ImageView
-            android:layout_width="9dp"
-            android:layout_height="9dp"
-            android:layout_marginRight="5dp"
-            android:src="@drawable/ant_design_reload_time_outline" />
-
-        <TextView
-            android:id="@+id/date_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/roboto_regular"
-            android:text="1 days ago"
-            android:textColor="#7e7e7e"
-            android:textSize="10sp" />
 
 
     </LinearLayout>

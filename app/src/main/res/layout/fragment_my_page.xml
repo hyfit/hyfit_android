@@ -90,6 +90,7 @@
                         android:textSize="10sp"/>
 
                     <TextView
+                        android:id="@+id/post_num_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="3"
@@ -117,6 +118,7 @@
                         android:textSize="10sp"/>
 
                     <TextView
+                        android:id="@+id/follower_num_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="130"
@@ -145,6 +147,7 @@
                         android:textSize="10sp"/>
 
                     <TextView
+                        android:id="@+id/following_num_tv"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="75"
@@ -152,13 +155,10 @@
                         android:textColor="@color/black"
                         android:fontFamily="@font/roboto_medium"/>
 
-
                 </LinearLayout>
 
 
             </RelativeLayout>
-
-
 
 
         </LinearLayout>
@@ -172,186 +172,43 @@
 
     </RelativeLayout>
 
-    <RelativeLayout
-        android:id="@+id/relativeLayout4"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginTop="30dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
-
-        <ImageView
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/mountain_climbing" />
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:src="@drawable/clarity_heart_solid" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="23"
-                android:textColor="#ccf3f3f3"
-                android:textSize="5sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:src="@drawable/mdi_comment_processing" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="5"
-                android:textColor="#ccf3f3f3"
-                android:textSize="5sp" />
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/relativeLayout5"
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="30dp"
+    <TextView
+        android:id="@+id/empty_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/roboto_medium"
+        android:text="There is no post yet."
+        android:textColor="@color/string_gray"
+        android:textSize="16sp"
+        android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
+        app:layout_constraintTop_toTopOf="@+id/mypost_list_rv" />
 
-        <ImageView
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/riding3" />
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:src="@drawable/clarity_heart_solid" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="31"
-                android:textColor="#ccf3f3f3"
-                android:textSize="5sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:src="@drawable/mdi_comment_processing" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="7"
-                android:textColor="#ccf3f3f3"
-                android:textSize="5sp" />
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:layout_width="88dp"
-        android:layout_height="88dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginRight="40dp"
+    <ProgressBar
+        android:id="@+id/mprogressbar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
-
-        <ImageView
-            android:layout_width="88dp"
-            android:layout_height="88dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/climbing_stairs" />
-
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentBottom="true">
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:src="@drawable/clarity_heart_solid" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="29"
-                android:textColor="#ccf3f3f3"
-                android:textSize="5sp" />
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="2dp"
-                android:src="@drawable/mdi_comment_processing" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="4dp"
-                android:fontFamily="@font/roboto_bold"
-                android:text="6"
-                android:textColor="#ccf3f3f3"
-                android:textSize="5sp" />
-
-        </LinearLayout>
-
-
-    </RelativeLayout>
-
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:visibility="invisible"/>
 
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mypost_list_rv"
         android:layout_width="match_parent"
-        android:layout_height="380dp"
-        android:layout_marginRight="40dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
         android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:clipToPadding="false"
+        android:padding="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/relativeLayout3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

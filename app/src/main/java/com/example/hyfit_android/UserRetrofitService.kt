@@ -6,6 +6,8 @@ import com.example.hyfit_android.Join.JoinReq
 import com.example.hyfit_android.Join.JoinView
 import com.example.hyfit_android.Login.*
 import com.example.hyfit_android.UserInfo.*
+import com.example.hyfit_android.community.UpdateProfileImageView
+import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -20,6 +22,7 @@ class UserRetrofitService {
     private lateinit var passwordUpdateView: PasswordUpdateView
     private lateinit var getUserView: GetUserView
     private lateinit var validView:ValidView
+    private lateinit var updateProfileImageView: UpdateProfileImageView
     fun setLoginView(loginView: LoginView){
         this.loginView=loginView
     }
@@ -53,6 +56,10 @@ class UserRetrofitService {
 
     fun setvalidView(validView: ValidView){
         this.validView=validView
+    }
+
+    fun setUpdateProfileImageView(updateProfileImageView: UpdateProfileImageView) {
+        this.updateProfileImageView = updateProfileImageView
     }
 
     fun login(loginRequest: LoginReq){
@@ -269,6 +276,26 @@ class UserRetrofitService {
                     Log.d("ValidFailure", t.message.toString())
                 }
 
+            })
+        }
+    }
+
+    fun updateProfileImage(jwt:String?, file: MultipartBody.Part){
+        val userService = getRetrofit().create(UserRetrofitInterface::class.java)
+        if (jwt != null) {
+            userService.updateProfileImage(jwt, file).enqueue(object : Callback<GetResponse> {
+                override fun onResponse(call: Call<GetResponse>, response: Response<GetResponse>) {
+                    Log.d("updateProfileImage", "goodgood")
+                    val resp: GetResponse = response.body()!!
+                    when (val code = resp.code) {
+                        1000 -> updateProfileImageView.onUpdateProfileImageSuccess(resp.result)
+                        else -> updateProfileImageView.onUpdateProfileImageFailure(code, resp.message)
+                    }
+                }
+
+                override fun onFailure(call: Call<GetResponse>, t: Throwable) {
+                    Log.d("updateProfileImgFailure", t.message.toString())
+                }
             })
         }
     }
