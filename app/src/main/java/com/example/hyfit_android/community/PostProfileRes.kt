@@ -10,7 +10,7 @@ data class PostProfileRes (
         )
 data class PostProfile (
     @SerializedName(value="email")val email: String,
-    @SerializedName(value="userProfile")val userProfile: UserProfile,
+    @SerializedName(value="userProfileDto")val userProfile: UserProfile,
     @SerializedName(value="postNum")val postNum: Long,
     @SerializedName(value="followingNum")val followingNum: Long,
     @SerializedName(value="followerNum")val followerNum: Long

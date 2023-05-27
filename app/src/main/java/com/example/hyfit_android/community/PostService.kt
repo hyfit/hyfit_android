@@ -127,7 +127,7 @@ class PostService {
         })
     }
 
-    fun getAllPostsOfFollowingUsersWithType(token: String, lastPostId: Long?, searchType: String?, size: Int) {
+    fun getAllPostsOfFollowingUsersWithType(token: String, lastPostId: Long?=null, searchType: String?=null, size: Int) {
         val postService = getPostRetrofit().create(PostRetrofitInterface::class.java)
         postService.getAllPostsOfFollowingUsersWithType(token, lastPostId, searchType,size).enqueue(object: Callback<PostPageRes> {
             override fun onResponse(
@@ -148,7 +148,7 @@ class PostService {
         })
     }
 
-    fun getAllPostsOfAllUsersWithType(token: String,  lastPostId: Long?, searchType: String?, size: Int) {
+    fun getAllPostsOfAllUsersWithType(token: String,  lastPostId: Long?=null, searchType: String?=null, size: Int) {
         val postService = getPostRetrofit().create(PostRetrofitInterface::class.java)
         postService.getAllPostsOfAllUsersWithType(token, lastPostId, searchType,size).enqueue(object: Callback<PostPageRes> {
             override fun onResponse(

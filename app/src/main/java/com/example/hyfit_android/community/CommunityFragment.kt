@@ -51,7 +51,7 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
         getCommunityProfile()
 
         // 첫 화면-> 팔로잉 유저 게시물 목록 보여줌(getFollowingPosts)
-        getFollowingPosts(null, null)
+//        getFollowingPosts(null, null)
 
         // tag 초기화
         tagMap = HashMap<Button, Boolean>()
@@ -113,7 +113,7 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
     }
 
 
-    private fun getFollowingPosts(type: String?, lastPostId: Long?) {
+    private fun getFollowingPosts(type: String?=null, lastPostId: Long?=null) {
         binding.followingIv.visibility = View.VISIBLE
         binding.allIv.visibility = View.INVISIBLE
         binding.followingBtn.setTextColor(Color.parseColor("#000000"))
@@ -123,12 +123,12 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
         val postService = PostService()
 
         postService.setGetAllPostsOfFollowingUsersView(this)
-        postService.getAllPostsOfFollowingUsersWithType(jwt!!, lastPostId!!, type!!, 5)
+        postService.getAllPostsOfFollowingUsersWithType(jwt!!, lastPostId, type, 5)
         binding.cprogressbar.visibility = View.VISIBLE
 
     }
 
-    private fun getAllPosts(type: String?, lastPostId: Long?) {
+    private fun getAllPosts(type: String?=null, lastPostId: Long?=null) {
         binding.allIv.visibility = View.VISIBLE
         binding.followingIv.visibility = View.INVISIBLE
         binding.followingBtn.setTextColor(Color.parseColor("#949494"))
@@ -138,7 +138,7 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
         val postService = PostService()
 
         postService.setGetAllPostsOfAllUsersView(this)
-        postService.getAllPostsOfAllUsersWithType(jwt!!, lastPostId!!, type!!, 5)
+        postService.getAllPostsOfAllUsersWithType(jwt!!, lastPostId, type, 5)
         binding.cprogressbar.visibility = View.VISIBLE
 
     }
