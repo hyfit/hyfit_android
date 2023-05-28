@@ -91,12 +91,10 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
             myPageFragment.arguments = bundle
             parentFragmentManager
                 .beginTransaction()
-                .add(R.id.CommunityFragment, myPageFragment)
+                .replace(R.id.fragment_container, myPageFragment)
                 .addToBackStack(null)
                 .commit()
         }
-
-
     }
 
 //     사용자와 상호작용 할 수 있는 상태

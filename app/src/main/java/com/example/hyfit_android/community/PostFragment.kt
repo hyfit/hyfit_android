@@ -14,16 +14,19 @@ import com.bumptech.glide.Glide
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentPostBinding
 
-class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView,UnlikePostView, GetFollowingView {
+class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView,UnlikePostView, GetFollowingView{
 
     lateinit var binding:FragmentPostBinding
     lateinit var progressBar: ProgressBar
-    var onclicklikepostid=0
-    var postid=36
+
     lateinit var myemail:String
-    val email="oliver08@naver.com" //번들에서받으면바꾸기
+//    val email="oliver08@naver.com" //번들에서받으면바꾸기
+    private var email = ""
+    private var postId = 0L
     private var onfollow:Boolean=false
     lateinit var followingList:List<String>
+    var onclicklikepostid=0L
+    var postid=36L
 
 
     override fun onCreateView(
@@ -33,22 +36,21 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     ): View? {
         binding = FragmentPostBinding.inflate(inflater, container, false)
         //이따가 해제하기
-        //val postId = arguments?.getLong("postId")
-        //val email=arguments?.getString("email")
-        //val email="oliver08@naver.com"
+        postId = arguments?.getLong("postId")!!
+        email=arguments?.getString("email")!!
         val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
-        val myemail = sharedPreferences.getString("email", "")
+        myemail = sharedPreferences.getString("email", "")!!
         progressBar=binding.progressBar
         Log.d("emailemailhere", myemail!!)
 
         //
         //binding.postIv.clipToOutline = true
         //얘도 나중에 bundle로 넘겨주겟지 ..
-        val postId:Long=36
+      //  val postId:Long=36
         // 선택된 게시물 띄움
         progressBar.visibility=View.VISIBLE
         getFollowingList()
-        getOnePost(postId,email)
+        //getOnePost(postId,email)
         binding.likeBtn.setOnClickListener {
             like(postId)
         }
@@ -94,6 +96,14 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
         return spf!!.getString("jwt","0")
     }
+//    private fun getCommentList(){
+//        val jwt = getJwt()!!
+//        val postService = PostService()
+//        postService.setGetCommentListView(this)
+//        progressBar.bringToFront()
+//        progressBar.visibility=View.VISIBLE
+//        postService.getCommentList(postId)
+//    }
 
     private fun addFollow(email:String) {
         val jwt = getJwt()!!
@@ -116,6 +126,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         val followService=FollowService()
         followService.setFollowingView(this)
         followService.getFollowingList(jwt)
+        progressBar.visibility=View.VISIBLE
     }
 
     private fun getOnePost(postId:Long, email:String) {
@@ -124,7 +135,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         postService.setGetOnePostView(this)
         progressBar.bringToFront()
         progressBar.visibility=View.VISIBLE
-        postService.getOnePost(postId, email)
+        postService.getOnePost( postId, email)
     }
     private fun like(id:Long){
         val jwt=getJwt()!!
@@ -136,7 +147,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     private fun unlike(id:Long){
         val jwt=getJwt()!!
         val postService=PostService()
-        postService.setunlikePostView(this)
+        postService.setUnlikePostView(this)
         progressBar.visibility=View.VISIBLE
         postService.unlikePost(jwt,id)
     }
@@ -212,19 +223,19 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     }
 
     override fun onLikePostSuccess(result: PostLike) {
-        onclicklikepostid=result.postId.toInt()
+        onclicklikepostid=result.postId
         getOnePost(postId=result.postId, email=email)
         progressBar.visibility=View.GONE
     }
 
     override fun onLikePostFailure(code: Int, msg: String) {
-        unlike(postid.toLong())
+        unlike(postid)
         progressBar.visibility=View.GONE
     }
 
     override fun onUnlikePostSuccess(result: String) {
         Log.d("unlikeSuccess", "Cong")
-        getOnePost(postId=postid.toLong(), email=email)
+        getOnePost(postId=postid, email=email)
         progressBar.visibility=View.GONE
     }
 
@@ -235,11 +246,24 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     override fun onFollowingSuccess(result: List<String>) {
         followingList = result.map { it.split(",")[0] }
         onfollow=followingList.contains(email)
+        Log.d("followingList", followingList[0])
+        getOnePost(postid, email)
+        progressBar.visibility=View.GONE
 
     }
 
     override fun onFollowingFailure(code: Int, msg:String) {
         Log.d("followinglistsad", "sadsads")
     }
+
+//    override fun onGetCommentListSuccess(result: PostCommentList) {
+//        Log.d("commnetSuccess", "goodgood")
+//        binding.commentWriterTv.text=result.email
+//        binding.commentTv.text=result.content
+//    }
+
+//    override fun onGetCommentListFailure(code: Int, msg: String) {
+//        TODO("Not yet implemented")
+//    }
 
 }

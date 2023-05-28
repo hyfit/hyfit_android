@@ -94,7 +94,7 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
 
         // distance
         distance = (intent.getDoubleExtra("distance", 0.0))
-        user2distance =  (intent.getDoubleExtra("user2distance", 0.0))
+        user2distance =  (intent.getDoubleExtra("user2Distance", 0.0))
         val distanceResult = String.format("%.2f", (Math.round(distance * 100000.0) / 100000.0))
         val distanceResult2 = String.format("%.2f", (Math.round(user2distance * 100000.0) / 100000.0))
         // 우선 my distance
@@ -260,8 +260,7 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
 
             binding.paceText.text = user2pace
             binding.exerciseIncreaseText.text = user2increase.toString()
-            val distanceResult = String.format("%.2f", (Math.round(user2distance * 100000.0) / 100000.0))
-            binding.exerciseDistanceText.text = distanceResult + "km"
+            binding.exerciseDistanceText.text = distanceResult2 + "km"
         }
 
         binding.goToMain.setOnClickListener{
