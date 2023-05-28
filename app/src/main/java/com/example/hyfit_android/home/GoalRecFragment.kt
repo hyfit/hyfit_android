@@ -31,6 +31,7 @@ class GoalRecFragment(private var src : String,private var name : String, privat
         binding = FragmentGoalRecBinding.inflate(inflater, container, false)
         Glide.with(this)
             .load(src)
+            .placeholder(R.drawable.loading_img)
             .into(binding.goalRecImg)
 
         binding.goalTitle.text = name

@@ -17,6 +17,7 @@
         tools:ignore="NotSibling">
 
     <LinearLayout
+
         android:id="@+id/home_top_layout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -41,6 +42,7 @@
 
 
     <LinearLayout
+
         android:id="@+id/linearLayout6"
         android:orientation="vertical"
         android:layout_width="match_parent"
@@ -78,6 +80,7 @@
 
 <!--    운동 시작 이미지-->
 <LinearLayout
+    android:layout_gravity="center_horizontal"
     android:layout_marginHorizontal="25dp"
     android:layout_marginTop="30dp"
     android:id="@+id/home_start_image_layout"
@@ -146,15 +149,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:src="@drawable/run_pic" />
+
         <Button
             android:id="@+id/outdoor_start_btn"
             android:layout_width="40dp"
             android:layout_height="45dp"
-            android:background="@drawable/ic_workout_start"
-            android:layout_alignParentBottom="true"
             android:layout_alignParentEnd="true"
-            android:layout_margin="10dp"
-            />
+            android:layout_alignParentBottom="true"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/ic_workout_start" />
     </RelativeLayout>
         <TextView
             android:layout_gravity="center_horizontal"
@@ -169,41 +175,57 @@
 
     </LinearLayout>
 
-        <!--    지도-->
         <LinearLayout
+            android:layout_gravity="center_horizontal"
+            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:id="@+id/home_map_layout"
-            android:layout_marginTop="10dp"
-            android:layout_marginHorizontal="25dp"
-            android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/home_start_image_layout"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent">
+            app:layout_constraintStart_toStartOf="parent"
+            android:layout_marginTop="10dp"
+            android:layout_marginHorizontal="25dp">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/roboto_bold"
+                android:textSize="15sp"
+                android:textColor="@color/black"
+                android:text="Shall we working out with someone else?"
+             />
+            <!--    지도-->
+            <RelativeLayout
+                android:layout_gravity="center_horizontal"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/home_map_layout"
+                >
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/home_followingmap"/>
+                    android:layout_centerInParent="true"
+                    android:src="@drawable/run_with" />
 
-            <TextView
-                android:layout_gravity="center"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:layout_alignParentBottom="true"
-                android:textColor="@color/black"
-                android:fontFamily="@font/roboto_medium"
-                android:text="Recent workout location of following"
-                />
+                <Button
+                    android:id="@+id/runwith_start_btn"
+                    android:layout_width="40dp"
+                    android:layout_height="45dp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginEnd="20dp"
+                    android:background="@drawable/ic_workout_start2" />
 
+            </RelativeLayout>
         </LinearLayout>
+
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:id="@+id/home_recommend_goal"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="10dp"
             android:layout_marginHorizontal="25dp"
             android:orientation="vertical"
             app:layout_constraintTop_toBottomOf="@+id/home_map_layout"
@@ -213,9 +235,9 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/roboto_bold"
-                android:textSize="18sp"
+                android:textSize="15sp"
                 android:textColor="@color/black"
-                android:text="Recommended Goal"/>
+                android:text="How about working out towards this goal?"/>
             <ProgressBar
 
                 android:id="@+id/progressBar1"
@@ -226,7 +248,7 @@
                 />
     <!-- 목표 추천 -->
         <RelativeLayout
-            android:layout_marginTop="10dp"
+            android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="25dp"
             android:layout_marginBottom="20dp"
             android:layout_width="wrap_content"

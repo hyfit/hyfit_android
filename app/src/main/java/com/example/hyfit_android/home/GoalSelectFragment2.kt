@@ -15,6 +15,7 @@ import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentGoalModalDeleteBinding
 import com.example.hyfit_android.databinding.FragmentGoalSelect2Binding
 import com.example.hyfit_android.databinding.FragmentGoalSelectBinding
+import com.example.hyfit_android.exercise.exerciseWith.SelectFollowingFragment
 import com.example.hyfit_android.goal.*
 
 class GoalSelectFragment2 : DialogFragment(),GetMountainView, OnGoalClickListener, GetBuildingView{
@@ -23,7 +24,13 @@ class GoalSelectFragment2 : DialogFragment(),GetMountainView, OnGoalClickListene
     private lateinit var mountainList : ArrayList<Goal>
     private lateinit var buildingList : ArrayList<Goal>
     private var isSelected = 0
+    private var myEmail = ""
+    private var myNickName = ""
+    private var workoutType = ""
     private var goalId = -1
+
+    // 친구 선택
+    private val followingSelectFragment = SelectFollowingFragment()
 
 
     override fun onCreateView(
@@ -41,6 +48,9 @@ class GoalSelectFragment2 : DialogFragment(),GetMountainView, OnGoalClickListene
         val bundle = arguments
         mountainList = bundle?.getSerializable("mountain") as ArrayList<Goal>
         buildingList = bundle?.getSerializable("building") as ArrayList<Goal>
+        myEmail = bundle?.getString("MyEmail").toString()
+        myNickName = bundle?.getString("MyNickName").toString()
+        workoutType = bundle?.getString("type").toString()
 
         initSearchRecyclerView(mountainList)
 
@@ -56,13 +66,16 @@ class GoalSelectFragment2 : DialogFragment(),GetMountainView, OnGoalClickListene
 
         // 다음 버튼
         binding.selectBtn.setOnClickListener{
-            val typeSelectModal = TypeSelectFragment()
-            val bundle = Bundle().apply {
-                putInt("goalId",goalId)
+            val bundle = Bundle().apply{
+                putInt("goalId",isSelected)
+                putString("type",workoutType)
+                putString("MyEmail",myEmail)
+                putString("MyNickName",myNickName)
             }
-            typeSelectModal.arguments = bundle
-            typeSelectModal.dialog?.window?.setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT)
-            typeSelectModal.show(parentFragmentManager, "typeSelect")
+            followingSelectFragment.arguments = bundle
+            followingSelectFragment.show(parentFragmentManager, "followSelect")
+            dismiss()
+
         }
 
         return binding.root

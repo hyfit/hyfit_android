@@ -21,6 +21,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.viewpager.widget.ViewPager
 import androidx.viewpager2.widget.ViewPager2
 import com.example.hyfit_android.BuildConfig
+import com.example.hyfit_android.BuildConfig.STOMP_URL
 import com.example.hyfit_android.Join.JoinActivity1
 import com.example.hyfit_android.Login.LogoutActivity
 import com.example.hyfit_android.MainActivity
@@ -30,17 +31,25 @@ import com.example.hyfit_android.UserRetrofitService
 import com.example.hyfit_android.databinding.FragmentMainBinding
 import com.example.hyfit_android.exercise.ExerciseActivity
 import com.example.hyfit_android.exercise.StairActivity
+import com.example.hyfit_android.exercise.exerciseWith.RequestFragment
+import com.example.hyfit_android.exercise.exerciseWith.SelectFollowingFragment
+import com.example.hyfit_android.exercise.exerciseWith.TypeSelectWithFragment
 import com.example.hyfit_android.goal.*
+import com.gmail.bishoybasily.stomp.lib.Event
+import com.gmail.bishoybasily.stomp.lib.StompClient
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
 import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.nn_app_sdk.zservice.WarningMessages
+import io.reactivex.disposables.Disposable
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.selects.select
 import kotlinx.coroutines.withContext
+import okhttp3.OkHttpClient
+import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -62,10 +71,29 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView, 
     private val goalSelectModal = GoalSelectFragment()
     private val typeSelectFragment = TypeSelectFragment()
     private lateinit var bundle : Bundle
-    private  var mountainList: ArrayList<Goal>? = null
-    private  var buildingList:  ArrayList<Goal>?= null
+    var mountainList: ArrayList<Goal>? = null
+    var buildingList:  ArrayList<Goal>?= null
 
     private lateinit var viewPager: ViewPager2
+
+    private val followSelectModal = SelectFollowingFragment()
+    private val typeSelectWithFragment = TypeSelectWithFragment()
+
+    private var nickName = ""
+
+    // websocket
+    lateinit var stompConnection: Disposable
+    lateinit var topic: Disposable
+    private val intervalMillis = 1000L
+    private val client = OkHttpClient()
+    private val stomp = StompClient(client, intervalMillis)
+
+    private lateinit var email : String
+    // 나한테 메세지를 보낸 사람 (sender)
+    private lateinit var receiver : String
+    private var exerciseWithId =0
+
+    private var requestFragment  = RequestFragment()
 
 
     override fun onCreateView(
@@ -125,6 +153,16 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView, 
                 }
             }
         }
+        binding.runwithStartBtn.setOnClickListener{
+            val bundle = Bundle().apply {
+                putString("MyEmail",email)
+                putString("MyNickName",nickName)
+                putSerializable("building", buildingList)
+                putSerializable("mountain", mountainList)
+            }
+            typeSelectWithFragment.arguments = bundle
+            typeSelectWithFragment.show(parentFragmentManager,"typeSelectWith")
+        }
 
         return binding.root
     }
@@ -145,6 +183,60 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView, 
 //        }
 //        goalSelectFragment2.arguments = bundle
 //        goalSelectFragment2.show(parentFragmentManager, "goalSelect2")
+//    }
+
+
+    // websocket
+//    private fun send(type:String,sender : String,receiver:  String, data : Int){
+//        val jsonObject = JSONObject()
+//        jsonObject.put("type",type)
+//        jsonObject.put("sender",sender)
+//        jsonObject.put("receiver",receiver)
+//        jsonObject.put("data",data)
+//        val jsonString = jsonObject.toString()
+//
+//        stomp.send("/pub/request", jsonString).subscribe {
+//            if(it){ }
+//        }
+//    }
+//    override fun onDestroy() {
+//        super.onDestroy()
+//       // send("QUIT", email,receiver,exerciseWithId)
+////        topic.dispose()
+//        stompConnection.dispose()
+//    }
+//
+//    private fun subscribe(email : String) {
+//        stomp.url = STOMP_URL
+//        stompConnection = stomp.connect().subscribe {
+//            when (it.type) {
+//                Event.Type.OPENED -> {
+//                    Log.d("CONNECT", "OPENED")
+//                }
+//                Event.Type.CLOSED -> {
+//                    Log.d("CONNECT", "CLOSED")
+//                }
+//                Event.Type.ERROR -> {
+//                    Log.d("CONNECT", "ERROR")
+//                }
+//
+//                null -> TODO()
+//            }
+//        }
+//
+//        // exerciseWith 채널 구독
+//        topic = stomp.join("/sub/channel/${email}")
+//            .doOnError { error -> Log.d("ERROR", "subscribe error") }
+//            .subscribe { chatData ->
+//                val chatObject = JSONObject(chatData)
+//                Log.d("THISISCHATDATA!!!", chatObject.toString())
+////                val bundle = Bundle().apply{
+////                    putString("email",email)
+////                }
+////                requestFragment.arguments = bundle
+////                requestFragment.show(parentFragmentManager,"requestFragment")
+//
+//            }
 //    }
     private fun openGoalSelectModal() {
         val bundle = Bundle().apply {
@@ -225,6 +317,9 @@ class MainFragment : Fragment(), GetUserView, GetMountainView, GetBuildingView, 
 
     override fun onUserSuccess(code: Int, result: User) {
         binding.welcomeText.text = "Welcome, ${result.nickName}"
+        nickName = result.nickName.toString()
+        email = result.email.toString()
+        // subscribe(email)
     }
 
     override fun onUserFailure(code: Int, msg: String) {
