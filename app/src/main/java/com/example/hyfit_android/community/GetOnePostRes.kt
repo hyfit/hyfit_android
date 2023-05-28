@@ -10,9 +10,9 @@ data class GetOnePostRes (
         )
 
 data class OnePost(
-    @SerializedName(value="post")val post: Post,
+    @SerializedName(value="postDto")val post: Post,
     @SerializedName(value="imageUrl")val imageUrl: String,
-    @SerializedName(value="userProfile")val userProfile: UserProfile,
-    @SerializedName(value="postLikeNum")val postLikeNum: Long,
+    @SerializedName(value="userProfileDto")val userProfile: UserProfile,
+    @SerializedName(value="postLikeNumber")val postLikeNum: Long,
     @SerializedName(value="type")val type: String
 )

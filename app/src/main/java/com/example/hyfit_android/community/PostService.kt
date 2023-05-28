@@ -1,7 +1,6 @@
 package com.example.hyfit_android.community
 
 import android.util.Log
-import com.example.hyfit_android.getRetrofit
 import okhttp3.MultipartBody
 import retrofit2.Call
 import retrofit2.Callback

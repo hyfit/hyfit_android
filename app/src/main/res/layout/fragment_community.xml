@@ -123,20 +123,6 @@
             android:gravity="center_vertical">
 
             <Button
-                android:id="@+id/hiking_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="18dp"
-                android:layout_marginRight="5dp"
-                android:background="@drawable/tag_btn_back_blue"
-                android:fontFamily="@font/roboto_regular"
-                android:letterSpacing="0.01"
-                android:text="Hiking"
-                android:textAllCaps="false"
-                android:textColor="@color/string_gray"
-                android:textSize="10sp"
-                android:textStyle="normal" />
-
-            <Button
                 android:id="@+id/running_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
@@ -151,6 +137,20 @@
                 android:textStyle="normal" />
 
             <Button
+                android:id="@+id/hiking_btn"
+                android:layout_width="wrap_content"
+                android:layout_height="18dp"
+                android:layout_marginRight="5dp"
+                android:background="@drawable/tag_btn_back"
+                android:fontFamily="@font/roboto_regular"
+                android:letterSpacing="0.01"
+                android:text="Hiking"
+                android:textAllCaps="false"
+                android:textColor="@color/string_gray"
+                android:textSize="10sp"
+                android:textStyle="normal" />
+
+            <Button
                 android:id="@+id/walking_btn"
                 android:layout_width="wrap_content"
                 android:layout_height="18dp"
@@ -159,19 +159,6 @@
                 android:fontFamily="@font/roboto_regular"
                 android:letterSpacing="0.01"
                 android:text="Walking"
-                android:textAllCaps="false"
-                android:textColor="@color/string_gray"
-                android:textSize="10sp"
-                android:textStyle="normal" />
-
-            <Button
-                android:id="@+id/biking_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="18dp"
-                android:background="@drawable/tag_btn_back"
-                android:fontFamily="@font/roboto_regular"
-                android:letterSpacing="0.01"
-                android:text="Biking"
                 android:textAllCaps="false"
                 android:textColor="@color/string_gray"
                 android:textSize="10sp"
@@ -216,22 +203,20 @@
         android:visibility="invisible"/>
 
 
-
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/post_list_rv"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintVertical_bias="0.05"
         android:clipToPadding="false"
-        android:padding="10dp"
-        android:layout_marginTop="25dp"
-        android:layout_marginLeft="40dp"
-        android:layout_marginRight="40dp"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView">
 
     </androidx.recyclerview.widget.RecyclerView>
-
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

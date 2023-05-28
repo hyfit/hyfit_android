@@ -53,8 +53,6 @@ class GoalSelectRVAdaptor(val context: Context, val result: ArrayList<Goal>, val
         @SuppressLint("ResourceAsColor")
         fun bind(result : Goal) {
             binding.goalSelectTitle.text = "${result.place} (${result.rate}%)"
-//            binding.goalPercentageContent.text = "${result.rate}%"
-//            binding.goalSelectGainContent.text = "${result.gain}m"
             if (bindingAdapterPosition == selectGoalIndex) {
                 binding.goalSelectListLayout.setBackgroundColor(ContextCompat.getColor(context, R.color.type_select))
             } else {

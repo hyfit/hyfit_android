@@ -10,7 +10,7 @@ interface PostRetrofitInterface {
     @POST(ApiPathConstants.POST_API_PATH + "/save")
     fun savePost(@Header("X-AUTH-TOKEN")token: String, @Part file : MultipartBody.Part, @Part("dto")savePostReq: SavePostReq): Call<PostResponse>
 
-    @GET(ApiPathConstants.POST_API_PATH + "{id}")
+    @GET(ApiPathConstants.POST_API_PATH + "/{id}")
     fun getOnePost(@Path("id")post_id:Long, @Query("email")email: String): Call<GetOnePostRes>
 
     // 한 유저의 게시물 목록 조회
