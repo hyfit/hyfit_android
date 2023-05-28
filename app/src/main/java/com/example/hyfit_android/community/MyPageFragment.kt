@@ -10,7 +10,7 @@ import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentMyPageBinding
 
 
-class MyPageFragment: Fragment(), GetAllUserPostsView, GetFollowerView, GetFollowingView {
+class MyPageFragment: Fragment(), GetAllPostsOfUserView, GetFollowerView, GetFollowingView {
 
     lateinit var binding: FragmentMyPageBinding
 

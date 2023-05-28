@@ -1,6 +1,6 @@
 package com.example.hyfit_android.community
 
 interface LikePostView {
-    fun onLikeSuccess(result: LikePostResult)
-    fun onLikeFailure(code:Int)
+    fun onLikePostSuccess(result: PostLike)
+    fun onLikePostFailure(code:Int, msg:String)
 }

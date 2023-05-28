@@ -59,8 +59,8 @@
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/profile_iv"
-                android:layout_width="25dp"
-                android:layout_height="17dp"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentStart="true"
                 android:layout_centerHorizontal="true"
                 android:layout_marginRight="10dp"
@@ -110,7 +110,7 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/constraintLayout"
             android:layout_width="match_parent"
-            android:layout_height="300dp"
+            android:layout_height="wrap_content"
             android:layout_marginTop="30dp"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
@@ -132,7 +132,7 @@
                 android:id="@+id/title_tv"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/roboto_regular"
                 android:letterSpacing="0.02"
                 android:text="Workout done today!"
@@ -150,6 +150,7 @@
             android:layout_height="20dp"
             android:layout_marginRight="60dp"
             android:layout_marginLeft="60dp"
+            android:layout_marginTop="5dp"
             android:gravity="right"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
@@ -183,7 +184,7 @@
 
             <ImageButton
                 android:id="@+id/like_btn"
-                android:layout_width="wrap_content"
+                android:layout_width="19dp"
                 android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:background="#00ff0000"
@@ -201,13 +202,15 @@
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerView"
+            android:id="@+id/comment_list_rv"
             android:layout_width="match_parent"
             android:layout_height="160dp"
             android:layout_marginLeft="60dp"
             android:layout_marginTop="5dp"
             android:layout_marginBottom="10dp"
             android:layout_marginRight="60dp"
+            android:padding="5dp"
+            android:clipToPadding="false"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
@@ -225,7 +228,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/recyclerView">
+            app:layout_constraintTop_toBottomOf="@+id/comment_list_rv">
 
             <EditText
                 android:id="@+id/comment_et"

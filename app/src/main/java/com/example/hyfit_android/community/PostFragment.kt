@@ -14,7 +14,7 @@ import com.bumptech.glide.Glide
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentPostBinding
 
-class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView, UnlikePostView, GetFollowingView {
+class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView,UnlikePostView, GetFollowingView {
 
     lateinit var binding: FragmentPostBinding
     lateinit var progressBar: ProgressBar
@@ -37,7 +37,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         //val email=arguments?.getString("email")
         val email="oliver08@naver.com"
         val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
-        myemail = sharedPreferences.getString("email", "")!!
+        val myemail = sharedPreferences.getString("email", "")
         progressBar=binding.progressBar
         Log.d("emailemailhere", myemail!!)
 
@@ -124,21 +124,21 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         postService.setGetOnePostView(this)
         progressBar.bringToFront()
         progressBar.visibility=View.VISIBLE
-        postService.getOnePost(jwt, postId, email)
+        postService.getOnePost(postId, email)
     }
     private fun like(id:Long){
         val jwt=getJwt()!!
         val postService=PostService()
         postService.setLikePostView(this)
         progressBar.visibility=View.VISIBLE
-        postService.like(jwt,id)
+        postService.likePost(jwt,id)
     }
     private fun unlike(id:Long){
         val jwt=getJwt()!!
         val postService=PostService()
         postService.setunlikePostView(this)
         progressBar.visibility=View.VISIBLE
-        postService.unlike(jwt,id)
+        postService.unlikePost(jwt,id)
     }
 
     private fun imageset(imageurl:String, imageview: ImageView){
@@ -159,16 +159,16 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         Log.d("follow failure", code.toString() + " "+msg)
     }
 
-    override fun onGetOnePostSuccess(result: PostResult) {
+    override fun onGetOnePostSuccess(result: OnePost) {
         Log.d("onGetOnePostSuccess", "hihi")
         val type=result.type
-        val postLikeNumber=result.postLikeNumber
+        val postLikeNumber=result.postLikeNum
         val nickName=result.userProfile.nickName
         val writeremail=result.userProfile.email
         val titlecontent=result.post.content
         val postimage="https://d14okywu7b1q79.cloudfront.net"+result.imageUrl
         val postimageview=binding.postIv
-        val userimage="https://d14okywu7b1q79.cloudfront.net"+result.userProfile.profileImageUrl
+        val userimage="https://d14okywu7b1q79.cloudfront.net"+result.userProfile.profileImgUrl
         val userimageview=binding.profileIv
 
         binding.titleTv.text=titlecontent
@@ -211,25 +211,24 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         Log.d("unfollow failure", code.toString()+" "+msg)
     }
 
-    override fun onLikeSuccess(result: LikePostResult) {
-        onclicklikepostid=result.postId
-        getOnePost(postId=result.postId.toLong(), email=email)
+    override fun onLikePostSuccess(result: PostLike) {
+        onclicklikepostid=result.postId.toInt()
+        getOnePost(postId=result.postId, email=email)
         progressBar.visibility=View.GONE
-
     }
 
-    override fun onLikeFailure(code: Int) {
+    override fun onLikePostFailure(code: Int, msg: String) {
         unlike(postid.toLong())
         progressBar.visibility=View.GONE
     }
 
-    override fun onUnlikeSuccess(result: String) {
+    override fun onUnlikePostSuccess(result: String) {
         Log.d("unlikeSuccess", "Cong")
         getOnePost(postId=postid.toLong(), email=email)
         progressBar.visibility=View.GONE
     }
 
-    override fun onUnlikeFailure(code: Int) {
+    override fun onUnlikePostFailure(code: Int, msg: String) {
         Log.d("unlikeFailure","sad")
     }
 
@@ -239,7 +238,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
 
     }
 
-    override fun onFollowingFailure(code: Int, msg: String) {
+    override fun onFollowingFailure(code: Int, msg:String) {
         Log.d("followinglistsad", "sadsads")
     }
 
