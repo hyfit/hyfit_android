@@ -90,7 +90,21 @@
                 android:text="Follow"
                 android:textAllCaps="false"
                 android:textColor="@color/main"
+                android:visibility="visible"
                 android:textSize="10sp" />
+            <Button
+                android:id="@+id/unfollow_btn"
+                android:layout_width="43dp"
+                android:layout_height="22dp"
+                android:layout_alignParentRight="true"
+                android:layout_marginTop="5dp"
+                android:background="@drawable/tag_btn_back"
+                android:fontFamily="@font/roboto_bold"
+                android:text="following"
+                android:textAllCaps="false"
+                android:visibility="gone"
+                android:textColor="@color/black"
+                android:textSize="9sp" />
         </RelativeLayout>
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -169,8 +183,8 @@
 
             <ImageButton
                 android:id="@+id/like_btn"
-                android:layout_width="19dp"
-                android:layout_height="7dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:layout_marginRight="5dp"
                 android:background="#00ff0000"
                 android:src="@drawable/clarity_heart_line" />

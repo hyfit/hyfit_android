@@ -14,13 +14,16 @@ import com.bumptech.glide.Glide
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentPostBinding
 
-class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView,UnlikePostView {
+class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView, UnlikePostView, GetFollowingView {
 
     lateinit var binding: FragmentPostBinding
     lateinit var progressBar: ProgressBar
     var onclicklikepostid=0
     var postid=36
-    val email="oliver08@naver.com"
+    lateinit var myemail:String
+    val email="oliver08@naver.com" //번들에서받으면바꾸기
+    private var onfollow:Boolean=false
+    lateinit var followingList:List<String>
 
 
     override fun onCreateView(
@@ -34,7 +37,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         //val email=arguments?.getString("email")
         val email="oliver08@naver.com"
         val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
-        val myemail = sharedPreferences.getString("email", "")
+        myemail = sharedPreferences.getString("email", "")!!
         progressBar=binding.progressBar
         Log.d("emailemailhere", myemail!!)
 
@@ -44,11 +47,19 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         val postId:Long=36
         // 선택된 게시물 띄움
         progressBar.visibility=View.VISIBLE
+        getFollowingList()
         getOnePost(postId,email)
         binding.likeBtn.setOnClickListener {
             like(postId)
         }
         Log.d("getOnePost", "SUCCESS")
+        binding.followBtn.setOnClickListener {
+            addFollow(email)
+        }
+        binding.unfollowBtn.setOnClickListener {
+            unfollow(email)
+        }
+
 
         // 게시물 유저 정보 띄움(profileImage, nickName)
 
@@ -65,9 +76,6 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     override fun onResume() {
         super.onResume()
 
-        binding.followBtn.setOnClickListener {
-
-        }
 
         binding.backBtn.setOnClickListener {
 //            (activity as com.example.hyfit_android.MainActivity).replaceFragment(CommunityFragment())
@@ -87,10 +95,27 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         return spf!!.getString("jwt","0")
     }
 
-    private fun addFollow() {
-        val jwt = getJwt()
+    private fun addFollow(email:String) {
+        val jwt = getJwt()!!
         val followService = FollowService()
-//        followService.addFollow(jwt, email)
+        followService.setAddFollowView(this)
+        progressBar.visibility=View.VISIBLE
+        followService.addFollow(jwt, email)
+    }
+
+    private fun unfollow(email:String){
+        val jwt=getJwt()!!
+        val followService=FollowService()
+        followService.setUnfollowView(this)
+        progressBar.visibility=View.VISIBLE
+        followService.unfollow(jwt, email)
+    }
+
+    private fun getFollowingList(){
+        val jwt=getJwt()!!
+        val followService=FollowService()
+        followService.setFollowingView(this)
+        followService.getFollowingList(jwt)
     }
 
     private fun getOnePost(postId:Long, email:String) {
@@ -108,7 +133,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         progressBar.visibility=View.VISIBLE
         postService.like(jwt,id)
     }
-    fun unlike(id:Long){
+    private fun unlike(id:Long){
         val jwt=getJwt()!!
         val postService=PostService()
         postService.setunlikePostView(this)
@@ -123,10 +148,15 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     }
 
     override fun onAddFollowSuccess(result: String) {
-        TODO("Not yet implemented")
+        Log.d("follow success", "success~")
+        Log.d("Follow result", result)
+        onfollow=true
+        getOnePost(postid.toLong(),email)
+        progressBar.visibility=View.GONE
     }
 
     override fun onAddFollowFailure(code: Int, msg: String) {
+        Log.d("follow failure", code.toString() + " "+msg)
     }
 
     override fun onGetOnePostSuccess(result: PostResult) {
@@ -145,7 +175,15 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         binding.likeTv.text=postLikeNumber.toString()
         binding.writerTv.text=nickName
         binding.typeBtn.text=type
-        progressBar.visibility = ProgressBar.GONE
+        Log.d("onfollowbtn", onfollow.toString())
+        if(onfollow){
+            binding.followBtn.visibility=View.GONE
+            binding.unfollowBtn.visibility=View.VISIBLE
+        }
+        else{
+            binding.followBtn.visibility=View.VISIBLE
+            binding.unfollowBtn.visibility=View.GONE
+        }
 
         Log.d("postImage", postimage)
         Log.d("UserImage", postimage)
@@ -162,10 +200,15 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     }
 
     override fun onUnfollowSuccess(result: String) {
-        TODO("Not yet implemented")
+        Log.d("unfollow success", "success~")
+        Log.d("unFollow result", result)
+        onfollow=false
+        getOnePost(postid.toLong(),email)
+        progressBar.visibility=View.GONE
     }
 
     override fun onUnfollowFailure(code: Int, msg: String) {
+        Log.d("unfollow failure", code.toString()+" "+msg)
     }
 
     override fun onLikeSuccess(result: LikePostResult) {
@@ -188,6 +231,16 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
 
     override fun onUnlikeFailure(code: Int) {
         Log.d("unlikeFailure","sad")
+    }
+
+    override fun onFollowingSuccess(result: List<String>) {
+        followingList = result.map { it.split(",")[0] }
+        onfollow=followingList.contains(email)
+
+    }
+
+    override fun onFollowingFailure(code: Int, msg: String) {
+        Log.d("followinglistsad", "sadsads")
     }
 
 }

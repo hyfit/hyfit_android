@@ -12,8 +12,8 @@ class PostService {
     private lateinit var getAllUserPostsView: GetAllUserPostsView
     private lateinit var modifyPostView: ModifyPostView
     private lateinit var deletePostView: DeletePostView
-    private lateinit var likePostView:LikePostView
-    private lateinit var unlikePostView:UnlikePostView
+    private lateinit var likePostView: LikePostView
+    private lateinit var unlikePostView: UnlikePostView
 
     fun setSavePostView(savePostView: SavePostView) {
         this.savePostView = savePostView
@@ -24,7 +24,7 @@ class PostService {
     fun setLikePostView(likePostView: LikePostView) {
         this.likePostView = likePostView
     }
-    fun setunlikePostView(unlikePostView:UnlikePostView) {
+    fun setunlikePostView(unlikePostView: UnlikePostView) {
         this.unlikePostView = unlikePostView
     }
     fun setGetAllPostsView(getAllUserPostsView: GetAllUserPostsView) {

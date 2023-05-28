@@ -1,7 +1,5 @@
 package com.example.hyfit_android.community
 
-import com.google.gson.annotations.SerializedName
-
 data class LikePostResponse(
     val isSuccess: Boolean,
     val code: Int,

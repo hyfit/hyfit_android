@@ -70,14 +70,14 @@ class MyPageFragment: Fragment(), GetAllUserPostsView, GetFollowerView, GetFollo
     override fun onGetAllUserPostsFailure(code: Int, msg: String) {
     }
 
-    override fun onFollowerSuccess(result: HashMap<String, List<String>>) {
+    override fun onFollowerSuccess(result: List<String>) {
         TODO("Not yet implemented")
     }
 
     override fun onFollowerFailure(code: Int, msg: String) {
     }
 
-    override fun onFollowingSuccess(result: HashMap<String, List<String>>) {
+    override fun onFollowingSuccess(result: List<String>) {
         TODO("Not yet implemented")
     }
 
