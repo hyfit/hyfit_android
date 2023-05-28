@@ -14,10 +14,11 @@ import com.bumptech.glide.Glide
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentPostBinding
 
-class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView, UnlikePostView, GetFollowingView {
+class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView,UnlikePostView, GetFollowingView{
 
-    lateinit var binding: FragmentPostBinding
+    lateinit var binding:FragmentPostBinding
     lateinit var progressBar: ProgressBar
+
     lateinit var myemail:String
 //    val email="oliver08@naver.com" //번들에서받으면바꾸기
     private var email = ""
@@ -49,7 +50,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         // 선택된 게시물 띄움
         progressBar.visibility=View.VISIBLE
         getFollowingList()
-        getOnePost(postId,email)
+        //getOnePost(postId,email)
         binding.likeBtn.setOnClickListener {
             like(postId)
         }
@@ -95,6 +96,14 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
         return spf!!.getString("jwt","0")
     }
+//    private fun getCommentList(){
+//        val jwt = getJwt()!!
+//        val postService = PostService()
+//        postService.setGetCommentListView(this)
+//        progressBar.bringToFront()
+//        progressBar.visibility=View.VISIBLE
+//        postService.getCommentList(postId)
+//    }
 
     private fun addFollow(email:String) {
         val jwt = getJwt()!!
@@ -117,6 +126,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         val followService=FollowService()
         followService.setFollowingView(this)
         followService.getFollowingList(jwt)
+        progressBar.visibility=View.VISIBLE
     }
 
     private fun getOnePost(postId:Long, email:String) {
@@ -236,11 +246,24 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     override fun onFollowingSuccess(result: List<String>) {
         followingList = result.map { it.split(",")[0] }
         onfollow=followingList.contains(email)
+        Log.d("followingList", followingList[0])
+        getOnePost(postid, email)
+        progressBar.visibility=View.GONE
 
     }
 
-    override fun onFollowingFailure(code: Int, msg: String) {
+    override fun onFollowingFailure(code: Int, msg:String) {
         Log.d("followinglistsad", "sadsads")
     }
+
+//    override fun onGetCommentListSuccess(result: PostCommentList) {
+//        Log.d("commnetSuccess", "goodgood")
+//        binding.commentWriterTv.text=result.email
+//        binding.commentTv.text=result.content
+//    }
+
+//    override fun onGetCommentListFailure(code: Int, msg: String) {
+//        TODO("Not yet implemented")
+//    }
 
 }

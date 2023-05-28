@@ -27,13 +27,13 @@ class FollowService {
 
     fun addFollow(token:String, email:String) {
         val followService = getRetrofit().create(FollowRetrofitInterface::class.java)
-        followService.addFollow(token, email).enqueue(object: Callback<FollowResponse> {
+        followService.addFollow(token, email).enqueue(object: Callback<DefaultCommunityRes> {
             override fun onResponse(
-                call: Call<FollowResponse>,
-                response: Response<FollowResponse>
+                call: Call<DefaultCommunityRes>,
+                response: Response<DefaultCommunityRes>
             ) {
                 Log.d("ADDFOLLOW/SUCCESS",response.toString())
-                val resp: FollowResponse = response.body()!!
+                val resp: DefaultCommunityRes = response.body()!!
                 Log.d("ADDFOLLOW/SUCCESS", resp.toString())
                 when(val code = resp.code) {
                     1000 -> addFollowView.onAddFollowSuccess(resp.result)
@@ -41,7 +41,7 @@ class FollowService {
                 }
             }
 
-            override fun onFailure(call: Call<FollowResponse>, t: Throwable) {
+            override fun onFailure(call: Call<DefaultCommunityRes>, t: Throwable) {
                 Log.d("ADDFOLLOW/FAILURE", t.message.toString())
             }
 

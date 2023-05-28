@@ -13,14 +13,16 @@ class PostService {
     private lateinit var getAllPostsOfFollowingUsersView: GetAllPostsOfFollowingUsersView
     private lateinit var  getAllPostsOfAllUsersView: GetAllPostsOfAllUsersView
     private lateinit var modifyPostView: ModifyPostView
+    private lateinit var likePostView: LikePostView
+    private lateinit var unlikePostView: UnlikePostView
     private lateinit var saveCommentView: SaveCommentView
     private lateinit var getCommentListView: GetCommentListView
     private lateinit var deleteCommentView: DeleteCommentView
     private lateinit var getCommunityProfileView: GetCommunityProfileView
 
     private lateinit var deletePostView: DeletePostView
-    private lateinit var likePostView: LikePostView
-    private lateinit var unlikePostView: UnlikePostView
+
+
 
     fun setSavePostView(savePostView: SavePostView) {
         this.savePostView = savePostView
@@ -31,8 +33,14 @@ class PostService {
     fun setGetAllPostsOfUserView(getAllPostsOfUserView: GetAllPostsOfUserView) {
         this.getAllPostsOfUserView = getAllPostsOfUserView
     }
+
+    fun setunlikePostView(unlikePostView: UnlikePostView) {
+        this.unlikePostView = unlikePostView
+    }
+
     fun setGetAllPostsOfFollowingUsersView(getAllPostsOfFollowingUsersView: GetAllPostsOfFollowingUsersView) {
         this.getAllPostsOfFollowingUsersView = getAllPostsOfFollowingUsersView
+
     }
     fun setGetAllPostsOfAllUsersView(getAllPostsOfAllUsersView: GetAllPostsOfAllUsersView) {
         this.getAllPostsOfAllUsersView = getAllPostsOfAllUsersView
@@ -43,29 +51,24 @@ class PostService {
     fun setLikePostView(likePostView: LikePostView) {
         this.likePostView = likePostView
     }
-        fun setUnlikePostView(unlikePostView: UnlikePostView) {
-            this.unlikePostView = unlikePostView
-        }
-
-        fun setSaveCommentView(saveCommentView: SaveCommentView) {
-            this.saveCommentView = saveCommentView
-        }
-
-        fun setGetCommentListView(getCommentListView: GetCommentListView) {
-            this.getCommentListView = getCommentListView
-        }
-
-        fun setDeleteCommentView(deleteCommentView: DeleteCommentView) {
-            this.deleteCommentView = deleteCommentView
-        }
-
-        fun setDeletePostView(deletePostView: DeletePostView) {
-            this.deletePostView = deletePostView
-        }
-
-        fun setGetCommunityProfileView(getCommunityProfileView: GetCommunityProfileView) {
-            this.getCommunityProfileView = getCommunityProfileView
-        }
+    fun setUnlikePostView(unlikePostView: UnlikePostView) {
+        this.unlikePostView = unlikePostView
+    }
+    fun setSaveCommentView(saveCommentView: SaveCommentView) {
+        this.saveCommentView = saveCommentView
+    }
+    fun setGetCommentListView(getCommentListView: GetCommentListView) {
+        this.getCommentListView = getCommentListView
+    }
+    fun setDeleteCommentView(deleteCommentView: DeleteCommentView) {
+        this.deleteCommentView = deleteCommentView
+    }
+    fun setDeletePostView(deletePostView: DeletePostView) {
+        this.deletePostView = deletePostView
+    }
+    fun setGetCommunityProfileView(getCommunityProfileView: GetCommunityProfileView) {
+        this.getCommunityProfileView = getCommunityProfileView
+    }
 
 
         fun savePost(token: String, file: MultipartBody.Part, savePostReq: SavePostReq) {
@@ -369,5 +372,7 @@ class PostService {
                 }
             })
         }
-    }
 
+
+
+}
