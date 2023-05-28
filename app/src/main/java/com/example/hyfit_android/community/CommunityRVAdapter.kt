@@ -22,6 +22,10 @@ class CommunityRVAdapter(val context: Context, val result: List<PostPagination>,
         return ViewHolder(binding)
     }
 
+    public fun getItemPostId(position: Int) : Long{
+        return result[position].postId
+    }
+
 //    override fun getItemId(position: Int): Long {
 //        return super.getItemId(position)
 //    }
