@@ -72,6 +72,7 @@ class ReportFragment : Fragment(), ReportView{
         binding.age1.bringToFront()
         binding.age2.bringToFront()
         binding.age3.bringToFront()
+        binding.chart.bringToFront()
 
         binding.change.setOnClickListener {
             binding.layoutdashboard.visibility = View.GONE

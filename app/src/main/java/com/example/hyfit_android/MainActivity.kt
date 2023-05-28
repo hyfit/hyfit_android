@@ -86,7 +86,6 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
         altitudeObservable.addObserver(this)
         userNickName = intent.getStringExtra("userNickName").toString()
 
-
         binding = ActivityMainBinding.inflate(layoutInflater)
         //bindingrp = FragmentReportBinding.inflate(inflater, container, false)
         setContentView(binding.root)
@@ -172,7 +171,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
     }
     override fun onDestroy() {
         super.onDestroy()
-        send("QUIT", email,receiver,exerciseWithId)
+      //  send("QUIT", email,receiver,exerciseWithId)
         topic.dispose()
         stompConnection.dispose()
     }
@@ -240,7 +239,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
                         // 상대방 위치
                         intent.putExtra("user2lat",chatObject.getString("user2lat"))
                         intent.putExtra("user2lon",chatObject.getString("user2lon"))
-
+                        topic.dispose()
                         startActivity(intent)
 
                 }

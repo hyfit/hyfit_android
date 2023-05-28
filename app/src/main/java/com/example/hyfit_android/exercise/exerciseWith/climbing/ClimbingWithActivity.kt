@@ -26,7 +26,6 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.ActivityCompat
 import com.bumptech.glide.Glide
 import com.example.hyfit_android.*
-import com.example.hyfit_android.UserInfo.GetUserView
 import com.example.hyfit_android.UserInfo.UserGetByEmailView
 import com.example.hyfit_android.databinding.ActivityClimbingBinding
 import com.example.hyfit_android.databinding.ActivityClimbingWithBinding
@@ -146,9 +145,9 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
     private var latLngList :  MutableList<LatLng> = mutableListOf()
     private var user2nickName = ""
     private var user2img = ""
-    private var user2previousLat = ""
-    private var user2previousLong = ""
-    private var user2previousAlt = ""
+    private var user2previousLat = "0"
+    private var user2previousLong ="0"
+    private var user2previousAlt = "0"
     private var user2peakAlt = ""
     private var user2increase = 0.0
     private var user2distance = 0.0
@@ -334,7 +333,9 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                     longitude = location.longitude
                     if (myExerciseId > 0) {
                         calculateAlt(latitude.toString(), longitude.toString(), "5")
-                        calibration(latitude.toString(), longitude.toString(), "5")
+                        if(location != null && location.hasSpeed()){
+                            calibration(latitude.toString(), longitude.toString(), "5")
+                        }
                     }
                     var currentLocation = LatLng(latitude, longitude)
                     map1?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 18f))
@@ -567,6 +568,7 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                                 runOnUiThread {
                                     val userList = listOf(
                                         NNUser("1", myNickName, "", myHat,urlToBitmap(myProfileImage)),
+//                                        NNUser("2",user2nickName,"",user2)
                                     )
                                     // 고도bar 바꾸기
                                     configAltimeterVisual(userList)
@@ -749,22 +751,23 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                                 // 계산
                                 val alt = (location.split(",")[2]).split("+")[0]
 
-                                if (user2previousLat == null && user2previousLong == null && user2previousAlt == null) {
+                                if (user2previousLat.equals(null) && user2previousLong.equals(null) && user2previousAlt.equals(null)) {
                                     user2previousLat = lat
                                     user2previousLong = long
                                     user2previousAlt = alt
                                     user2peakAlt = alt
                                 } else {
                                     // distance 계산
-                                    var currentDistance =
-                                        calDistance(previousLat!!, previousLong!!, previousAlt!!, lat, long, alt)
+                                    Log.d("THISISCAL",user2previousLat + user2previousLat + user2previousLat + lat + long+ alt )
+                                    val currentDistance =
+                                        calDistance(user2previousLat!!, user2previousLat!!, user2previousLat!!, lat, long, alt)
                                     user2distance += currentDistance
                                     user2previousLat = lat
                                     user2previousLong = long
                                     user2peakAlt = alt
                                     // increase 계산
-                                    if (alt.toDouble() > previousAlt!!.toDouble()) user2peakAlt = alt
-                                    val currentIncrease = calIncrease(previousAlt!!, alt)
+                                    if (alt.toDouble() > user2previousAlt!!.toDouble()) user2peakAlt = alt
+                                    val currentIncrease = calIncrease(user2previousAlt!!, alt)
                                     user2increase += currentIncrease
                                     user2previousAlt = alt
 
@@ -866,9 +869,17 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                 }
             }
         }
+    override fun onDestroy() {
+        super.onDestroy()
+        //  send("QUIT", email,receiver,exerciseWithId)
+        topic.dispose()
+        stompConnection.dispose()
+    }
+
 
     fun calDistance(Lat1: String, Lon1: String, Alt1: String, Lat2: String, Lon2: String, Alt2: String): Double{
         // DCMA 알고리즘 사용
+        Log.d("THISISINDISTANCE","HERE")
         val lat1 = Lat1.toDouble()
         val lat2 = Lat2.toDouble()
         val lon1 = Lon1.toDouble()
@@ -963,6 +974,7 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
         intent.putStringArrayListExtra("user2locationList",locList as ArrayList<String>)
         Log.d("USER2LOCLIST",locList.toString())
         Log.d("USER2NAME",user2nickName)
+        topic.dispose()
         loadingDialog.dismiss()
         startActivity(intent)
     }
