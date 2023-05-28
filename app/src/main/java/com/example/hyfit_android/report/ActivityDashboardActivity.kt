@@ -56,8 +56,8 @@ class ActivityDashboardActivity : AppCompatActivity(),GetAllExerciseView, OnExer
     }
     override fun onGetAllExerciseSuccess(result: List<Exercise>) {
         binding.progressBar.visibility = View.GONE
-        exerciseList = result
-        initRecyclerView(result)
+        exerciseList = result.reversed()
+        initRecyclerView(exerciseList)
     }
 
     override fun onGetAllExerciseFailure(code: Int, msg: String) {

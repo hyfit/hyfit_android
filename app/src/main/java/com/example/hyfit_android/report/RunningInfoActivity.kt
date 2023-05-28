@@ -56,7 +56,7 @@ class RunningInfoActivity : AppCompatActivity() , OnMapReadyCallback {
         val distanceResult = String.format("%.2f", (Math.round(distance.toDouble() * 100000.0) / 100000.0))
         binding.exerciseDistanceText1.text = distanceResult + "km"
         binding.totalTime1.text = formatTime(totalTime)
-        binding.totalTime1.text = distanceResult + "km"
+        // binding.totalTime1.text = distanceResult + "km"
         binding.exercisePace1.text = pace
         title = "$date / $type"
         binding.exerciseInfoText.text = title
