@@ -20,6 +20,8 @@
             android:id="@+id/click_me"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:textAllCaps="false"
+            android:fontFamily="@font/roboto_medium"
             android:layout_height="wrap_content"
             android:text="kidzero"/>
 
@@ -27,6 +29,8 @@
             android:id="@+id/click_user2"
             android:layout_width="0dp"
             android:layout_weight="1"
+            android:textAllCaps="false"
+            android:fontFamily="@font/roboto_medium"
             android:layout_height="wrap_content"
             android:text="teter"/>
     </LinearLayout>
