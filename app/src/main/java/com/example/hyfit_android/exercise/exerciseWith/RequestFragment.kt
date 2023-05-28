@@ -24,10 +24,7 @@ import com.example.hyfit_android.BuildConfig
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentGoalSelectBinding
 import com.example.hyfit_android.databinding.FragmentRequestBinding
-import com.example.hyfit_android.exercise.Exercise
-import com.example.hyfit_android.exercise.ExerciseService
-import com.example.hyfit_android.exercise.ExerciseStartReq
-import com.example.hyfit_android.exercise.ExerciseStartView
+import com.example.hyfit_android.exercise.*
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
 import com.google.android.gms.maps.model.LatLng
@@ -37,7 +34,7 @@ import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.time.LocalDateTime
 
-class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseView, ExerciseStartView {
+class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseView, ExerciseStartView{
     private lateinit var binding : FragmentRequestBinding
     private var exerciseWithId  = 0
     private var workoutType = ""
@@ -79,33 +76,17 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
         user2email = bundle?.getString("user2email")!!
 
         binding.emailRequestName.text ="From. ${bundle?.getString("nickName")}"
-        binding.workoutTypeRequest.text = "workout type : $workoutType"
+        binding.workoutRequestText.text = "Let's $workoutType together!"
 
         // 승낙버튼
         binding.requestAccept.setOnClickListener{
             startExercise()
-//            if(workoutType.equals("climbing")  || workoutType.equals("stair")){
-//                // 목표 선택으로 넘기기
-//                val bundle = Bundle().apply {
-//                    putString("type",workoutType)
-//                    putInt("exerciseWithId",exerciseWithId)
-////                    putString("MyNickName",myNickName)
-////                    putSerializable("building", buildingList)
-////                    putSerializable("mountain", mountainList)
-//                }
-//                goalSelectFragment3.arguments = bundle
-//                goalSelectFragment3.show(parentFragmentManager, "goalSelect3")
-//                dismiss()
-//            }
-//            else {
-//                // 바로 운동 시작
-//                startExercise()
-//
-//            }
         }
         // 취소버튼
         binding.requestClose.setOnClickListener{
+
             deleteExerciseWith()
+
         }
 
         // location
@@ -209,6 +190,8 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
         exerciseWithService.startExercise(jwt!!, ExerciseWithReq(exerciseWithId,exerciseId))
     }
 
+
+
     override fun onStartExerciseViewSuccess(result: ExreciseWith) {
         subscribe()
 
@@ -242,6 +225,7 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
     override fun onExerciseStartFailure(code: Int, msg: String) {
         Log.d("EXERCISESTART",msg)
     }
+
 
 
 }

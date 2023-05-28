@@ -8,6 +8,7 @@ fun getreportRetrofit(): Retrofit {
 
     val rpretrofit = Retrofit.Builder()
         .baseUrl("http://43.200.92.35")
+        //.baseUrl("http://10.0.2.2:5000")
         .addConverterFactory(GsonConverterFactory.create())
         .client(OkHttpClient())
         .build()

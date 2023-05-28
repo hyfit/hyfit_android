@@ -22,10 +22,10 @@ class UserbodyActivity: AppCompatActivity(), UserbodyView {
         binding.complete.setOnClickListener{
             val weight:String=binding.textWeight.text.toString()
             val height:String=binding.textHeight.text.toString()
-            val goalweight:String=binding.textGoalweight.text.toString()
+            val goal_weight:String=binding.textGoalweight.text.toString()
             val rpService = ReportRetrofitService()
             rpService.setBodyView(this)
-            rpService.bodydata(UserbodyReq(email, weight, height,goalweight))
+            rpService.bodydata(UserbodyReq(email, weight, height,goal_weight))
             binding.progressBar.visibility = ProgressBar.VISIBLE
         }
     }

@@ -12,12 +12,20 @@ class PostService {
     private lateinit var getAllUserPostsView: GetAllUserPostsView
     private lateinit var modifyPostView: ModifyPostView
     private lateinit var deletePostView: DeletePostView
+    private lateinit var likePostView: LikePostView
+    private lateinit var unlikePostView: UnlikePostView
 
     fun setSavePostView(savePostView: SavePostView) {
         this.savePostView = savePostView
     }
     fun setGetOnePostView(getOnePostView: GetOnePostView) {
         this.getOnePostView = getOnePostView
+    }
+    fun setLikePostView(likePostView: LikePostView) {
+        this.likePostView = likePostView
+    }
+    fun setunlikePostView(unlikePostView: UnlikePostView) {
+        this.unlikePostView = unlikePostView
     }
     fun setGetAllPostsView(getAllUserPostsView: GetAllUserPostsView) {
         this.getAllUserPostsView = getAllUserPostsView
@@ -50,14 +58,14 @@ class PostService {
         })
     }
 
-    fun getOnePost(token:String, postId: Long, email:String) {
+    fun getOnePost(token:String, post_id: Long, email:String) {
         val postService = getRetrofit().create(PostRetrofitInterface::class.java)
-        postService.getOnePost(token, postId, email).enqueue(object: Callback<PostResponse> {
+        postService.getOnePost(token, post_id, email).enqueue(object: Callback<GetOnePostResponse> {
             override fun onResponse(
-                call: Call<PostResponse>,
-                response: Response<PostResponse>) {
+                call: Call<GetOnePostResponse>,
+                response: Response<GetOnePostResponse>) {
                 Log.d("GETONEPOST/SUCCESS",response.toString())
-                val resp: PostResponse = response.body()!!
+                val resp: GetOnePostResponse = response.body()!!
                 Log.d("GETONEPOST/SUCCESS", resp.toString())
                 when(val code = resp.code) {
                     1000 -> getOnePostView.onGetOnePostSuccess( resp.result)
@@ -65,7 +73,49 @@ class PostService {
                 }
             }
 
-            override fun onFailure(call: Call<PostResponse>, t: Throwable) {
+            override fun onFailure(call: Call<GetOnePostResponse>, t: Throwable) {
+                Log.d("GETONEPOST/FAILURE", t.message.toString())
+            }
+        })
+    }
+
+    fun like(token:String, id: Long) {
+        val postService = getRetrofit().create(PostRetrofitInterface::class.java)
+        postService.like(token, id).enqueue(object: Callback<LikePostResponse> {
+            override fun onResponse(
+                call: Call<LikePostResponse>,
+                response: Response<LikePostResponse>) {
+                Log.d("LIKEPOST/SUCCESS",response.toString())
+                val resp: LikePostResponse = response.body()!!
+                Log.d("LIKEPOST/SUCCESS", resp.toString())
+                when(val code = resp.code) {
+                    1000 -> likePostView.onLikeSuccess(resp.result)
+                    2303 -> likePostView.onLikeFailure(code)
+                }
+            }
+
+            override fun onFailure(call: Call<LikePostResponse>, t: Throwable) {
+                Log.d("GETONEPOST/FAILURE", t.message.toString())
+            }
+        })
+    }
+
+    fun unlike(token:String, id: Long) {
+        val postService = getRetrofit().create(PostRetrofitInterface::class.java)
+        postService.unlike(token, id).enqueue(object: Callback<UnlikePostResponse> {
+            override fun onResponse(
+                call: Call<UnlikePostResponse>,
+                response: Response<UnlikePostResponse>) {
+                Log.d("UNLIKEPOST/SUCCESS",response.toString())
+                val resp: UnlikePostResponse = response.body()!!
+                Log.d("UnLIKEPOST/SUCCESS", resp.toString())
+                when(val code = resp.code) {
+                    1000 -> unlikePostView.onUnlikeSuccess(resp.result)
+                    else -> unlikePostView.onUnlikeFailure(code)
+                }
+            }
+
+            override fun onFailure(call: Call<UnlikePostResponse>, t: Throwable) {
                 Log.d("GETONEPOST/FAILURE", t.message.toString())
             }
         })

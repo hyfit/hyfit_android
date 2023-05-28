@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".report.RunningInfoActivity">
+
+    <LinearLayout
+        android:id="@+id/exercise_info_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center_vertical"
+        android:layout_marginTop="40dp">
+        <ImageView
+            android:id="@+id/prev_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_prev_btn"
+            android:layout_gravity="start"
+            android:layout_marginRight="10dp"
+            android:padding="20dp" />
+        <TextView
+            android:id="@+id/exercise_info_text"
+            android:fontFamily="@font/inter_medium"
+            android:textSize="20sp"
+            android:textColor="#5b5b5b"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="2023-03-23 / walking"
+            />
+
+    </LinearLayout>
+    <LinearLayout
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_info_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/exercise_result_map_layout1">
+        <!--    지도-->
+        <FrameLayout
+            android:id="@+id/running_info_fragment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <fragment
+                android:layout_width="match_parent"
+                android:layout_height="350dp"
+                android:id="@+id/running_info_map"
+                tools:context=".exercise.ExerciseResultActivity"
+                android:name="com.google.android.gms.maps.SupportMapFragment"/>
+        </FrameLayout>
+    </LinearLayout>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_result_page_box"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_result_map_layout1"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/total_time1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_marginBottom="10dp"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:fontFamily="@font/inter_medium"
+            android:text="00:00:00"
+            android:textColor="@color/main_color" />
+
+
+
+        <!--        페이스 결과값-->
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:id="@+id/result_pace_layout1"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:fontFamily="@font/inter_medium"
+                android:text="average pace"
+                android:textColor="#969696"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/exercise_pace1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_medium"
+                android:text=""
+                android:textColor="@color/main_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <!--        구분선-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="50dp"
+            android:background="#c3c3c3"/>
+
+        <!--        거리 결과값-->
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:fontFamily="@font/inter_medium"
+                android:text="distance"
+                android:textColor="#969696"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/exercise_distance_text1"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_medium"
+                android:text="0.4km"
+                android:textColor="@color/main_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <!--        <ImageView-->
+        <!--            android:layout_marginTop="10dp"-->
+        <!--            android:id="@+id/go_to_main1"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:src="@drawable/ic_homebtn"/>-->
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>
