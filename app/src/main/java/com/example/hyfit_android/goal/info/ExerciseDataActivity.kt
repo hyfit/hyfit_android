@@ -106,7 +106,7 @@ class ExerciseDataActivity : AppCompatActivity() , GetExerciseByGoalView, OnExer
     }
 
     override fun onGetExerciseByGoalSuccess(result: List<Exercise>) {
-        exerciseList = result
+        exerciseList = result.reversed()
         listSize = result.size
         totalPage = (listSize + pageSize - 1) / pageSize
         if(totalPage == 0) totalPage = 1

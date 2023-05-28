@@ -19,7 +19,9 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     lateinit var binding: FragmentPostBinding
     lateinit var progressBar: ProgressBar
     lateinit var myemail:String
-    val email="oliver08@naver.com" //번들에서받으면바꾸기
+//    val email="oliver08@naver.com" //번들에서받으면바꾸기
+    private var email = ""
+    private var postId = 0L
     private var onfollow:Boolean=false
     lateinit var followingList:List<String>
     var onclicklikepostid=0L
@@ -33,9 +35,8 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     ): View? {
         binding = FragmentPostBinding.inflate(inflater, container, false)
         //이따가 해제하기
-        //val postId = arguments?.getLong("postId")
-        //val email=arguments?.getString("email")
-        val email="oliver08@naver.com"
+        postId = arguments?.getLong("postId")!!
+        email=arguments?.getString("email")!!
         val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
         myemail = sharedPreferences.getString("email", "")!!
         progressBar=binding.progressBar
@@ -44,7 +45,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         //
         //binding.postIv.clipToOutline = true
         //얘도 나중에 bundle로 넘겨주겟지 ..
-        val postId:Long=36
+      //  val postId:Long=36
         // 선택된 게시물 띄움
         progressBar.visibility=View.VISIBLE
         getFollowingList()

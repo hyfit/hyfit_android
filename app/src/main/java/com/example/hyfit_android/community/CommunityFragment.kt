@@ -103,8 +103,6 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
                 .addToBackStack(null)
                 .commit()
         }
-
-
     }
 
 
