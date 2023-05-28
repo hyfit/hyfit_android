@@ -11,7 +11,7 @@ data class PostPageRes (
         )
 
 data class Slice (
-    @SerializedName(value="content")val content: List<PostPagination>?=null,
+    @SerializedName(value="content")val content: List<PostPagination>,
     @SerializedName(value="pageable")val pageable: Pageable,
     @SerializedName(value="number")val number: Int,
     @SerializedName(value="sort")val sort: Sort,
@@ -24,13 +24,13 @@ data class Slice (
 
 data class PostPagination (
     @SerializedName(value="email")val email: String,
-    @SerializedName(value="nickName")val nickname: String,
+    @SerializedName(value="nickName")val nickName: String,
     @SerializedName(value="profile_img")val profileImg: String?=null,
     @SerializedName(value="postId")val postId: Long,
     @SerializedName(value="content")val content: String,
     @SerializedName(value="imageUrl")val imageUrl: String,
     @SerializedName(value="type")val type: String,
-    @SerializedName(value="createdAt")val createdAt: LocalDateTime
+    @SerializedName(value="createdAt")val createdAt: String
     )
 
 data class Pageable (

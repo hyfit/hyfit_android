@@ -10,7 +10,7 @@ interface PostRetrofitInterface {
     @POST(ApiPathConstants.POST_API_PATH + "/save")
     fun savePost(@Header("X-AUTH-TOKEN")token: String, @Part file : MultipartBody.Part, @Part("dto")savePostReq: SavePostReq): Call<PostResponse>
 
-    @GET(ApiPathConstants.POST_API_PATH + "{id}")
+    @GET(ApiPathConstants.POST_API_PATH + "/{id}")
     fun getOnePost(@Path("id")post_id:Long, @Query("email")email: String): Call<GetOnePostRes>
 
     // 한 유저의 게시물 목록 조회
@@ -22,7 +22,7 @@ interface PostRetrofitInterface {
     fun getAllPostsOfFollowingUsersWithType(@Header("X-AUTH-TOKEN")token: String, @Query("lastPostId")lastPostId: Long?=null, @Query("searchType")searchType: String?=null, @Query("size")size: Int): Call<PostPageRes>
 
     // 모든 유저 게시물 조회 (운동 타입 별 검색 가능)
-    @GET(ApiPathConstants.POST_API_PATH + "all-users-posts")
+    @GET(ApiPathConstants.POST_API_PATH + "/all-users-posts")
     fun getAllPostsOfAllUsersWithType(@Header("X-AUTH-TOKEN")token: String, @Query("lastPostId")lastPostId: Long?=null, @Query("searchType")searchType: String?=null, @Query("size")size: Int): Call<PostPageRes>
 
     // 게시물 내용 수정
