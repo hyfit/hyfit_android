@@ -4,6 +4,7 @@ package com.example.hyfit_android
 import android.Manifest
 import android.content.ContentValues
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
@@ -14,13 +15,17 @@ import androidx.fragment.app.FragmentManager
 import com.example.hyfit_android.BuildConfig.STOMP_URL
 import com.example.hyfit_android.Login.LoginActivity
 import com.example.hyfit_android.UserInfo.GetUserView
+import com.example.hyfit_android.UserInfo.UserGetByEmailView
 import com.example.hyfit_android.community.CommunityFragment
 import com.example.hyfit_android.databinding.ActivityMainBinding
 import com.example.hyfit_android.exercise.exerciseWith.RequestFragment
+import com.example.hyfit_android.exercise.exerciseWith.climbing.ClimbingWithActivity
+import com.example.hyfit_android.exercise.exerciseWith.exercise.ExerciseWithActivity
 import com.example.hyfit_android.goal.*
 import com.example.hyfit_android.home.MainFragment
 import com.gmail.bishoybasily.stomp.lib.Event.Type.*
 import com.gmail.bishoybasily.stomp.lib.StompClient
+import com.google.android.gms.maps.model.LatLng
 import com.nextnav.nn_app_sdk.NextNavSdk
 import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatus
@@ -32,7 +37,7 @@ import org.json.JSONObject
 import java.util.*
 
 
-class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainView, GetBuildingView , GetGoalView, GetDoneGoalView{
+class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainView, GetBuildingView , GetGoalView, GetDoneGoalView {
 
     lateinit var binding: ActivityMainBinding
     lateinit var loginActivity: LoginActivity
@@ -48,6 +53,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
     private lateinit var altitudeObservable: AltitudeContextNotification
 
     var userNickName = ""
+    var myImage = ""
 
     var initCode = 0
 
@@ -198,10 +204,15 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
                 // 운동 요청 알림
                 if(chatObject.getString("type").equals("REQUEST")){
                     val bundle = Bundle().apply{
-                        putString("email",chatObject.getString("sender"))
+                        putString("user2email",chatObject.getString("sender"))
+                        putString("myEmail", chatObject.getString("receiver"))
                         putString("nickName",chatObject.getString("sender_nickName"))
                         putInt("exerciseWithId",chatObject.getInt("data"))
                         putString("workoutType",chatObject.getString("workoutType"))
+
+                        // 상대방 위치
+                        putString("user2Lat",chatObject.getString("lat") )
+                        putString("user2Lon",chatObject.getString("lon") )
 
                     }
                     requestFragment.arguments = bundle
@@ -211,6 +222,27 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
                 // 운동 승낙 알림
                 else if(chatObject.getString("type").equals("ACCEPT")){
                     Log.d("THISISACCEPT!!!",chatObject.toString())
+                        val intent = Intent(this@MainActivity, ClimbingWithActivity::class.java)
+                        // 다른 유저 이메일
+                        intent.putExtra("user2Email",chatObject.getString("sender"))
+                        // 내 이메일
+                        intent.putExtra("myEmail",email)
+                        // 내 닉네임
+                        intent.putExtra("myNickName", userNickName)
+                        // 내 프로필 사진
+                        intent.putExtra("myProfileImg",myImage)
+
+                        // 내 운동 id
+                        intent.putExtra("myExerciseId",chatObject.getInt("exercise1id"))
+                        // 상대방 운동 id
+                        intent.putExtra("user2ExerciseId", chatObject.getInt("exercise2id"))
+
+                        // 상대방 위치
+                        intent.putExtra("user2lat",chatObject.getString("user2lat"))
+                        intent.putExtra("user2lon",chatObject.getString("user2lon"))
+
+                        startActivity(intent)
+
                 }
 
 
@@ -218,6 +250,7 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
     }
     override fun onUserSuccess(code: Int, result: User) {
         email = result.email.toString()
+        myImage = result.profile_img.toString()
         subscribe(email)
     }
 

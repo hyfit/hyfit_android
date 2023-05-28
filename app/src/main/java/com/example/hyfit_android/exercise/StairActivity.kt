@@ -487,7 +487,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         inError()
     }
 
-    override fun onSaveExerciseRedisLocSuccess(result: List<String>) {
+    override fun onSaveExerciseRedisLocSuccess(result: String) {
 
     }
 
@@ -527,7 +527,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
     }
 
     // 고도 저장
-    override fun onSaveAltRedisLocSuccess(result: List<String>) {
+    override fun onSaveAltRedisLocSuccess(result: String) {
         Log.d("SAVEALT",result.toString())
     }
 

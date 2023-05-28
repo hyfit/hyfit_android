@@ -579,7 +579,7 @@ class ExerciseActivity:AppCompatActivity(),OnMapReadyCallback, Observer, Exercis
         inError()
     }
 
-    override fun onSaveExerciseRedisLocSuccess(result: List<String>) {
+    override fun onSaveExerciseRedisLocSuccess(result: String) {
 
     }
 

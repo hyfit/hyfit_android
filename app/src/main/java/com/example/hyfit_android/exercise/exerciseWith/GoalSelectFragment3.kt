@@ -1,7 +1,12 @@
 package com.example.hyfit_android.exercise.exerciseWith
 
+import android.content.Context
+import android.content.Context.LOCATION_SERVICE
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,6 +16,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +37,9 @@ import com.example.hyfit_android.home.GoalSelectRVAdaptor
 import com.example.hyfit_android.home.OnGoalClickListener
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
+import com.google.android.gms.location.LocationCallback
+import com.google.android.gms.maps.model.LatLng
+import com.nextnav.nn_app_sdk.PhoneMetaData.mContext
 import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
 import org.json.JSONObject
@@ -57,6 +66,9 @@ class GoalSelectFragment3 : DialogFragment(),GetMountainView, OnGoalClickListene
     private val intervalMillis = 1000L
     private val client = OkHttpClient()
     private val stomp = StompClient(client, intervalMillis)
+
+    private var mLocationManager: LocationManager? = null
+    private var mLocationListener: LocationListener? = null
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -99,6 +111,20 @@ class GoalSelectFragment3 : DialogFragment(),GetMountainView, OnGoalClickListene
         }
        //  getMountainProgress()
 
+        // location
+        mLocationManager = mContext.getSystemService(LOCATION_SERVICE) as LocationManager
+        mLocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                var lat = 0.0
+                var lng = 0.0
+                if (location != null) {
+                    lat = location.latitude
+                    lng = location.longitude
+                }
+                var currentLocation = LatLng(lat, lng)
+            }
+        }
+
         return binding.root
     }
 
@@ -128,8 +154,17 @@ class GoalSelectFragment3 : DialogFragment(),GetMountainView, OnGoalClickListene
     }
 
     override fun onStartExerciseViewSuccess(result: ExreciseWith) {
-        subscribe(result.exerciseWithId!!)
-        accept("ACCEPT", result.user2Email!!,result.user1Email!!, "", "",workoutType,-1,result.exerciseWithId!!)
+        subscribe()
+        // 유저 2명한테 둘다 accept 보내야함
+        // 받는사람한테 exercise1 이 자기꺼
+
+        // 요청 받은사람이 요청 보낸사람한테 accept 메세지
+        accept(result.user2Email!!,result.user1Email!!,
+            result.user1ExerciseId!!, result.user2ExerciseId!!,workoutType,result.exerciseWithId!!)
+
+        // 요청 보낸사람이 요청 받은사람한테 accept 메세지
+        accept(result.user1Email!!,result.user2Email!!, result.user2ExerciseId!!, result.user1ExerciseId!!,workoutType,result.exerciseWithId!!)
+
         dismiss()
     }
 
@@ -137,25 +172,25 @@ class GoalSelectFragment3 : DialogFragment(),GetMountainView, OnGoalClickListene
         TODO("Not yet implemented")
     }
     // websocket
-    private fun accept(type:String, sender : String,receiver:  String, sender_nickName : String,receiver_nickName : String, workoutType : String, goalId : Int , data : Int){
+    private fun accept(sender : String, receiver:  String, exercise1id : Int,exercise2id : Int, workoutType : String , data : Int){
         val jsonObject = JSONObject()
-        jsonObject.put("type",type)
+        jsonObject.put("type","ACCEPT")
         jsonObject.put("sender",sender)
         jsonObject.put("receiver",receiver)
-        jsonObject.put("sender_nickName",sender_nickName)
-        jsonObject.put("receiver_nickName",receiver_nickName)
+        jsonObject.put("exercise1id",exercise1id)
+        jsonObject.put("exercise2id",exercise2id)
         jsonObject.put("workoutType",workoutType)
-        jsonObject.put("goalId",goalId)
         jsonObject.put("data",data)
         val jsonString = jsonObject.toString()
         Log.d("THISISSENDERDATA",jsonString)
+
 
         stomp.send("/pub/accept", jsonString).subscribe {
             if(it){ }
         }
     }
 
-    private fun subscribe(exerciseWithId : Int) {
+    private fun subscribe() {
         stomp.url = BuildConfig.STOMP_URL
         stompConnection = stomp.connect().subscribe {
             when (it.type) {
@@ -173,13 +208,6 @@ class GoalSelectFragment3 : DialogFragment(),GetMountainView, OnGoalClickListene
             }
         }
 
-        // exerciseWith 채널 구독
-        topic = stomp.join("/sub/channel/${exerciseWithId}")
-            .doOnError { error -> Log.d("ERROR", "subscribe error") }
-            .subscribe { chatData ->
-                val chatObject = JSONObject(chatData)
-                Log.d("THISISCHATDATA!!!", chatObject.toString())
-            }
     }
 
 

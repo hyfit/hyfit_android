@@ -20,6 +20,7 @@ class UserRetrofitService {
     private lateinit var passwordUpdateView: PasswordUpdateView
     private lateinit var getUserView: GetUserView
     private lateinit var validView:ValidView
+    private lateinit var userGetByEmailView: UserGetByEmailView
     fun setLoginView(loginView: LoginView){
         this.loginView=loginView
     }
@@ -53,6 +54,10 @@ class UserRetrofitService {
 
     fun setvalidView(validView: ValidView){
         this.validView=validView
+    }
+
+    fun setUserGetByEmailView(userGetByEmailView: UserGetByEmailView){
+        this.userGetByEmailView = userGetByEmailView
     }
 
     fun login(loginRequest: LoginReq){
@@ -267,6 +272,38 @@ class UserRetrofitService {
 
                 override fun onFailure(call: Call<UserResponse>, t: Throwable) {
                     Log.d("ValidFailure", t.message.toString())
+                }
+
+            })
+        }
+    }
+
+    fun usergetByEmail(email:String?){
+        val userService = getRetrofit().create(UserRetrofitInterface::class.java)
+        if (email != null) {
+            userService.usergetByEmail(email!!).enqueue(object : Callback<GetResponse> {
+                override fun onResponse(call: Call<GetResponse>, response: Response<GetResponse>) {
+
+                    if (response.isSuccessful) {
+                        Log.d("userget", "goodgood")
+                        val resp: GetResponse? = response.body()
+                        if (resp != null) {
+                            when (val code = resp.code) {
+                                1000 -> userGetByEmailView.onUserGetByEmailSuccess(code, resp.result)
+                                else -> userGetByEmailView.onUserGetByEmailFailure(code, resp.message)
+                            }
+                        } else {
+                            // 서버로부터 받은 응답이 null인 경우 처리
+                            Log.d("GetuserFailure", "Response body is null.")
+                        }
+                    } else {
+                        // 서버로부터 받은 응답이 실패인 경우 처리
+                        Log.d("GetuserFailure", "Response failed with code ${response.code()}.")
+                    }
+                }
+
+                override fun onFailure(call: Call<GetResponse>, t: Throwable) {
+                    Log.d("GetuserFailure", t.message.toString())
                 }
 
             })

@@ -1,0 +1,236 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".exercise.exerciseWith.climbing.ClimbingWithResultActivity">
+
+    <LinearLayout
+        android:id="@+id/exercise_result_title"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:gravity="center"
+        android:orientation="horizontal">
+        <Button
+            android:id="@+id/click_me"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="kidzero"/>
+
+        <Button
+            android:id="@+id/click_user2"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="teter"/>
+    </LinearLayout>
+
+    <!--    지도-->
+    <RelativeLayout
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_result_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/exercise_result_map_layout">
+<!--        <RelativeLayout-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_height="wrap_content">-->
+        <fragment
+            android:id="@+id/climbingWith_result_map"
+            android:name="com.google.android.gms.maps.SupportMapFragment"
+            android:layout_width="match_parent"
+            android:layout_height="350dp"
+            tools:context=".exercise.exerciseWith.climbing.ClimbingWithResultActivity" />
+
+            <com.nextnav.zsdkplus.altimeter.Altimeter
+                android:layout_centerVertical="true"
+                android:id="@+id/altimeter"
+                android:layout_width="wrap_content"
+                android:layout_height="350dp"
+                android:background="@color/alt_bar"
+                android:visibility="visible" />
+
+        </RelativeLayout>
+<!--       -->
+<!--    </RelativeLayout>-->
+
+    <ScrollView
+        android:foregroundGravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/exercise_result_map_layout"
+        tools:ignore="NotSibling">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/ic_result_page_box"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:layout_marginTop="30dp"
+            android:id="@+id/result_time_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="50dp"
+            android:orientation="horizontal">
+
+<!--            <TextView-->
+<!--                android:layout_width="0dp"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_weight="1.5"-->
+<!--                android:fontFamily="@font/inter_medium"-->
+<!--                android:text="time"-->
+<!--                android:textColor="#969696"-->
+<!--                android:textSize="15sp" />-->
+
+            <TextView
+                android:id="@+id/result_time_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/inter_medium"
+                android:text="00:00:00"
+                android:textColor="@color/main_color"
+                android:textSize="23sp" />
+
+        </LinearLayout>
+
+        <!--        구분선-->
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:layout_marginHorizontal="50dp"-->
+<!--            android:background="#c3c3c3"/>-->
+
+        <!--        페이스 결과값-->
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:id="@+id/result_pace_layout"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:fontFamily="@font/inter_medium"
+                android:text="average pace"
+                android:textColor="#969696"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/pace_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_medium"
+                android:text=""
+                android:textColor="@color/main_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <!--        구분선-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="50dp"
+            android:background="#c3c3c3"/>
+
+        <!--        거리 결과값-->
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:fontFamily="@font/inter_medium"
+                android:text="distance"
+                android:textColor="#969696"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/exercise_distance_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_medium"
+                android:text="0.4km"
+                android:textColor="@color/main_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+        <!--        구분선-->
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginHorizontal="50dp"
+            android:background="#c3c3c3"/>
+        <!--        상승값 결과값-->
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:layout_marginHorizontal="50dp"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1.5"
+                android:fontFamily="@font/inter_medium"
+                android:text="increase value"
+                android:textColor="#969696"
+                android:textSize="15sp" />
+
+            <TextView
+                android:id="@+id/exercise_increase_text"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:fontFamily="@font/inter_medium"
+                android:text="0.4km"
+                android:textColor="@color/main_color"
+                android:textSize="20sp" />
+        </LinearLayout>
+
+        <ImageView
+            android:layout_marginTop="10dp"
+            android:id="@+id/go_to_main"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:src="@drawable/ic_homebtn"/>
+
+    </LinearLayout>
+    </ScrollView>
+    <ProgressBar
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

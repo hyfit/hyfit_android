@@ -1,8 +1,14 @@
 package com.example.hyfit_android.exercise.exerciseWith
 
+import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -12,6 +18,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import com.example.hyfit_android.BuildConfig
 import com.example.hyfit_android.R
@@ -23,6 +30,8 @@ import com.example.hyfit_android.exercise.ExerciseStartReq
 import com.example.hyfit_android.exercise.ExerciseStartView
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
+import com.google.android.gms.maps.model.LatLng
+import com.nextnav.nn_app_sdk.PhoneMetaData
 import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
 import org.json.JSONObject
@@ -32,6 +41,12 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
     private lateinit var binding : FragmentRequestBinding
     private var exerciseWithId  = 0
     private var workoutType = ""
+    private var user2lat = ""
+    private var user2lon = ""
+    private var myEmail = ""
+    private var user2email = ""
+    private var exercise1Id = 0
+    private var exercise2Id = 0
     private val goalSelectFragment3 = GoalSelectFragment3()
 
     // websocket
@@ -41,7 +56,9 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
     private val client = OkHttpClient()
     private val stomp = StompClient(client, intervalMillis)
 
-
+    // location
+    private var mLocationManager: LocationManager? = null
+    private var mLocationListener: LocationListener? = null
 
     @RequiresApi(Build.VERSION_CODES.O)
     @SuppressLint("SetTextI18n")
@@ -51,54 +68,84 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
     ): View? {
         binding =  FragmentRequestBinding.inflate(inflater, container, false)
         dialog?.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+
+
         val bundle = arguments
         exerciseWithId = bundle?.getInt("exerciseWithId")!!
         workoutType = bundle?.getString("workoutType")!!
-
+        user2lat = bundle?.getString("user2Lat")!!
+        user2lon = bundle?.getString("user2Lon")!!
+        myEmail = bundle?.getString("myEmail")!!
+        user2email = bundle?.getString("user2email")!!
 
         binding.emailRequestName.text ="From. ${bundle?.getString("nickName")}"
         binding.workoutTypeRequest.text = "workout type : $workoutType"
 
         // 승낙버튼
         binding.requestAccept.setOnClickListener{
-            // 목표 선택해야함
-            if(workoutType.equals("climbing")  || workoutType.equals("stair")){
-                // 목표 선택으로 넘기기
-                val bundle = Bundle().apply {
-                    putString("type",workoutType)
-                    putInt("exerciseWithId",exerciseWithId)
-//                    putString("MyNickName",myNickName)
-//                    putSerializable("building", buildingList)
-//                    putSerializable("mountain", mountainList)
-                }
-                goalSelectFragment3.arguments = bundle
-                goalSelectFragment3.show(parentFragmentManager, "goalSelect3")
-                dismiss()
-            }
-            else {
-                // 바로 운동 시작
-                startExercise()
-
-            }
+            startExercise()
+//            if(workoutType.equals("climbing")  || workoutType.equals("stair")){
+//                // 목표 선택으로 넘기기
+//                val bundle = Bundle().apply {
+//                    putString("type",workoutType)
+//                    putInt("exerciseWithId",exerciseWithId)
+////                    putString("MyNickName",myNickName)
+////                    putSerializable("building", buildingList)
+////                    putSerializable("mountain", mountainList)
+//                }
+//                goalSelectFragment3.arguments = bundle
+//                goalSelectFragment3.show(parentFragmentManager, "goalSelect3")
+//                dismiss()
+//            }
+//            else {
+//                // 바로 운동 시작
+//                startExercise()
+//
+//            }
         }
         // 취소버튼
         binding.requestClose.setOnClickListener{
             deleteExerciseWith()
         }
+
+        // location
+        mLocationManager = PhoneMetaData.mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        mLocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                var lat = 0.0
+                var lng = 0.0
+                if (location != null) {
+                    lat = location.latitude
+                    lng = location.longitude
+                }
+                binding.progressBar.visibility = View.GONE
+                // 요청 받은사람이 요청 보낸사람한테 accept 메세지 (첫번째 request에 sender에게 전송)
+                accept(myEmail!!,user2email!!,
+                    exercise1Id!!, exercise2Id!!,workoutType,exerciseWithId!!, user2lat, user2lon,lat.toString(), lng.toString() )
+
+                // 요청 보낸사람이 요청 받은사람한테 accept 메세지
+                accept(user2email!!,myEmail!!, exercise2Id!!, exercise1Id!!,workoutType,exerciseWithId!!,lat.toString(), lng.toString(), user2lat, user2lon)
+                mLocationListener?.let { mLocationManager?.removeUpdates(it) }
+                dismiss()
+            }
+        }
         return binding.root
     }
 
     // websocket
-    private fun accept(type:String, sender : String,receiver:  String, sender_nickName : String,receiver_nickName : String, workoutType : String, goalId : Int , data : Int){
+    private fun accept( sender : String, receiver:  String, exercise1id : Int,exercise2id : Int, workoutType : String , data : Int, user1lat : String, user1lon : String, user2lat : String, user2lon : String){
         val jsonObject = JSONObject()
-        jsonObject.put("type",type)
+        jsonObject.put("type","ACCEPT")
         jsonObject.put("sender",sender)
         jsonObject.put("receiver",receiver)
-        jsonObject.put("sender_nickName",sender_nickName)
-        jsonObject.put("receiver_nickName",receiver_nickName)
+        jsonObject.put("exercise1id",exercise1id)
+        jsonObject.put("exercise2id",exercise2id)
         jsonObject.put("workoutType",workoutType)
-        jsonObject.put("goalId",goalId)
         jsonObject.put("data",data)
+        jsonObject.put("user1lat",user1lat)
+        jsonObject.put("user1lon",user1lon)
+        jsonObject.put("user2lat",user2lat)
+        jsonObject.put("user2lon",user2lon)
         val jsonString = jsonObject.toString()
         Log.d("THISISSENDERDATA",jsonString)
 
@@ -107,7 +154,7 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
         }
     }
 
-    private fun subscribe(exerciseWithId : Int) {
+    private fun subscribe() {
         stomp.url = BuildConfig.STOMP_URL
         stompConnection = stomp.connect().subscribe {
             when (it.type) {
@@ -125,13 +172,6 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
             }
         }
 
-        // exerciseWith 채널 구독
-        topic = stomp.join("/sub/channel/${exerciseWithId}")
-            .doOnError { error -> Log.d("ERROR", "subscribe error") }
-            .subscribe { chatData ->
-                val chatObject = JSONObject(chatData)
-                Log.d("THISISCHATDATA!!!", chatObject.toString())
-            }
     }
     private fun getJwt():String?{
         val spf = requireActivity().getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
@@ -153,6 +193,7 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
     }
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startExercise(){
+        binding.progressBar.visibility = View.VISIBLE
         val exerciseService = ExerciseService()
         val jwt: String? = getJwt()
         val current = LocalDateTime.now()
@@ -169,9 +210,24 @@ class RequestFragment : DialogFragment(), DeleteExerciseWithView, StartExerciseV
     }
 
     override fun onStartExerciseViewSuccess(result: ExreciseWith) {
-        subscribe(result.exerciseWithId!!)
-        accept("ACCEPT", result.user2Email!!,result.user1Email!!, "", "",workoutType,-1,result.exerciseWithId!!)
-        dismiss()
+        subscribe()
+
+        exerciseWithId = result.exerciseWithId!!
+        exercise1Id = result.user1ExerciseId!!
+        exercise2Id = result.user2ExerciseId!!
+        // 위치 가져오기
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        mLocationListener?.let { mLocationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, it) }
+
 
     }
 

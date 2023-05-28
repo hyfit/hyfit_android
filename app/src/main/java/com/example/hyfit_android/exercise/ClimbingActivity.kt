@@ -588,7 +588,7 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
         inError()
     }
 
-    override fun onSaveExerciseRedisLocSuccess(result: List<String>) {
+    override fun onSaveExerciseRedisLocSuccess(result: String) {
 
     }
 
@@ -631,7 +631,7 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
         inError()
     }
 
-    override fun onSaveAltRedisLocSuccess(result: List<String>) {
+    override fun onSaveAltRedisLocSuccess(result: String) {
         Log.d("SAVEALT",result.toString())
     }
 

@@ -45,7 +45,7 @@ class TypeSelectWithFragment : DialogFragment(){
         val running = binding.runningBtn
         val walking = binding.walkingBtn
         val climbing = binding.climbingBtn
-        val stair = binding.stairBtn
+        // val stair = binding.stairBtn
         val bundle = arguments
         myEmail = bundle?.getString("MyEmail").toString()
         myNickName = bundle?.getString("MyNickName").toString()
@@ -63,14 +63,12 @@ class TypeSelectWithFragment : DialogFragment(){
                 running.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                stair.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 isSelected = null
             }
             else {
                 running.setBackgroundColor(resources.getColor(R.color.type_select))
                 walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                stair.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 isSelected = "running"
             }
         }
@@ -81,14 +79,12 @@ class TypeSelectWithFragment : DialogFragment(){
                 running.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                stair.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 isSelected = null
             }
             else {
                 running.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 walking.setBackgroundColor(resources.getColor(R.color.type_select))
                 climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                stair.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 isSelected = "walking"
             }
         }
@@ -99,56 +95,40 @@ class TypeSelectWithFragment : DialogFragment(){
                 running.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                stair.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 isSelected = null
             }
             else {
                 running.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 climbing.setBackgroundColor(resources.getColor(R.color.type_select))
-                stair.setBackgroundColor(resources.getColor(R.color.type_unselect))
                 isSelected = "climbing"
             }
         }
 
         // stair
-        stair.setOnClickListener{
-            if(isSelected == "stair"){
-                running.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                stair.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                isSelected = null
-            }
-            else {
-                running.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
-                stair.setBackgroundColor(resources.getColor(R.color.type_select))
-                isSelected = "stair"
-            }
-        }
+//        stair.setOnClickListener{
+//            if(isSelected == "stair"){
+//                running.setBackgroundColor(resources.getColor(R.color.type_unselect))
+//                walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
+//                climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
+//                stair.setBackgroundColor(resources.getColor(R.color.type_unselect))
+//                isSelected = null
+//            }
+//            else {
+//                running.setBackgroundColor(resources.getColor(R.color.type_unselect))
+//                walking.setBackgroundColor(resources.getColor(R.color.type_unselect))
+//                climbing.setBackgroundColor(resources.getColor(R.color.type_unselect))
+//                stair.setBackgroundColor(resources.getColor(R.color.type_select))
+//                isSelected = "stair"
+//            }
+//        }
 
         // type select 버튼
         binding.typeBtn.setOnClickListener{
             if(isSelected == null){
                 Toast.makeText(requireContext(), "You need to select a type.", Toast.LENGTH_SHORT).show()
             }
-            else if(isSelected.equals("climbing") || isSelected.equals("stairs")){
-                // 목표 선택으로 넘기기
-                val bundle = Bundle().apply {
-                    putString("type",isSelected)
-                    putString("MyEmail",myEmail)
-                    putString("MyNickName",myNickName)
-                    putSerializable("building", buildingList)
-                    putSerializable("mountain", mountainList)
-                }
-                goalSelectModal.arguments = bundle
-                goalSelectModal.show(parentFragmentManager, "goalSelect")
-                dismiss()
-            }
-            else {
-                // 친구 선택으로 넘기기
+            else{
                 val bundle = Bundle().apply{
                     putString("type",isSelected)
                     putString("MyEmail",myEmail)
@@ -157,7 +137,7 @@ class TypeSelectWithFragment : DialogFragment(){
                 followingSelectFragment.arguments = bundle
                 followingSelectFragment.show(parentFragmentManager, "followSelect")
                 dismiss()
-                }
+            }
 
             }
 

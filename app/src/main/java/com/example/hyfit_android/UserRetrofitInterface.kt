@@ -50,4 +50,8 @@ interface UserRetrofitInterface {
     @GET("/api/user/valid")
     fun valid(@Header("X-AUTH-TOKEN")jwt:String) :Call<UserResponse>
 
+    @GET("api/user/email")
+    fun usergetByEmail(@Query("email") email : String) : Call<GetResponse>
+
+
 }
