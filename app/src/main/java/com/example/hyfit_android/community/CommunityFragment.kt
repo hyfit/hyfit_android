@@ -5,6 +5,7 @@ import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.os.Parcelable
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -18,6 +19,7 @@ import com.example.hyfit_android.databinding.FragmentCommunityBinding
 import com.example.hyfit_android.MainActivity
 import com.example.hyfit_android.R
 import com.example.hyfit_android.goal.GoalDetailRVAdapter
+import com.example.hyfit_android.goal.GoalModalFragment
 
 
 class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowingUsersView,
@@ -190,6 +192,9 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
             R.id.walking_btn -> {
                 onTagClicked(binding.walkingBtn)
             }
+//            R.id.riding_btn -> {
+//                onTagClicked(binding.ridingBtn)
+//            }
             R.id.stair_climbing_btn -> {
                 onTagClicked(binding.stairClimbingBtn)
             }
@@ -297,17 +302,19 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
 
     // 한 게시물 클릭시
     override fun onPostClick(data: PostPagination) {
+        Log.d("CLICK!!!!!!",data.email)
         val bundle = Bundle().apply {
-            this.putString("email", data.email)
-            this.putLong("postId", data.postId)
+            putString("email", data.email)
+            putLong("postId", data.postId)
         }
         postFragment.arguments = bundle
         parentFragmentManager
             .beginTransaction()
-            .add(R.id.CommunityFragment, postFragment)
+            .replace(R.id.fragment_container, postFragment)
             .addToBackStack(null)
             .commit()
     }
+
 
 //    override fun onItemChange() {
 //        getAllPosts(null, null)

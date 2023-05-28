@@ -2,9 +2,10 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="wrap_content"
+    android:layout_width="500dp"
     android:layout_height="wrap_content"
     android:id="@+id/request_layout"
+
     android:paddingBottom="20dp"
     android:background="@drawable/ic_rectangle_148"
     tools:context=".exercise.exerciseWith.RequestFragment">
@@ -25,47 +26,50 @@
             android:id="@+id/goal_search_goal_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent">
+            <ImageView
+                android:layout_gravity="center"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:src="@drawable/notification"/>
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="sans-serif"
                 android:text="Workout request"
                 android:textStyle="bold"
-                android:textSize="16sp"
-                android:textColor="@color/darkgray2"
+                android:textSize="25sp"
+                android:textColor="@color/main_color"
                 />
         </LinearLayout>
         <LinearLayout
             android:layout_marginVertical="10dp"
-            android:padding="10dp"
+            android:padding="20dp"
             android:background="@color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
             android:orientation="vertical">
             <TextView
+                android:textSize="20sp"
                 android:layout_marginTop="10dp"
-                android:id="@+id/email_request"
+                android:id="@+id/workout_request_text"
                 android:layout_width="wrap_content"
                 android:fontFamily="@font/roboto_light"
                 android:layout_height="wrap_content"
-                android:text="Let's workout together! "/>
-            <TextView
-                android:id="@+id/workout_type_request"
-                android:layout_width="wrap_content"
-                android:fontFamily="@font/roboto_light"
-                android:layout_height="wrap_content"
-                android:text="workout type : "/>
-            <TextView
-                android:layout_marginTop="5dp"
-                android:id="@+id/email_request_name"
-                android:layout_width="wrap_content"
-                android:fontFamily="@font/roboto_medium"
-                android:layout_height="wrap_content"
-                android:text="From. kidzero"/>
+                android:text="Let's Running together! "/>
+                <TextView
+                    android:textSize="15sp"
+                    android:id="@+id/email_request_name"
+                    android:layout_width="wrap_content"
+                    android:fontFamily="@font/roboto_medium"
+                    android:layout_height="wrap_content"
+                    android:text="From. kidzero"/>
+
+
 
         </LinearLayout>
     </LinearLayout>
@@ -116,6 +120,18 @@
             android:fontFamily="@font/inter_medium"
             android:layout_weight="1" />
     </LinearLayout>
+
+    <ProgressBar
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="invisible"
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

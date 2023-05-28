@@ -1,8 +1,14 @@
 package com.example.hyfit_android.exercise.exerciseWith
 
+import android.Manifest
 import android.app.Dialog
+import android.content.Context
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.location.Location
+import android.location.LocationListener
+import android.location.LocationManager
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -14,6 +20,7 @@ import android.view.Window
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DividerItemDecoration
@@ -31,6 +38,8 @@ import com.example.hyfit_android.goal.Goal
 import com.example.hyfit_android.goal.GoalDetailRVAdapter
 import com.gmail.bishoybasily.stomp.lib.Event
 import com.gmail.bishoybasily.stomp.lib.StompClient
+import com.google.android.gms.maps.model.LatLng
+import com.nextnav.nn_app_sdk.PhoneMetaData
 import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
 import org.json.JSONObject
@@ -61,6 +70,10 @@ class SelectFollowingFragment : DialogFragment(),GetFollowingView,FollowingClick
     private lateinit var  receiver_nickName: String
     private var exerciseWithId =0
 
+    // location
+    private var mLocationManager: LocationManager? = null
+    private var mLocationListener: LocationListener? = null
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -76,8 +89,8 @@ class SelectFollowingFragment : DialogFragment(),GetFollowingView,FollowingClick
         val bundle = arguments
         myEmail = bundle?.getString("MyEmail").toString()
         myNickName = bundle?.getString("MyNickName").toString()
-        workoutType = bundle?.getString("type").toString()
-        goalId = bundle?.getInt("goalId")!!
+       workoutType = bundle?.getString("type").toString()
+       // goalId = bundle?.getInt("goalId")!!
 
         binding.requestBtn.setOnClickListener{
             if(isSelected == 0){
@@ -92,11 +105,29 @@ class SelectFollowingFragment : DialogFragment(),GetFollowingView,FollowingClick
             }
         }
 
+        // location
+        mLocationManager = PhoneMetaData.mContext.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+        mLocationListener = object : LocationListener {
+            override fun onLocationChanged(location: Location) {
+                var lat = 0.0
+                var lng = 0.0
+                if (location != null) {
+                    lat = location.latitude
+                    lng = location.longitude
+                }
+                binding.progressBar.visibility = View.GONE
+                request("REQUEST",myEmail,receiver,myNickName, receiver_nickName,workoutType,goalId,exerciseWithId,lat.toString(), lng.toString())
+                mLocationListener?.let { mLocationManager?.removeUpdates(it) }
+                dismiss()
+
+            }
+        }
+
         return binding.root
     }
 
     // websocket
-    private fun request(type:String, sender : String,receiver:  String, sender_nickName : String,receiver_nickName : String, workoutType : String, goalId : Int , data : Int){
+    private fun request(type:String, sender : String,receiver:  String, sender_nickName : String,receiver_nickName : String, workoutType : String, goalId : Int , data : Int,lat : String, lon : String){
         val jsonObject = JSONObject()
         jsonObject.put("type",type)
         jsonObject.put("sender",sender)
@@ -106,6 +137,8 @@ class SelectFollowingFragment : DialogFragment(),GetFollowingView,FollowingClick
         jsonObject.put("workoutType",workoutType)
         jsonObject.put("goalId",goalId)
         jsonObject.put("data",data)
+        jsonObject.put("lat",lat)
+        jsonObject.put("lon",lon)
         val jsonString = jsonObject.toString()
         Log.d("THISISSENDERDATA",jsonString)
 
@@ -114,16 +147,18 @@ class SelectFollowingFragment : DialogFragment(),GetFollowingView,FollowingClick
         }
     }
 
-    private fun subscribe(exerciseWithId : Int) {
-        stomp.url =STOMP_URL
+    private fun subscribe() {
+        stomp.url = STOMP_URL
         stompConnection = stomp.connect().subscribe {
             when (it.type) {
                 Event.Type.OPENED -> {
                     Log.d("CONNECT", "OPENED")
                 }
+
                 Event.Type.CLOSED -> {
                     Log.d("CONNECT", "CLOSED")
                 }
+
                 Event.Type.ERROR -> {
                     Log.d("CONNECT", "ERROR")
                 }
@@ -131,15 +166,15 @@ class SelectFollowingFragment : DialogFragment(),GetFollowingView,FollowingClick
                 null -> TODO()
             }
         }
-
-        // exerciseWith 채널 구독
-        topic = stomp.join("/sub/channel/${exerciseWithId}")
-            .doOnError { error -> Log.d("ERROR", "subscribe error") }
-            .subscribe { chatData ->
-                val chatObject = JSONObject(chatData)
-                Log.d("THISISCHATDATA!!!", chatObject.toString())
-            }
     }
+//        // exerciseWith 채널 구독
+//        topic = stomp.join("/sub/channel/${exerciseWithId}")
+//            .doOnError { error -> Log.d("ERROR", "subscribe error") }
+//            .subscribe { chatData ->
+//                val chatObject = JSONObject(chatData)
+//                Log.d("THISISCHATDATA!!!", chatObject.toString())
+//            }
+//    }
 //    override fun onDestroy() {
 //        super.onDestroy()
 //       // send("QUIT", email,receiver,exerciseWithId)
@@ -150,6 +185,7 @@ class SelectFollowingFragment : DialogFragment(),GetFollowingView,FollowingClick
     // user1 일단 운동 시작
     @RequiresApi(Build.VERSION_CODES.O)
     private fun startExercise(){
+        binding.progressBar.visibility = View.VISIBLE
         val exerciseService = ExerciseService()
         val jwt: String? = getJwt()
         val current = LocalDateTime.now()
@@ -174,10 +210,23 @@ class SelectFollowingFragment : DialogFragment(),GetFollowingView,FollowingClick
     }
 
     override fun onRequestExerciseSuccess(result: ExreciseWith) {
-        subscribe(result.exerciseWithId!!.toInt())
+       // subscribe(result.exerciseWithId!!.toInt())
         // type : request로 보냄
-        request("REQUEST",myEmail,receiver,myNickName, receiver_nickName,workoutType,goalId,result.exerciseWithId?.toInt() ?: 0)
-        dismiss()
+        subscribe()
+        // 위치 가져오기
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            return
+        }
+        mLocationListener?.let { mLocationManager?.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0f, it) }
+
+        exerciseWithId = result.exerciseWithId?.toInt() ?: 0
     }
 
     override fun onRequestExerciseFailure(code: Int, msg: String) {

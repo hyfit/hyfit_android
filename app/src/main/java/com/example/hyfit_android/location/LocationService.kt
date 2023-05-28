@@ -90,17 +90,17 @@ class LocationService {
 
     fun getAllExerciseList(id : Int){
         val locationService = getRetrofit().create(LocationRetrofitInterface::class.java)
-        locationService.getAllExerciseList(id).enqueue(object: Callback<LocationRedisRes> {
-            override fun onResponse(call: Call<LocationRedisRes>, response: Response<LocationRedisRes>) {
+        locationService.getAllExerciseList(id).enqueue(object: Callback<LocationAllRedisRes> {
+            override fun onResponse(call: Call<LocationAllRedisRes>, response: Response<LocationAllRedisRes>) {
                 Log.d("LOCATIONGET/SUCCESS", response.toString())
-                val resp: LocationRedisRes = response.body()!!
+                val resp: LocationAllRedisRes = response.body()!!
                 Log.d("LOCATIONGET/SUCCESS", resp.toString())
                 when(val code = resp.code){
                     1000-> getAllExerciseListView.onGetAllExerciseListSuccess(resp.result)
                     else-> getAllExerciseListView.onGetAllExerciseListFailure(code, resp.message)
                 }
             }
-            override fun onFailure(call: Call<LocationRedisRes>, t: Throwable) {
+            override fun onFailure(call: Call<LocationAllRedisRes>, t: Throwable) {
                 Log.d("LOCATION/FAILURE", t.message.toString())
             }
         })
@@ -126,17 +126,17 @@ class LocationService {
 
     fun getAllRedisExercise(id : Int){
         val locationService = getRetrofit().create(LocationRetrofitInterface::class.java)
-        locationService.getAllRedisExercise(id).enqueue(object: Callback<LocationRedisRes> {
-            override fun onResponse(call: Call<LocationRedisRes>, response: Response<LocationRedisRes>) {
+        locationService.getAllRedisExercise(id).enqueue(object: Callback<LocationAllRedisRes> {
+            override fun onResponse(call: Call<LocationAllRedisRes>, response: Response<LocationAllRedisRes>) {
                 Log.d("LOCATION/SUCCESS", response.toString())
-                val resp: LocationRedisRes = response.body()!!
+                val resp: LocationAllRedisRes = response.body()!!
                 Log.d("LOCATION/SUCCESS", resp.toString())
                 when(val code = resp.code){
                     1000-> getAllRedisExerciseView.onGetAllRedisExerciseSuccess(resp.result)
                     else-> getAllRedisExerciseView.onGetAllRedisExerciseFailure(code, resp.message)
                 }
             }
-            override fun onFailure(call: Call<LocationRedisRes>, t: Throwable) {
+            override fun onFailure(call: Call<LocationAllRedisRes>, t: Throwable) {
                 Log.d("LOCATION/FAILURE", t.message.toString())
             }
         })

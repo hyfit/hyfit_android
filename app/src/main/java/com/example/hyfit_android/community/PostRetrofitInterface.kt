@@ -49,4 +49,11 @@ interface PostRetrofitInterface {
     fun getCommunityProfile(@Query("email")email: String): Call<PostProfileRes>
 
 
+    @POST("/api/follow/add?email={email}")
+    fun follow(
+        @Header("X-AUTH-TOKEN") token: String,
+        @Query("email") id: Long
+    ): Call<FollowResponse>
+
+
 }

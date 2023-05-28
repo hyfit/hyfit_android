@@ -25,6 +25,8 @@ android {
         buildConfigField "String", "KEY_VALUE",  properties['key_value']
         // stomp url
         buildConfigField "String", "STOMP_URL",  properties['stomp_url']
+        // s3_url
+        buildConfigField "String", "S3_URL",  properties['s3_url']
 
         vectorDrawables.useSupportLibrary = true
     }
@@ -123,5 +125,9 @@ dependencies {
     //okHttp
     implementation "com.squareup.okhttp3:okhttp:4.9.0"
     implementation "com.squareup.okhttp3:logging-interceptor:4.9.0"
+
+    implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'io.reactivex.rxjava3:rxjava:2.2.8'
+    implementation 'io.reactivex.rxjava3:rxkotlin:3.0.0'
 
 }

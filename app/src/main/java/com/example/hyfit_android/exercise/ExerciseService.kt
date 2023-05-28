@@ -12,7 +12,8 @@ class ExerciseService {
     private lateinit var endExerciseView : EndExerciseView
     private lateinit var getExerciseByGoalView: GetExerciseByGoalView
     private lateinit var getExerciseView: GetExerciseView
-
+    private lateinit var deleteExerciseView : DeleteExerciseView
+    private lateinit var getAllExerciseView : GetAllExerciseView
     fun setExerciseStartView(exerciseStartView: ExerciseStartView){
         this.exerciseStartView = exerciseStartView
     }
@@ -26,6 +27,14 @@ class ExerciseService {
 
     fun setGetExerciseView(getExerciseView: GetExerciseView){
         this.getExerciseView = getExerciseView
+    }
+
+    fun setDeleteExerciseview(deleteExerciseView : DeleteExerciseView){
+        this.deleteExerciseView = deleteExerciseView
+    }
+
+    fun setGetAllExerciseView(getAllExerciseView: GetAllExerciseView){
+        this.getAllExerciseView = getAllExerciseView
     }
 
     fun startExercise(jwt:String,exerciseStartReq: ExerciseStartReq){
@@ -102,4 +111,38 @@ class ExerciseService {
         })
     }
 
+    fun deleteExercise(exerciseId : Long){
+        val exerciseService = getRetrofit().create(ExerciseRetrofitInterface::class.java)
+        exerciseService.deleteExercise(exerciseId).enqueue(object: Callback<ExerciseDeleteRes> {
+            override fun onResponse(call: Call<ExerciseDeleteRes>, response: Response<ExerciseDeleteRes>) {
+                Log.d("GETBYGOAL/SUCCESS", response.toString())
+                val resp: ExerciseDeleteRes = response.body()!!
+                Log.d("GETBYGOAL/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> deleteExerciseView.onDeleteExerciseSuccess(resp.result)
+                    else-> deleteExerciseView.onDeleteExerciseFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<ExerciseDeleteRes>, t: Throwable) {
+                Log.d("GETBYGOAL/FAILURE", t.message.toString())
+            }
+        })
+    }
+    fun getAllExercise(jwt : String){
+        val exerciseService = getRetrofit().create(ExerciseRetrofitInterface::class.java)
+        exerciseService.getAllExercise(jwt).enqueue(object: Callback<ExerciseListRes> {
+            override fun onResponse(call: Call<ExerciseListRes>, response: Response<ExerciseListRes>) {
+                Log.d("GETBYGOAL/SUCCESS", response.toString())
+                val resp: ExerciseListRes = response.body()!!
+                Log.d("GETBYGOAL/SUCCESS", resp.toString())
+                when(val code = resp.code){
+                    1000-> getAllExerciseView.onGetAllExerciseSuccess(resp.result)
+                    else-> getAllExerciseView.onGetAllExerciseFailure(code, resp.message)
+                }
+            }
+            override fun onFailure(call: Call<ExerciseListRes>, t: Throwable) {
+                Log.d("GETBYGOAL/FAILURE", t.message.toString())
+            }
+        })
+    }
 }

@@ -33,4 +33,7 @@
 
     <color name="type_select">#c2c2c2</color>
     <color name="type_unselect">#FAFBFD</color>
+
+    <color name="alt_bar">#4B5158</color>
+    <color name="map_circle">#5384ED</color>
 </resources>

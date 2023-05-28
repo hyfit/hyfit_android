@@ -16,7 +16,7 @@ import com.example.hyfit_android.databinding.FragmentPostBinding
 
 class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView,UnlikePostView, GetFollowingView {
 
-    lateinit var binding: FragmentPostBinding
+    lateinit var binding:FragmentPostBinding
     lateinit var progressBar: ProgressBar
     var onclicklikepostid=0
     var postid=36
@@ -35,7 +35,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         //이따가 해제하기
         //val postId = arguments?.getLong("postId")
         //val email=arguments?.getString("email")
-        val email="oliver08@naver.com"
+        //val email="oliver08@naver.com"
         val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
         val myemail = sharedPreferences.getString("email", "")
         progressBar=binding.progressBar

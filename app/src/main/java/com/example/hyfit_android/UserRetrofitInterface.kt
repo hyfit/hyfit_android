@@ -54,4 +54,8 @@ interface UserRetrofitInterface {
     @POST("/api/user/profile-image")
     fun updateProfileImage(@Header("X-AUTH-TOKEN")jwt:String, @Part file : MultipartBody.Part): Call<GetResponse>
 
+    @GET("api/user/email")
+    fun usergetByEmail(@Query("email") email : String) : Call<GetResponse>
+
+
 }

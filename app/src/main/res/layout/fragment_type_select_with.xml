@@ -75,17 +75,17 @@
             android:background="@color/type_unselect"
             android:fontFamily="@font/inter_medium"
             android:text="Walking"/>
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:background="#C2C2C2" />
-        <Button
-            android:id="@+id/stair_btn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_medium"
-            android:background="@color/type_unselect"
-            android:text="Stairs"/>
+<!--        <View-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="1dp"-->
+<!--            android:background="#C2C2C2" />-->
+<!--        <Button-->
+<!--            android:id="@+id/stair_btn"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="@font/inter_medium"-->
+<!--            android:background="@color/type_unselect"-->
+<!--            android:text="Stairs"/>-->
         <View
             android:layout_width="match_parent"
             android:layout_height="1dp"

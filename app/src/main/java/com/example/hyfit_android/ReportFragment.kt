@@ -20,6 +20,7 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.hyfit_android.Login.FindPasswordReq
 import com.example.hyfit_android.databinding.FragmentReportBinding
+import com.example.hyfit_android.report.ActivityDashboardActivity
 import com.github.mikephil.charting.charts.BarChart
 import com.github.mikephil.charting.charts.LineChart
 import com.github.mikephil.charting.charts.PieChart
@@ -136,6 +137,12 @@ class ReportFragment : Fragment(), ReportView{
         binding.click2.setOnClickListener {
             binding.modalContainer2.bringToFront()
             binding.modalContainer2.visibility=View.VISIBLE
+        }
+
+        binding.goToActivityBtn.setOnClickListener{
+            val intent = Intent(activity, ActivityDashboardActivity::class.java)
+            startActivity(intent)
+
         }
 
 

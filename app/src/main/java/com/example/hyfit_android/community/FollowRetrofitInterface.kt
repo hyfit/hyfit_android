@@ -10,6 +10,7 @@ import retrofit2.http.Query
 
 interface FollowRetrofitInterface {
 
+
     @POST(ApiPathConstants.FOLLOW_API_PATH + "/add")
     fun addFollow(@Header("X-AUTH-TOKEN")token: String, @Query("email")email: String): Call<DefaultCommunityRes>
 
