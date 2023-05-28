@@ -5,6 +5,7 @@ import com.example.hyfit_android.Login.FindPasswordReq
 import com.example.hyfit_android.Login.LoginReq
 import com.example.hyfit_android.UserInfo.UpdateUserReq
 import com.example.hyfit_android.UserInfo.UpdatepassReq
+import okhttp3.MultipartBody
 //import com.example.hyfit_android.Login.LoginReq
 import retrofit2.Call
 import retrofit2.http.*
@@ -49,6 +50,9 @@ interface UserRetrofitInterface {
 
     @GET("/api/user/valid")
     fun valid(@Header("X-AUTH-TOKEN")jwt:String) :Call<UserResponse>
+
+    @POST("/api/user/profile-image")
+    fun updateProfileImage(@Header("X-AUTH-TOKEN")jwt:String, @Part file : MultipartBody.Part): Call<GetResponse>
 
     @GET("api/user/email")
     fun usergetByEmail(@Query("email") email : String) : Call<GetResponse>

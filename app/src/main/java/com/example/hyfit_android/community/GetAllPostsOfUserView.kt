@@ -1,6 +1,6 @@
 package com.example.hyfit_android.community
 
-interface GetAllUserPostsView {
-    fun onGetAllUserPostsSuccess(result: ArrayList<Post>)
+interface GetAllPostsOfUserView {
+    fun onGetAllUserPostsSuccess(result: List<PostImgInfo>)
     fun onGetAllUserPostsFailure(code: Int, msg: String)
 }

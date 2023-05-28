@@ -3,15 +3,14 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/relativeLayout4"
+    android:id="@+id/myPostLayout"
     android:layout_width="88dp"
     android:layout_height="88dp"
     android:layout_marginLeft="40dp"
-    android:layout_marginTop="30dp"
-    app:layout_constraintStart_toStartOf="parent"
-    app:layout_constraintTop_toBottomOf="@+id/relativeLayout3">
+    android:layout_marginTop="30dp">
 
     <ImageView
+        android:id="@+id/post_iv"
         android:layout_width="88dp"
         android:layout_height="88dp"
         android:scaleType="centerCrop"
@@ -31,6 +30,7 @@
             android:src="@drawable/clarity_heart_solid" />
 
         <TextView
+            android:id="@+id/like_num_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="2dp"
@@ -46,6 +46,7 @@
             android:src="@drawable/mdi_comment_processing" />
 
         <TextView
+            android:id="@+id/comment_num_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="4dp"
