@@ -130,11 +130,11 @@ class ReportFragment : Fragment(), ReportView{
             binding.modalContainer1.bringToFront()
             binding.modalContainer1.visibility=View.VISIBLE
         }
-        binding.click1.setOnClickListener {
+        binding.goaldetail1.setOnClickListener {
             binding.modalContainer1.bringToFront()
             binding.modalContainer1.visibility = View.VISIBLE
         }
-        binding.click2.setOnClickListener {
+        binding.goaldetail2.setOnClickListener {
             binding.modalContainer2.bringToFront()
             binding.modalContainer2.visibility=View.VISIBLE
         }

@@ -16,10 +16,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.hyfit_android.databinding.FragmentCommunityBinding
-import com.example.hyfit_android.MainActivity
 import com.example.hyfit_android.R
-import com.example.hyfit_android.goal.GoalDetailRVAdapter
-import com.example.hyfit_android.goal.GoalModalFragment
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowingUsersView,
@@ -28,12 +28,16 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
 
     private lateinit var communityRVAdapter: CommunityRVAdapter
     private lateinit var tagMap: HashMap<Button, Boolean>
-//    private lateinit var recyclerViewState: Parcelable
-    private lateinit var postList: List<PostPagination>
+    private lateinit var recyclerViewState: Parcelable
+    private var lastVisiblePosition: Int ? = null
+    private var postList: ArrayList<PostPagination> = ArrayList<PostPagination>()
     private val postFragment = PostFragment()
     private val myPageFragment = MyPageFragment()
     private var isLastPage = false
     private var isTagClicked = false
+    private var clickedTag: String? = null
+    private var followOrAll: String = "following"
+    private var itemTotalCount: Int = 0
 
 
     // 뷰를 만들 때 실행 (backstack에서 다시 돌아올 경우, 여기부터 실행됨)
@@ -45,7 +49,6 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
         binding = FragmentCommunityBinding.inflate(inflater, container, false)
 
 
-
         return binding.root
     }
 
@@ -53,8 +56,12 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
     // 뷰가 만들어지면 실행
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
+        recyclerViewState = binding.postListRv.layoutManager?.onSaveInstanceState()!!
+
         // 로그인 유저 프로필 이미지 가져옴
         getCommunityProfile()
+
+        initAdapter()
 
         // 첫 화면-> 팔로잉 유저 게시물 목록 보여줌(getFollowingPosts)
         getFollowingPosts(null, null)
@@ -73,13 +80,15 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
         // recyclerview에 following 유저 게시물 띄움
         binding.followingBtn.setOnClickListener{
             binding.emptyTv.visibility = View.INVISIBLE
-            getFollowingPosts(null, null)
+            followOrAll = "following"
+            getFollowingPosts(clickedTag, null)
         }
 
         // recyclerview에 모든 유저 게시물 띄움
         binding.allBtn.setOnClickListener {
             binding.emptyTv.visibility = View.INVISIBLE
-            getAllPosts(null, null)
+            followOrAll = "all"
+            getAllPosts(clickedTag, null)
         }
 
         // 프로필 이미지 클릭시 -> 자신의 페이지로 이동
@@ -97,36 +106,6 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
         }
     }
 
-//     사용자와 상호작용 할 수 있는 상태
-//    override fun onResume() {
-//        super.onResume()
-//
-//        // recyclerview에 following 유저 게시물 띄움
-//        binding.followingBtn.setOnClickListener{
-//            binding.emptyTv.visibility = View.INVISIBLE
-//            getFollowingPosts(null, null)
-//        }
-//
-//        // recyclerview에 모든 유저 게시물 띄움
-//        binding.allBtn.setOnClickListener {
-//            binding.emptyTv.visibility = View.INVISIBLE
-//            getAllPosts(null, null)
-//        }
-//
-//        // 프로필 이미지 클릭시 -> 자신의 페이지로 이동
-//        binding.profileImageview.setOnClickListener {
-//            val myEmail = getMyEmail()
-//            bundle = Bundle()
-//            bundle.putString("email", myEmail)
-//            val myPageFragment = MyPageFragment()
-//            myPageFragment.arguments = bundle
-//            parentFragmentManager
-//                .beginTransaction()
-//                .add(R.id.CommunityFragment, myPageFragment)
-//                .addToBackStack(null)
-//                .commit()
-//        }
-//    }
 
     private fun getJwt():String?{
         val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
@@ -137,7 +116,6 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
         val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
         return sharedPreferences.getString("email", "")
     }
-
 
     private fun getFollowingPosts(type: String?, lastPostId: Long?) {
         binding.followingIv.visibility = View.VISIBLE
@@ -182,36 +160,49 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
     override fun onClick(v: View) {
         when (v.id) {
             R.id.hiking_btn -> {
-                onTagClicked(binding.hikingBtn)
+                onTagClicked(binding.hikingBtn, "climbing")
             }
             R.id.running_btn -> {
-                onTagClicked(binding.runningBtn)
+                onTagClicked(binding.runningBtn, "running")
             }
             R.id.walking_btn -> {
-                onTagClicked(binding.walkingBtn)
+                onTagClicked(binding.walkingBtn, "walking")
             }
-//            R.id.riding_btn -> {
-//                onTagClicked(binding.ridingBtn)
-//            }
             R.id.stair_climbing_btn -> {
-                onTagClicked(binding.stairClimbingBtn)
+                onTagClicked(binding.stairClimbingBtn, "stair")
             }
         }
     }
 
 
     @SuppressLint("ResourceAsColor", "NewApi")
-    private fun onTagClicked(btn: Button) {
+    private fun onTagClicked(btn: Button, type: String) {
         val itr = tagMap.keys.iterator()
         //tag 버튼 선택 취소
         if(tagMap[btn] == true) {
             tagMap[btn] = false
             btn.setBackgroundResource(R.drawable.tag_btn_back)
             btn.setTextColor(resources.getColor(R.color.string_gray, resources.newTheme()))
+            isTagClicked = false
+            clickedTag = null
+            if(followOrAll.equals("following")) {
+                getFollowingPosts(null, null)
+            } else {
+                getAllPosts(null, null)
+            }
         }
         // tag 버튼 선택(다른 tag 선택 취소)
         else if(tagMap[btn] == false){
             tagMap[btn] = true
+            isTagClicked = true
+            clickedTag = type
+
+            if(followOrAll.equals("following")) {
+                getFollowingPosts(clickedTag, null)
+            } else {
+                getAllPosts(clickedTag, null)
+            }
+
             btn.setBackgroundResource(R.drawable.tag_btn_back_blue)
             btn.setTextColor(resources.getColor(R.color.string_white, resources.newTheme()))
             while (itr.hasNext()) {
@@ -225,45 +216,60 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
 
         }
 
+
     }
 
-    private fun initAdapter(postList: List<PostPagination>) {
-//        recyclerViewState = binding.postListRv.layoutManager?.onSaveInstanceState()!!
-
-        communityRVAdapter = CommunityRVAdapter(requireContext(), postList, this)
+    private fun initAdapter() {
+        communityRVAdapter = CommunityRVAdapter(requireContext(), this)
         binding.postListRv.adapter = communityRVAdapter
         binding.postListRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
 
+        binding.postListRv.apply {
+            setHasFixedSize(true)
+            setItemViewCacheSize(10)
+            adapter = communityRVAdapter
+            layoutManager = binding.postListRv.layoutManager
+            layoutManager?.onRestoreInstanceState(recyclerViewState)
 
-//        binding.postListRv.apply {
-//            this.layoutManager = LinearLayoutManager(context, LinearLayoutManager.VERTICAL,false)
-//            this.adapter = communityRVAdapter
-//            setHasFixedSize(true)
-//            setItemViewCacheSize(10)
-//
-////            layoutManager?.onRestoreInstanceState(recyclerViewState)
-////
-////            addOnScrollListener(object : RecyclerView.OnScrollListener() {
-////                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-////                    super.onScrolled(recyclerView, dx, dy)
-////                    val lastVisisbleItemPosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
-//////                    val isLastPage : Boolean =
-//
-////                }
-////            })
-//        }
+            addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    super.onScrolled(recyclerView, dx, dy)
+                    lastVisiblePosition = (recyclerView.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+                    if(lastVisiblePosition == itemTotalCount - 1 && !isLastPage) {
+                        if(followOrAll.equals("following")) {
+                            getFollowingPosts(clickedTag, communityRVAdapter.getItemPostId(lastVisiblePosition!!))
+                        } else{
+                            getAllPosts(clickedTag, communityRVAdapter.getItemPostId(lastVisiblePosition!!))
+                        }
+                    }
+
+                }
+            })
+        }
     }
 
 
     override fun onGetAllPostsOfFollowingUsersWithTypeSuccess(result: Slice) {
         binding.cprogressbar.visibility = View.GONE
-        postList = result.content!!
-        initAdapter(result.content)
-        if(postList!!.size == 0) {
+        // post 없는 경우
+        if(result.empty && result.first) {
             binding.emptyTv.visibility = View.VISIBLE
         } else {
+            // 마지막 페이지인지 확인
             isLastPage = result.last
         }
+        // 첫 페이지가 아닌 경우 기존 리스트에 추가
+        if(!postList.isEmpty()) {
+            lastVisiblePosition = (binding.postListRv.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+            communityRVAdapter.addPosts(result.content, lastVisiblePosition!!)
+            itemTotalCount += result.numberOfElements
+        } else {
+            // 첫 페이지
+            postList = result.content!!
+            itemTotalCount = result.numberOfElements
+            communityRVAdapter.setPosts(result.content)
+        }
+
     }
     override fun onGetAllPostsOfFollowingUsersWithTypeFailure(code: Int, msg: String) {
         TODO("Not yet implemented")
@@ -271,14 +277,24 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
 
     override fun onGetAllPostsOfAllUsersWithTypeSuccess(result: Slice) {
         binding.cprogressbar.visibility = View.GONE
-        postList = result.content!!
-        initAdapter(result.content)
-        if(postList!!.size == 0) {
+
+        if(result.empty && result.first) {
             binding.emptyTv.visibility = View.VISIBLE
         } else {
             isLastPage = result.last
         }
 
+        // 첫 페이지가 아닌 경우 기존 리스트에 추가
+        if(!postList.isEmpty()) {
+            lastVisiblePosition = (binding.postListRv.layoutManager as LinearLayoutManager?)!!.findLastCompletelyVisibleItemPosition()
+            communityRVAdapter.addPosts(result.content, lastVisiblePosition!!)
+            itemTotalCount += result.numberOfElements
+        } else {
+            // 첫 페이지
+            postList = result.content!!
+            itemTotalCount = result.numberOfElements
+            communityRVAdapter.setPosts(result.content)
+        }
     }
     override fun onGetAllPostsOfAllUsersWithTypeFailure(code: Int, msg: String) {
         TODO("Not yet implemented")
@@ -314,8 +330,5 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
     }
 
 
-//    override fun onItemChange() {
-//        getAllPosts(null, null)
-//    }
 }
 
