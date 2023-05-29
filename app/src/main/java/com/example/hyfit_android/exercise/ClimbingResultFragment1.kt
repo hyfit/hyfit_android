@@ -65,7 +65,7 @@ class ClimbingResultFragment1() : Fragment(), OnMapReadyCallback {
 //        mapView.getMapAsync(this)
 
         // 거리
-        val distanceResult = String.format("%.2f", (Math.round(climbingResultActivity.distance * 100000.0) / 100000.0))
+        val distanceResult = String.format("%.2f",climbingResultActivity.distance)
         binding.exerciseDistanceText1.text = distanceResult + "km"
 
         // 경로

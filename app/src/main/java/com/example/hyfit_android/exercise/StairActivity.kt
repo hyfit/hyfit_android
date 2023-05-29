@@ -336,7 +336,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
             }
 
             // 30초에 한번씩 저장
-            if((timeInSeconds % 30).toDouble() == 0.0){
+            if((timeInSeconds % 10).toDouble() == 0.0){
                 saveRedisAltExercise(exerciseId.toLong(), lat, long, alt,increase.toString())
             }
         }
@@ -404,22 +404,20 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
                     }
                     // in korea
                     600 -> {
-//                        runOnUiThread {
-//                            Toast.makeText(
-//                                this@StairActivity,
-//                                "Location is out of Pinnacle service area",
-//                                Toast.LENGTH_SHORT
-//                            ).show()
-//                        }
-//                        endExerciseInKorea()
-//                        if(isReady == 0) {
-//                            isReady = 1
-//                            saveExerciseRedisLoc(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), "9.0")
-//                        }
-//                        else {
-//                            Log.d("KOREACODE", o.statusCode.toString())
-//                            saveRedis(9.0)
-//                        }
+                        if(isReady == 0) {
+                            isReady = 1
+                            val hat ="9.0"
+                            saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hat,"0.0")
+                        }
+
+                        else {
+                            if (o.heightHat != null && o.heightHatUncertainty != null && o.height != null &&
+                                o.heightUncertainty != null
+                            ) {
+                                val hat =9.0
+                                saveRedis(hat)
+                            }
+                        }
 
                     }
                     else -> {

@@ -14,7 +14,7 @@ class ClimbingResultActivity : AppCompatActivity() {
     var locationList = ArrayList<String>()
     var peakAlt = ""
     var totalTime = 0L
-    var increase = 0L
+    var increase = ""
     var pace = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,14 +22,14 @@ class ClimbingResultActivity : AppCompatActivity() {
         viewPager = binding.viewPager
         exerciseId = intent.getLongExtra("exerciseId",0L)
         distance = (intent.getDoubleExtra("distance", 0.0))
-        val distanceResult = String.format("%.2f", (Math.round(distance * 100000.0) / 100000.0))
+        val distanceResult = String.format("%.2f", distance)
 
         // 경로 지정
         locationList = intent.getStringArrayListExtra("locationList") as ArrayList<String>
 
         // 최고 고도
-        peakAlt = intent.getStringExtra("peakAlt").toString()
-        increase = intent.getLongExtra("increase",0L)
+        peakAlt = String.format("%.2f", intent.getStringExtra("peakAlt")!!.toFloat())
+        increase =  String.format("%.2f", intent.getLongExtra("increase",0L).toFloat())
 
         // pace
         pace = intent.getStringExtra("pace").toString()

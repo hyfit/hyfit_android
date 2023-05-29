@@ -415,7 +415,7 @@ class ExerciseActivity:AppCompatActivity(),OnMapReadyCallback, Observer, Exercis
             }
 
             // 30초에 한번씩 저장
-            if((timeInSeconds % 30).toDouble() == 0.0){
+            if((timeInSeconds % 10).toDouble() == 0.0){
                 saveExerciseRedisLoc(exerciseId.toLong(), lat, long, alt)
             }
 

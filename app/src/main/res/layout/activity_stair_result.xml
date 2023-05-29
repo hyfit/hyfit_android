@@ -39,7 +39,7 @@
         android:textColor="#5b5b5b"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Increase Chart"
+        android:text="Altitude change"
         />
 
     <!--    지도-->
@@ -101,7 +101,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:fontFamily="@font/inter_medium"
-                android:text="time"
+                android:text="Time"
                 android:textColor="#969696"
                 android:textSize="15sp" />
 

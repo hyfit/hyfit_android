@@ -53,7 +53,7 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
         mapFragment.onCreate(savedInstanceState)
         mapFragment.getMapAsync(this)
         val distance:Double= (intent.getDoubleExtra("distance", 0.0))
-        val distanceResult = String.format("%.2f", (Math.round(distance * 100000.0) / 100000.0))
+        val distanceResult = String.format("%.2f", distance)
         pace = intent.getStringExtra("pace").toString()
 
         binding.paceText.text = pace

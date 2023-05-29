@@ -16,6 +16,7 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
 import com.google.android.gms.maps.model.LatLng
+import kotlin.math.abs
 import kotlin.properties.Delegates
 
 class StairResultActivity : AppCompatActivity() {
@@ -30,48 +31,51 @@ class StairResultActivity : AppCompatActivity() {
         var index = 0
         var currentTime = 0
         val entries = mutableListOf<BarEntry>()
-
+          var minAltitude = Float.MAX_VALUE
         Log.d("THISISRESULTLIST",locationList.toString())
-        if (locationList != null) {
-            for (location in locationList) {
-                val latLngArr = location.split(",")
-              if(latLngArr[3] == "0.0") continue
-                else {
-                  val xTime = formatXtime(currentTime)
-                  xList.add(xTime)
-                  entries.add(BarEntry(index.toFloat(),latLngArr[3].toFloat()))
-                  currentTime += 30
-                  index++
+          if (locationList != null) {
+              for (location in locationList) {
+                  val latLngArr = location.split(",")
+                  if(latLngArr[2] == "0.0") continue
+                  else {
+                      val xTime = formatXtime(currentTime)
+                      xList.add(xTime)
+                      Log.d("THISISALT",latLngArr[2])
+                      if (latLngArr[2].toFloat() < minAltitude) {
+                          minAltitude = latLngArr[2].toFloat()
+                      }
+                      entries.add(BarEntry(index.toFloat(),latLngArr[2].toFloat()))
+                      currentTime += 10
+                      index++
+                  }
               }
-            }
-        }
+          }
+          binding = ActivityStairResultBinding.inflate(layoutInflater)
+          setContentView(binding.root)
+          barChart = binding.stairBarChart
 
-        binding = ActivityStairResultBinding.inflate(layoutInflater)
-        setContentView(binding.root)
-        barChart = binding.stairBarChart
+          val dataSet = BarDataSet(entries, "Altitude change")
+          val data = BarData(dataSet)
 
-        val dataSet = BarDataSet(entries, "Increase value")
-        val data = BarData(dataSet)
+          // x축
+          val xAxis = barChart.xAxis
+          xAxis.setDrawGridLines(false)
+          xAxis.position = XAxis.XAxisPosition.BOTTOM
+          xAxis.valueFormatter = IndexAxisValueFormatter(xList) // locationList is the list of locations you are using to create the BarChart
 
-        // x축
-        val xAxis = barChart.xAxis
-        xAxis.setDrawGridLines(false)
-        xAxis.position = XAxis.XAxisPosition.BOTTOM
-        xAxis.valueFormatter = IndexAxisValueFormatter(xList) // locationList is the list of locations you are using to create the BarChart
-
-        // y축
-        val yAxis = barChart.axisLeft
+          // y축
+          val yAxis = barChart.axisLeft
           barChart.axisRight.isEnabled = false
-        yAxis.setDrawGridLines(false)
-        yAxis.axisMinimum = 0f
+          yAxis.setDrawGridLines(false)
+          yAxis.axisMinimum =minAltitude - 1
 
-        barChart.data = data
-        dataSet.color = R.color.main_color
+          barChart.data = data
+          dataSet.color = R.color.main_color
           barChart.description.isEnabled = false  // description label 제거
-        barChart.setFitBars(true)
-        barChart.invalidate()
+          barChart.setFitBars(true)
+          barChart.invalidate()
 
-        // 상승값
+          // 상승값
         val distance:Double= (intent.getDoubleExtra("distance", 0.0))
         val distanceResult = String.format("%.2f", distance)
         binding.exerciseDistanceText.text=distanceResult+ "m"

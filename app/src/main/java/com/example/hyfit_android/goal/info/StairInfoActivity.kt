@@ -2,6 +2,7 @@ package com.example.hyfit_android.goal.info
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.ActivityStairInfoBinding
 import com.example.hyfit_android.exercise.Exercise
@@ -30,6 +31,8 @@ class StairInfoActivity : AppCompatActivity(),GetAllRedisExerciseView,GetExercis
     private var date = ""
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        var minAltitude = Float.MAX_VALUE
+
         // binding
         binding = ActivityStairInfoBinding.inflate(layoutInflater)
         barChart = binding.stairBarChart
@@ -50,18 +53,22 @@ class StairInfoActivity : AppCompatActivity(),GetAllRedisExerciseView,GetExercis
         if (result != null) {
             for (location in result) {
                 val latLngArr = location.split(",")
-                if(latLngArr[3] == "0.0") continue
+                if(latLngArr[2] == "0.0") continue
                 else {
                     val xTime = formatXtime(currentTime)
                     xList.add(xTime)
-                    entries.add(BarEntry(index.toFloat(),latLngArr[3].toFloat()))
-                    currentTime += 30
+                    Log.d("THISISALT",latLngArr[2])
+                    if (latLngArr[2].toFloat() < minAltitude) {
+                        minAltitude = latLngArr[2].toFloat()
+                    }
+                    entries.add(BarEntry(index.toFloat(),latLngArr[2].toFloat()))
+                    currentTime += 10
                     index++
                 }
             }
         }
 
-        val dataSet = BarDataSet(entries, "Increase value")
+        val dataSet = BarDataSet(entries, "Altitude change")
         val data = BarData(dataSet)
 
         // x축
@@ -74,7 +81,7 @@ class StairInfoActivity : AppCompatActivity(),GetAllRedisExerciseView,GetExercis
         val yAxis = barChart.axisLeft
         barChart.axisRight.isEnabled = false
         yAxis.setDrawGridLines(false)
-        yAxis.axisMinimum = 0f
+        yAxis.axisMinimum =minAltitude - 1
 
         barChart.data = data
         dataSet.color = R.color.main_color
@@ -116,7 +123,7 @@ class StairInfoActivity : AppCompatActivity(),GetAllRedisExerciseView,GetExercis
     }
 
     override fun onGetExerciseViewSuccess(result: Exercise) {
-        binding.exerciseDistanceText.text= result.pace+ "m"
+        binding.exerciseDistanceText.text= String.format("%.2f", (result.increase)!!.toDouble())+ "m"
         binding.resultTimeText.text = result.totalTime?.let { formatTime(it) }
         binding.exerciseInfoText.text = "${result.start?.substringBefore("T")} / ${result.type}"
 

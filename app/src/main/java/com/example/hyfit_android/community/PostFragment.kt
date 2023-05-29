@@ -22,11 +22,11 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     lateinit var myemail:String
 //    val email="oliver08@naver.com" //번들에서받으면바꾸기
     private var email = ""
-    private var postId = 0L
+   private var postId = 0L
     private var onfollow:Boolean=false
     lateinit var followingList:List<String>
     var onclicklikepostid=0L
-    var postid=36L
+  //  var postid=36L
 
 
     override fun onCreateView(
@@ -162,7 +162,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         Log.d("follow success", "success~")
         Log.d("Follow result", result)
         onfollow=true
-        getOnePost(postid.toLong(),email)
+        getOnePost(postId.toLong(),email)
         progressBar.visibility=View.GONE
     }
 
@@ -214,7 +214,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         Log.d("unfollow success", "success~")
         Log.d("unFollow result", result)
         onfollow=false
-        getOnePost(postid.toLong(),email)
+        getOnePost(postId.toLong(),email)
         progressBar.visibility=View.GONE
     }
 
@@ -229,13 +229,13 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     }
 
     override fun onLikePostFailure(code: Int, msg: String) {
-        unlike(postid)
+        unlike(postId)
         progressBar.visibility=View.GONE
     }
 
     override fun onUnlikePostSuccess(result: String) {
         Log.d("unlikeSuccess", "Cong")
-        getOnePost(postId=postid, email=email)
+        getOnePost(postId=postId, email=email)
         progressBar.visibility=View.GONE
     }
 
@@ -247,7 +247,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         followingList = result.map { it.split(",")[0] }
         onfollow=followingList.contains(email)
         Log.d("followingList", followingList[0])
-        getOnePost(postid, email)
+        getOnePost(postId, email)
         progressBar.visibility=View.GONE
 
     }

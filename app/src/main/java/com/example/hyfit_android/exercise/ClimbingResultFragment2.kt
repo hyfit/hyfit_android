@@ -47,17 +47,22 @@ class ClimbingResultFragment2() : Fragment() {
         var index = 0
         var currentTime = 0
         val entries = mutableListOf<BarEntry>()
+        var minAltitude = Float.MAX_VALUE
 
         Log.d("THISISRESULTLIST",locationList.toString())
         if (locationList != null) {
             for (location in locationList) {
                 val latLngArr = location.split(",")
-                if(latLngArr[3] == "0.0") continue
+                if(latLngArr[2] == "0.0") continue
                 else {
                     val xTime = formatXtime(currentTime)
                     xList.add(xTime)
-                    entries.add(BarEntry(index.toFloat(),latLngArr[3].toFloat()))
-                    currentTime += 30
+                    Log.d("THISISALT",latLngArr[2])
+                    if (latLngArr[2].toFloat() < minAltitude) {
+                        minAltitude = latLngArr[2].toFloat()
+                    }
+                    entries.add(BarEntry(index.toFloat(),latLngArr[2].toFloat()))
+                    currentTime += 10
                     index++
                 }
             }
@@ -65,7 +70,7 @@ class ClimbingResultFragment2() : Fragment() {
 
         barChart = binding.stairBarChart
 
-        val dataSet = BarDataSet(entries, "Increase value")
+        val dataSet = BarDataSet(entries, "Altitude change")
         val data = BarData(dataSet)
 
         // x축
@@ -78,7 +83,7 @@ class ClimbingResultFragment2() : Fragment() {
         val yAxis = barChart.axisLeft
         barChart.axisRight.isEnabled = false
         yAxis.setDrawGridLines(false)
-        yAxis.axisMinimum = 0f
+        yAxis.axisMinimum =minAltitude - 1
 
         barChart.data = data
         dataSet.color = R.color.main_color
@@ -87,8 +92,8 @@ class ClimbingResultFragment2() : Fragment() {
         barChart.invalidate()
 
         // 상승값
-        val increaseResult = String.format("%.2f", climbingResultActivity.increase.toDouble())
-        binding.exerciseDistanceText.text=increaseResult+ "m"
+       //  val increaseResult = String.format("%.2f", climbingResultActivity.increase.toDouble())
+        binding.exerciseDistanceText.text= climbingResultActivity.increase+ "m"
 
         // 시간
         binding.result2Time.text = formatTime(climbingResultActivity.totalTime)

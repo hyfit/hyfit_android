@@ -45,7 +45,7 @@
             android:textColor="#5b5b5b"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Increase Chart"
+            android:text="Altitude change"
             />
         <com.github.mikephil.charting.charts.BarChart
             android:id="@+id/stair_bar_chart"
@@ -100,7 +100,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:fontFamily="@font/inter_medium"
-                android:text="peak altitude"
+                android:text="Peak altitude"
                 android:textColor="#969696"
                 android:textSize="15sp" />
 
@@ -137,7 +137,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1.5"
                 android:fontFamily="@font/inter_medium"
-                android:text="Increase value"
+                android:text="Increased value"
                 android:textColor="#969696"
                 android:textSize="15sp" />
 

@@ -197,7 +197,9 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
         binding.exerciseEndBtn.setOnClickListener{
             if(isReady == 1){
                 stopTimer()
-                pace = calculateAveragePace(timeInSeconds,distance)
+                //pace = calculateAveragePace(timeInSeconds,distance)
+                pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
+                else calculateAveragePace(timeInSeconds,distance)
                 saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), sdk.currentLocation.altitude.toString(),increase.toString())
                 isEnd = 1
                 // 로딩화면 띄우기
@@ -392,6 +394,8 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
                 previousLat = lat
                 previousLong = long
                 previousAlt = alt
+                peakAlt= alt
+
             } else {
                 // distance 계산
                 var currentDistance = calDistance(previousLat!!, previousLong!!, previousAlt!!, lat, long, alt)
@@ -411,7 +415,7 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
             }
 
             // 30초에 한번씩 저장
-            if (timeInSeconds % 30 == 0L) {
+            if (timeInSeconds % 10 == 0L) {
                 saveRedisAltExercise(exerciseId.toLong(), lat, long, alt,increase.toString())
             }
         }
