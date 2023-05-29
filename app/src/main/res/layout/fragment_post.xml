@@ -1,18 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<ScrollView
+<androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#f3f3f3"
     android:id="@+id/post_sv">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-
-        android:background="#f3f3f3"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
         <ProgressBar
             android:id="@+id/progressBar"
@@ -133,6 +129,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
+                android:paddingLeft="3dp"
                 android:fontFamily="@font/roboto_regular"
                 android:letterSpacing="0.02"
                 android:text="Workout done today!"
@@ -201,20 +198,19 @@
 
         </LinearLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/comment_list_rv"
-            android:layout_width="match_parent"
-            android:layout_height="160dp"
-            android:layout_marginLeft="60dp"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginRight="60dp"
-            android:padding="5dp"
-            android:clipToPadding="false"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout5"
-            app:layout_constraintBottom_toTopOf="@+id/relativeLayout"/>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/comment_list_rv"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
+        android:clipToPadding="false"
+        app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+        app:layout_constrainedHeight="true"
+        app:layout_constraintBottom_toTopOf="@+id/relativeLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout5" />
 
 
         <RelativeLayout
@@ -223,24 +219,25 @@
             android:layout_height="35dp"
             android:layout_marginLeft="60dp"
             android:layout_marginRight="60dp"
-            android:layout_marginBottom="40dp"
+            android:layout_marginBottom="15dp"
             android:background="@drawable/comment_round"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/comment_list_rv">
+            app:layout_constraintStart_toStartOf="parent">
 
             <EditText
                 android:id="@+id/comment_et"
-                android:layout_width="220dp"
+                android:layout_width="200dp"
                 android:layout_height="match_parent"
+                android:textSize="12sp"
+                android:fontFamily="@font/roboto_medium"
                 android:layout_marginLeft="30dp"
                 android:layout_centerVertical="true" />
 
             <ImageButton
                 android:id="@+id/comment_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
                 android:layout_marginTop="5dp"
@@ -258,4 +255,3 @@
 
 
 
-</ScrollView>

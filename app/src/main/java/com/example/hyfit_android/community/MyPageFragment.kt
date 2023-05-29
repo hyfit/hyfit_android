@@ -88,10 +88,10 @@ class MyPageFragment: Fragment(), GetAllPostsOfUserView, GetFollowerView, GetFol
             binding.editBtn.visibility = View.INVISIBLE
         }
 
-        getCommunityProfile()
+        getCommunityProfile(userEmail)
 
         // user의 모든 게시물 가져옴
-        getAllUserPosts()
+        getAllUserPosts(userEmail)
 
         binding.backBtn.setOnClickListener {
             parentFragmentManager.popBackStack()
@@ -109,21 +109,20 @@ class MyPageFragment: Fragment(), GetAllPostsOfUserView, GetFollowerView, GetFol
         return sharedPreferences.getString("email", "")
     }
 
-    private fun getAllUserPosts() {
+    private fun getAllUserPosts(userEmail: String) {
         val postService = PostService()
         val myemail = getMyEmail()
         postService.setGetAllPostsOfUserView(this)
-        postService.getAllPostsOfUser(myemail!!)
+        postService.getAllPostsOfUser(userEmail)
         binding.mprogressbar.visibility = View.VISIBLE
     }
 
-    private fun getCommunityProfile() {
+    private fun getCommunityProfile(userEmail: String) {
         val postService = PostService()
         val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
-        val myemail = sharedPreferences.getString("email", "")
 
         postService.setGetCommunityProfileView(this)
-        postService.getCommunityProfile(myemail!!)
+        postService.getCommunityProfile(userEmail!!)
 
     }
 
@@ -239,7 +238,7 @@ class MyPageFragment: Fragment(), GetAllPostsOfUserView, GetFollowerView, GetFol
         val postFragment = PostFragment()
         postFragment.arguments = bundle
         parentFragmentManager.beginTransaction()
-            .add(R.id.fragment_container, postFragment)
+            .replace(R.id.fragment_container, postFragment)
             .addToBackStack(null)
             .commit()
     }

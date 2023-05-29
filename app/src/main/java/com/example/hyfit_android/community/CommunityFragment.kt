@@ -100,7 +100,7 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
             myPageFragment.arguments = bundle
             parentFragmentManager
                 .beginTransaction()
-                .add(R.id.fragment_container, myPageFragment)
+                .replace(R.id.fragment_container, myPageFragment)
                 .addToBackStack(null)
                 .commit()
         }
@@ -324,7 +324,7 @@ class CommunityFragment: Fragment(), View.OnClickListener, GetAllPostsOfFollowin
         postFragment.arguments = bundle
         parentFragmentManager
             .beginTransaction()
-            .add(R.id.fragment_container, postFragment)
+            .replace(R.id.fragment_container, postFragment)
             .addToBackStack(null)
             .commit()
     }

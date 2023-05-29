@@ -1,22 +1,35 @@
 package com.example.hyfit_android.community
 
 import android.content.Context
+import android.graphics.Color
 import android.os.Bundle
+import android.os.Parcelable
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.ImageView
 import android.widget.ProgressBar
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
+import androidx.core.widget.doAfterTextChanged
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.GridLayoutManager
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.example.hyfit_android.R
 import com.example.hyfit_android.databinding.FragmentPostBinding
 
-class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView, UnlikePostView, GetFollowingView {
+class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, LikePostView, UnlikePostView, GetFollowingView, GetCommentListView, SaveCommentView {
 
     lateinit var binding: FragmentPostBinding
+    lateinit var commentRVAdapter: CommentRVAdapter
+    private lateinit var recyclerViewState: Parcelable
+    private lateinit var commentList: ArrayList<PostCommentList>
     lateinit var progressBar: ProgressBar
     lateinit var myemail:String
 //    val email="oliver08@naver.com" //번들에서받으면바꾸기
@@ -25,7 +38,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     private var onfollow:Boolean=false
     lateinit var followingList:List<String>
     var onclicklikepostid=0L
-    var postid=36L
+    var isLoginUser = false
 
 
     override fun onCreateView(
@@ -34,35 +47,25 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         savedInstanceState: Bundle?
     ): View? {
         binding = FragmentPostBinding.inflate(inflater, container, false)
-        //이따가 해제하기
+
+        activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN)
+
         postId = arguments?.getLong("postId")!!
         email=arguments?.getString("email")!!
+
         val sharedPreferences = requireActivity().getSharedPreferences("auth", Context.MODE_PRIVATE)
         myemail = sharedPreferences.getString("email", "")!!
         progressBar=binding.progressBar
         Log.d("emailemailhere", myemail!!)
+        isLoginUser = if(email.equals(myemail)) true else false
 
-        //
-        //binding.postIv.clipToOutline = true
-        //얘도 나중에 bundle로 넘겨주겟지 ..
-      //  val postId:Long=36
+
         // 선택된 게시물 띄움
         progressBar.visibility=View.VISIBLE
         getFollowingList()
         getOnePost(postId,email)
-        binding.likeBtn.setOnClickListener {
-            like(postId)
-        }
-        Log.d("getOnePost", "SUCCESS")
-        binding.followBtn.setOnClickListener {
-            addFollow(email)
-        }
-        binding.unfollowBtn.setOnClickListener {
-            unfollow(email)
-        }
 
-
-        // 게시물 유저 정보 띄움(profileImage, nickName)
+        getCommentList()
 
 
         return binding.root
@@ -72,16 +75,57 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-    }
-
-    override fun onResume() {
-        super.onResume()
+        recyclerViewState = binding.commentListRv.layoutManager?.onSaveInstanceState()!!
 
         binding.backBtn.setOnClickListener {
             parentFragmentManager.popBackStack()
         }
 
+        binding.likeBtn.setOnClickListener {
+            like(postId)
+        }
+        Log.d("getOnePost", "SUCCESS")
+
+        // 해당 포스트 유저가 로그인 한 유저인 경우
+        if(isLoginUser) {
+            binding.followBtn.visibility = View.INVISIBLE
+            binding.unfollowBtn.visibility = View.INVISIBLE
+        } else {
+            binding.followBtn.setOnClickListener {
+                addFollow(email)
+            }
+            binding.unfollowBtn.setOnClickListener {
+                unfollow(email)
+            }
+        }
+
+        binding.profileIv.setOnClickListener {
+            val bundle = Bundle().apply {
+                this.putString("email", email)
+            }
+            val myPageFragment = MyPageFragment()
+            myPageFragment.arguments = bundle
+            parentFragmentManager
+                .beginTransaction()
+                .replace(R.id.fragment_container, myPageFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+
+
+        binding.commentBtn.setOnClickListener {
+            if(binding.commentEt.text.isEmpty()) {
+                val toast = Toast.makeText(requireContext(),"Please write the comments.", Toast.LENGTH_SHORT)
+                toast.show()
+            } else {
+                saveComment(binding.commentEt.text.toString())
+
+            }
+        }
+
     }
+
+
 
     private fun getJwt():String?{
         val spf = activity?.getSharedPreferences("auth", AppCompatActivity.MODE_PRIVATE)
@@ -134,17 +178,47 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         postService.unlikePost(jwt,id)
     }
 
+    private fun getCommentList() {
+        val postService = PostService()
+        postService.setGetCommentListView(this)
+        postService.getCommentList(postId)
+        progressBar.visibility=View.VISIBLE
+    }
+
+    private fun saveComment(comment: String) {
+        val jwt = getJwt()
+        val postService = PostService()
+        postService.setSaveCommentView(this)
+        var commentReq = SaveCommentReq(comment)
+
+        postService.saveComment(jwt!!,postId, commentReq)
+    }
+
     private fun imageset(imageurl:String, imageview: ImageView){
         Glide.with(this)
             .load(imageurl)
             .into(imageview)
     }
 
+    private fun initAdapter(commentList: ArrayList<PostCommentList>) {
+        commentRVAdapter = CommentRVAdapter(requireContext(), commentList)
+        binding.commentListRv.adapter = commentRVAdapter
+        binding.commentListRv.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL,false)
+
+        binding.commentListRv.apply {
+            setHasFixedSize(true)
+            setItemViewCacheSize(10)
+            adapter = commentRVAdapter
+            layoutManager = binding.commentListRv.layoutManager
+            layoutManager?.onRestoreInstanceState(recyclerViewState)
+        }
+    }
+
     override fun onAddFollowSuccess(result: String) {
         Log.d("follow success", "success~")
         Log.d("Follow result", result)
         onfollow=true
-        getOnePost(postid.toLong(),email)
+        getOnePost(postId.toLong(),email)
         progressBar.visibility=View.GONE
     }
 
@@ -196,7 +270,7 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
         Log.d("unfollow success", "success~")
         Log.d("unFollow result", result)
         onfollow=false
-        getOnePost(postid.toLong(),email)
+        getOnePost(postId.toLong(),email)
         progressBar.visibility=View.GONE
     }
 
@@ -211,13 +285,13 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     }
 
     override fun onLikePostFailure(code: Int, msg: String) {
-        unlike(postid)
+        unlike(postId)
         progressBar.visibility=View.GONE
     }
 
     override fun onUnlikePostSuccess(result: String) {
         Log.d("unlikeSuccess", "Cong")
-        getOnePost(postId=postid, email=email)
+        getOnePost(postId=postId, email=email)
         progressBar.visibility=View.GONE
     }
 
@@ -233,6 +307,25 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
 
     override fun onFollowingFailure(code: Int, msg: String) {
         Log.d("followinglistsad", "sadsads")
+    }
+
+    override fun onGetCommentListSuccess(result: ArrayList<PostCommentList>) {
+        commentList = result
+        binding.progressBar.visibility = View.GONE
+        initAdapter(commentList)
+    }
+
+    override fun onGetCommentListFailure(code: Int, msg: String) {
+        Log.d("commentlistsad", "sadsads")
+    }
+
+    override fun onSaveCommentSuccess(result: PostComment) {
+        binding.commentEt.text = null
+        getCommentList()
+    }
+
+    override fun onSaveCommentFailure(code: Int, msg: String) {
+        Log.d("savecommentsad", "sadsads")
     }
 
 }
