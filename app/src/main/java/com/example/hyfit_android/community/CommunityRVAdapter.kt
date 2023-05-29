@@ -14,7 +14,9 @@ import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.time.temporal.ChronoUnit
 
-class CommunityRVAdapter(val context: Context, val result: List<PostPagination>, val clickListener: OnPostClickListener) : RecyclerView.Adapter<CommunityRVAdapter.ViewHolder>() {
+class CommunityRVAdapter(val context: Context,  val clickListener: OnPostClickListener) : RecyclerView.Adapter<CommunityRVAdapter.ViewHolder>() {
+
+    private var result = ArrayList<PostPagination>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CommunityRVAdapter.ViewHolder {
         val binding: PostItemBinding = PostItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -26,9 +28,19 @@ class CommunityRVAdapter(val context: Context, val result: List<PostPagination>,
         return result[position].postId
     }
 
-//    override fun getItemId(position: Int): Long {
-//        return super.getItemId(position)
-//    }
+    fun setPosts(posts: ArrayList<PostPagination>) {
+        this.result.apply {
+            clear()
+            addAll(posts)
+        }
+        notifyDataSetChanged()
+    }
+
+    public fun addPosts(posts: ArrayList<PostPagination>, lastItemPosition: Int) {
+        this.result.addAll(posts)
+        notifyItemRangeInserted(lastItemPosition+1, posts.size)
+    }
+
 
     override fun getItemCount(): Int {
         return result.size
@@ -43,10 +55,6 @@ class CommunityRVAdapter(val context: Context, val result: List<PostPagination>,
         }
 
         holder.bind(result[position])
-//        holder.bind(result[holder.absoluteAdapterPosition])
-
-
-
     }
 
     inner class ViewHolder(val binding: PostItemBinding): RecyclerView.ViewHolder(binding.root) {

@@ -77,16 +77,8 @@ class PostFragment : Fragment(), AddFollowView, UnfollowView, GetOnePostView, Li
     override fun onResume() {
         super.onResume()
 
-
         binding.backBtn.setOnClickListener {
-//            (activity as com.example.hyfit_android.MainActivity).replaceFragment(CommunityFragment())
-            parentFragmentManager.beginTransaction().apply {
-                replace(R.id.fragment_container, CommunityFragment().apply {
-//                        arguments = Bundle().apply {
-//                        }
-                })
-                commit()
-            }
+            parentFragmentManager.popBackStack()
         }
 
     }
