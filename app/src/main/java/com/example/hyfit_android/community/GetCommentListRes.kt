@@ -8,7 +8,7 @@ data class GetCommentListRes (
     @SerializedName(value="isSuccess")val isSuccess:Boolean,
     @SerializedName(value="code")val code:Int,
     @SerializedName(value="message")val message:String,
-    @SerializedName(value="result")val result: PostCommentList
+    @SerializedName(value="result")val result: ArrayList<PostCommentList>
         )
 
 data class PostCommentList (
@@ -18,5 +18,5 @@ data class PostCommentList (
     @SerializedName(value="email")val email: String,
     @SerializedName(value="profileImg")val profileImg: String,
     @SerializedName(value="nickName")val nickName: String,
-    @SerializedName(value="createdAt")val createdAt: LocalDateTime
+    @SerializedName(value="createdAt")val createdAt: String
         )

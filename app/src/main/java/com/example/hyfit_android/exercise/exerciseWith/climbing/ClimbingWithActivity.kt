@@ -54,6 +54,7 @@ import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.io.InputStream
+import java.lang.Math.random
 import java.net.HttpURLConnection
 import java.net.URL
 import java.time.LocalDateTime
@@ -61,6 +62,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.pow
 import kotlin.properties.Delegates
+import kotlin.random.Random
 
 class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,BarocalCallback,
     OnMapReadyCallback ,SaveAltRedisLocView,EndExerciseView,SaveExerciseLocView,GetAllRedisExerciseView{
@@ -355,7 +357,13 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
         binding.exerciseEndBtn.setOnClickListener{
             if(isReady == 1){
                 stopTimer()
-                pace = calculateAveragePace(timeInSeconds,distance)
+                pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
+                else calculateAveragePace(timeInSeconds,distance)
+
+                user2pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
+                else calculateAveragePace(timeInSeconds,distance)
+
+//                pace = calculateAveragePace(timeInSeconds,distance)
                 val hatAndHae = "${myHae}+$myHat"
                // val hatAndHae = "${sdk.currentLocation.altitude}+$myHat"
                 saveRedisAltExercise(myExerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hatAndHae,increase.toString())
@@ -601,18 +609,31 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                     600 -> {
                         if(isReady == 0) {
                             isReady = 1
-                            val hatAndHae = "9.0+9.0"
-                            myHae = 9.0
-                            myHat =9.0
+                            val hae = String.format("%.1f", randomValueAround9())
+                            val hat = String.format("%.1f", (randomValueAround9()-2.0))
+                            previousAlt = hae
+                            myHae = hae.toDouble()
+                            myHat = hat.toDouble()
+                            val hatAndHae = "$hae+$hat"
+//                            myHae = 9.0
+//                            myHat =9.0
                             val result = "${sdk.currentLocation.latitude.toString()},${sdk.currentLocation.longitude.toString()},${hatAndHae}"
                             workout(myEmail,user2Email,result)
                             saveRedisAltExercise(myExerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hatAndHae,"0")
                         }
                         else {
                             Log.d("KOREACODE", o.statusCode.toString())
-                            myHae =9.0
-                            myHat = 9.0
-                            val hatAndHae = "9.0+9.0"
+                            val hae = String.format("%.1f",  randomValueAround(previousAlt!!.toDouble()))
+                            val hat = String.format("%.1f", (hae.toDouble()-2.0))
+                            myHae = hae.toDouble()
+                            myHat = hat.toDouble()
+                            val hatAndHae = "$hae+$hat"
+//                            myHae = randomValue2(myHae)
+//                            myHat = myHae - 2.0
+//                            val hatAndHae = "$myHae+$myHat"
+//                            myHae =9.0
+//                            myHat = 9.0
+//                            val hatAndHae = "9.0+9.0"
                             val result = "${sdk.currentLocation.latitude.toString()},${sdk.currentLocation.longitude.toString()},${hatAndHae}"
                             workout(myEmail,user2Email,result)
                             saveRedis(hatAndHae)
@@ -791,8 +812,14 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                                 stopTimer()
                                 showLoading()
                             }
-                            user2pace = calculateAveragePace(timeInSeconds,user2distance)
-                            pace = calculateAveragePace(timeInSeconds, distance)
+                            pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
+                            else calculateAveragePace(timeInSeconds,distance)
+
+                            user2pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
+                            else calculateAveragePace(timeInSeconds,distance)
+
+//                            user2pace = calculateAveragePace(timeInSeconds,user2distance)
+//                            pace = calculateAveragePace(timeInSeconds, distance)
                             val hatAndHae = "${myHae}+$myHat"
                             // val hatAndHae = "${sdk.currentLocation.altitude}+$myHat"
                             saveRedisAltExercise(
@@ -875,6 +902,25 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
         topic.dispose()
         stompConnection.dispose()
     }
+    // random 고도
+    fun randomValueAround9(): Double {
+        val randomOffset = Random.nextDouble(-2.5, 2.5)
+        return 9.0 + randomOffset
+    }
+    fun randomValueAround(value: Double): Double {
+        val min = value - 0.5
+        val max = value + 0.5
+        return Random.nextDouble(min, max)
+    }
+
+
+    fun randomValue2(previousValue: Double): Double {
+        val minOffset = previousValue - 8.5
+        val maxOffset = previousValue - 9.5
+        val randomOffset = Random.nextDouble(minOffset, maxOffset)
+        return previousValue + randomOffset
+    }
+
 
 
     fun calDistance(Lat1: String, Lon1: String, Alt1: String, Lat2: String, Lon2: String, Alt2: String): Double{

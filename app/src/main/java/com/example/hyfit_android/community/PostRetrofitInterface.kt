@@ -7,6 +7,7 @@ import retrofit2.http.*
 
 interface PostRetrofitInterface {
 
+    @Multipart
     @POST(ApiPathConstants.POST_API_PATH + "/save")
     fun savePost(@Header("X-AUTH-TOKEN")token: String, @Part file : MultipartBody.Part, @Part("dto")savePostReq: SavePostReq): Call<PostResponse>
 

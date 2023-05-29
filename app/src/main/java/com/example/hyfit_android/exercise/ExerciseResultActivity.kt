@@ -52,8 +52,8 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
             .findFragmentById(R.id.exercise_result_map) as SupportMapFragment
         mapFragment.onCreate(savedInstanceState)
         mapFragment.getMapAsync(this)
-        val distance:Double= (intent.getDoubleExtra("distance", 0.0))
-        val distanceResult = String.format("%.2f", distance)
+        val increase:Double= (intent.getDoubleExtra("increaseValue", 0.0))
+        val distanceResult = String.format("%.2f", increase)
         pace = intent.getStringExtra("pace").toString()
 
         binding.paceText.text = pace

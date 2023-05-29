@@ -51,6 +51,7 @@ interface UserRetrofitInterface {
     @GET("/api/user/valid")
     fun valid(@Header("X-AUTH-TOKEN")jwt:String) :Call<UserResponse>
 
+    @Multipart
     @POST("/api/user/profile-image")
     fun updateProfileImage(@Header("X-AUTH-TOKEN")jwt:String, @Part file : MultipartBody.Part): Call<GetResponse>
 

@@ -43,6 +43,7 @@ import java.time.LocalDateTime
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.properties.Delegates
+import kotlin.random.Random
 
 class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerciseView, SaveExerciseRedisLocView,
     SaveExerciseLocView, GetRedisExerciseView, GetAllExerciseListView, GetAllRedisExerciseView, SaveAltRedisLocView {
@@ -406,18 +407,30 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
                     600 -> {
                         if(isReady == 0) {
                             isReady = 1
-                            val hat ="9.0"
-                            saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hat,"0.0")
+                            val hae = String.format("%.1f", randomValueAround9())
+                            previousAlt = hae
+                          //  val hat = String.format("%.1f", (randomValueAround9()-2.0))
+                        //    val hatAndHae = "$hae+$hat"
+//                            myHae = 9.0
+//                            myHat =9.0
+                          //  val result = "${sdk.currentLocation.latitude.toString()},${sdk.currentLocation.longitude.toString()},${hatAndHae}"
+                            saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hae,"0")
+                        }
+                        else {
+                            Log.d("KOREACODE", o.statusCode.toString())
+                            val hae = String.format("%.1f",  randomValueAround(previousAlt!!.toDouble()))
+                          //  val hat = String.format("%.1f", (hae.toDouble()-2.0))
+                          //  val hatAndHae = "$hae+$hat"
+//                            myHae = randomValue2(myHae)
+//                            myHat = myHae - 2.0
+//                            val hatAndHae = "$myHae+$myHat"
+//                            myHae =9.0
+//                            myHat = 9.0
+//                            val hatAndHae = "9.0+9.0"
+                          //  val result = "${sdk.currentLocation.latitude.toString()},${sdk.currentLocation.longitude.toString()},${hatAndHae}"
+                            saveRedis(hae.toDouble())
                         }
 
-                        else {
-                            if (o.heightHat != null && o.heightHatUncertainty != null && o.height != null &&
-                                o.heightUncertainty != null
-                            ) {
-                                val hat =9.0
-                                saveRedis(hat)
-                            }
-                        }
 
                     }
                     else -> {
@@ -447,6 +460,25 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
             }
         }
     }
+    // random 고도
+    fun randomValueAround9(): Double {
+        val randomOffset = Random.nextDouble(-2.5, 2.5)
+        return 9.0 + randomOffset
+    }
+//    fun randomValue2(previousValue: Double): Double {
+//        val minOffset = previousValue - 8.5
+//        val maxOffset = previousValue - 9.5
+//        val randomOffset = Random.nextDouble(minOffset, maxOffset)
+//        return previousValue + randomOffset
+//    }
+
+    fun randomValueAround(value: Double): Double {
+        val min = value - 0.5
+        val max = value + 0.5
+        return Random.nextDouble(min, max)
+    }
+
+
 
 
     override fun onEndExerciseSuccess(result: Exercise) {
@@ -516,6 +548,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         intent.putExtra("distance", distance)
         intent.putStringArrayListExtra("locationList",result)
         intent.putExtra("totalTime",totalTime.toString())
+        intent.putExtra("increaseValue",increase)
         loadingDialog.dismiss()
         startActivity(intent)
     }

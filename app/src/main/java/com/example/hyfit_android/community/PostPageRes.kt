@@ -11,7 +11,7 @@ data class PostPageRes (
         )
 
 data class Slice (
-    @SerializedName(value="content")val content: List<PostPagination>,
+    @SerializedName(value="content")val content: ArrayList<PostPagination>,
     @SerializedName(value="pageable")val pageable: Pageable,
     @SerializedName(value="number")val number: Int,
     @SerializedName(value="sort")val sort: Sort,

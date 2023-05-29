@@ -9,19 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.hyfit_android.databinding.MypostItemBinding
 
-class MyPageRVAdapter(val context: Context, val result: List<PostImgInfo>, val clickListener: OnMyPostClickListener) : RecyclerView.Adapter<MyPageRVAdapter.ViewHolder>()  {
-
-    init {
-        setHasStableIds(true)
-    }
+class MyPageRVAdapter(val context: Context, val result: ArrayList<PostImgInfo>, val clickListener: OnMyPostClickListener) : RecyclerView.Adapter<MyPageRVAdapter.ViewHolder>()  {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyPageRVAdapter.ViewHolder {
-        val binding: MypostItemBinding = MypostItemBinding.inflate(LayoutInflater.from(parent.context))
+        val binding: MypostItemBinding = MypostItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
         return ViewHolder(binding)
-    }
-
-    override fun getItemId(position: Int): Long {
-        return super.getItemId(position)
     }
 
     override fun getItemCount(): Int {
@@ -30,12 +22,12 @@ class MyPageRVAdapter(val context: Context, val result: List<PostImgInfo>, val c
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onBindViewHolder(holder: MyPageRVAdapter.ViewHolder, position: Int) {
-        holder.bind(result[holder.absoluteAdapterPosition])
-
         // 한 게시물 눌렀을 때
         holder.binding.myPostLayout.setOnClickListener {
             clickListener.onMyPostClick(result[holder.absoluteAdapterPosition])
         }
+
+        holder.bind(result[holder.absoluteAdapterPosition])
 
     }
 

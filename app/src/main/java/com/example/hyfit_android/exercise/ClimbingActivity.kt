@@ -47,6 +47,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.pow
 import kotlin.properties.Delegates
+import kotlin.random.Random
 
 class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, ExerciseStartView,EndExerciseView,
     SaveExerciseRedisLocView, SaveExerciseLocView, GetRedisExerciseView, GetAllExerciseListView,
@@ -398,6 +399,7 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
 
             } else {
                 // distance 계산
+                Log.d("THISISRESUKT",previousLat.toString() + previousLong.toString() + previousAlt.toString()+lat+long+alt)
                 var currentDistance = calDistance(previousLat!!, previousLong!!, previousAlt!!, lat, long, alt)
                 distance += currentDistance
                 previousLat = lat
@@ -505,11 +507,16 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
                     600 -> {
                         if(isReady == 0) {
                             isReady = 1
-                            saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), "9.0","0")
+                            val hae = String.format("%.1f", randomValueAround9())
+                            previousAlt = hae
+                            previousLat = sdk.currentLocation.latitude.toString()
+                            previousLong= sdk.currentLocation.longitude.toString()
+                            saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hae,"0")
                         }
                         else {
                             Log.d("KOREACODE", o.statusCode.toString())
-                            saveRedis("9.0")
+                            val hae = String.format("%.1f",  randomValueAround(previousAlt!!.toDouble()))
+                            saveRedis(hae)
                         }
 
                     }
@@ -525,6 +532,8 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
                     }
 
                 }
+
+
             }
             when(o.warningCode){
                 WarningMessages.HIGH_DELTA_LOCATION.code -> {
@@ -539,6 +548,17 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
                 }
             }
         }
+    }
+    // random 고도
+    fun randomValueAround9(): Double {
+        val randomOffset = Random.nextDouble(-2.5, 2.5)
+        return 9.0 + randomOffset
+    }
+
+    fun randomValueAround(value: Double): Double {
+        val min = value - 0.5
+        val max = value + 0.5
+        return Random.nextDouble(min, max)
     }
 
     fun inError(){

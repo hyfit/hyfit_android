@@ -78,7 +78,7 @@ class StairResultActivity : AppCompatActivity() {
           // 상승값
         val distance:Double= (intent.getDoubleExtra("distance", 0.0))
         val distanceResult = String.format("%.2f", distance)
-        binding.exerciseDistanceText.text=distanceResult+ "m"
+        binding.exerciseDistanceText.text= distanceResult+ "m"
 
         // 시간
         totalTime = intent.getStringExtra("totalTime")!!.toLong()

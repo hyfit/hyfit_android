@@ -286,7 +286,9 @@ class ExerciseActivity:AppCompatActivity(),OnMapReadyCallback, Observer, Exercis
         val current = LocalDateTime.now()
         val exerciseService = ExerciseService()
         exerciseService.setEndExerciseView(this)
-        pace = calculateAveragePace(timeInSeconds,distance)
+        pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
+        else calculateAveragePace(timeInSeconds,distance)
+//        pace = calculateAveragePace(timeInSeconds,distance)
         exerciseService.endExercise(ExerciseEndReq(exerciseId.toLong(),timeInSeconds,pace,distance.toString(),"0","0",current.toString()))
     }
 
