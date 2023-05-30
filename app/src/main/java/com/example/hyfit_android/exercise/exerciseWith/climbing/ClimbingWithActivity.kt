@@ -556,6 +556,12 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
             if (Date().time - o.timestamp <= 1000) {
                 when (o.statusCode) {
                     200 -> {
+                        // 아직 못받은 경우
+                         if(ifGet == 0){
+                             Log.d("THISISNORSTART!!",ifGet.toString())
+                             accept(myEmail!!,user2Email!!,
+                        myExerciseId!!, user2ExerciseId!!,"",-1, user2lat, user2lon,sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString())
+                         }
                         if (o.heightHat != null && o.heightHatUncertainty != null && o.height != null &&
                             o.heightUncertainty != null
                         ) {
@@ -601,6 +607,11 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                     }
                     // in korea
                     600 -> {
+                        // 아직 못받은 경우
+                        if(ifGet == 0){
+                            accept(myEmail!!,user2Email!!,
+                                myExerciseId!!, user2ExerciseId!!,"",-1, user2lat, user2lon,sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString())
+                        }
                         if(isReady == 0) {
                             isReady = 1
                             isKorea = 1
@@ -713,6 +724,26 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
         }
 
     }
+    private fun accept( sender : String, receiver:  String, exercise1id : Int,exercise2id : Int, workoutType : String , data : Int, user1lat : String, user1lon : String, user2lat : String, user2lon : String){
+        val jsonObject = JSONObject()
+        jsonObject.put("type","ACCEPT")
+        jsonObject.put("sender",sender)
+        jsonObject.put("receiver",receiver)
+        jsonObject.put("exercise1id",exercise1id)
+        jsonObject.put("exercise2id",exercise2id)
+        jsonObject.put("workoutType",workoutType)
+        jsonObject.put("data",data)
+        jsonObject.put("user1lat",user1lat)
+        jsonObject.put("user1lon",user1lon)
+        jsonObject.put("user2lat",user2lat)
+        jsonObject.put("user2lon",user2lon)
+        val jsonString = jsonObject.toString()
+        Log.d("THISISSENDERDATA",jsonString)
+
+        stomp.send("/pub/accept", jsonString).subscribe {
+            if(it){ }
+        }
+    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     private fun subscribe() {
@@ -738,6 +769,14 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
             .doOnError { error -> Log.d("ERROR", "subscribe error") }
             .subscribe { chatData ->
                 val chatObject = JSONObject(chatData)
+//                if(chatObject.getString("type").equals("REQUEST")){
+//                    // 아직 운동으로 못들어온 유저가 request 요청
+//                    accept(myEmail!!,user2Email!!,
+//                        myExerciseId!!, user2ExerciseId!!,"",-1, user2lat, user2lon,sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString())
+//
+//                    // 요청 보낸사람이 요청 받은사람한테 accept 메세지
+////                    accept(user2email!!,myEmail!!, exercise2Id!!, exercise1Id!!,workoutType,exerciseWithId!!,lat.toString(), lng.toString(), user2lat, user2lon)
+//                }
                 if (chatObject.getString("type").equals("WORKOUT")) {
                     // 만약 아직 한번도 못받았으면
                     if (ifGet == 0) {
@@ -774,7 +813,7 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                                 Log.d("THISISRESULTLIST", locList.toString())
 
                                 // 계산
-                                val alt = (location.split(",")[2]).split("+")[0]
+                                 val alt = (location.split(",")[2]).split("+")[0]
 
                                 if (user2previousLat == null && user2previousLong ==null && user2previousAlt ==null) {
                                     user2previousLat = lat
@@ -822,8 +861,8 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                         // val hatAndHae = "${sdk.currentLocation.altitude}+$myHat"
                         saveRedisAltExercise(
                             myExerciseId.toLong(),
-                            sdk.currentLocation.latitude.toString(),
-                            sdk.currentLocation.longitude.toString(),
+                            previousLat!!,
+                            previousLong!!,
                             hatAndHae,
                             increase.toString()
                         )
@@ -874,13 +913,12 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                 // distance 계산
                 var currentDistance = calDistance(previousLat!!, previousLong!!, previousAlt!!, lat, long, alt)
                 distance += currentDistance
-                previousLat = lat
-                previousLong = long
-                previousAlt = alt
                 // increase 계산
                 if (alt.toDouble() > previousAlt!!.toDouble()) peakAlt = alt
                 val currentIncrease = calIncrease(previousAlt!!, alt)
                 increase += currentIncrease
+                previousLat = lat
+                previousLong = long
                 previousAlt = alt
                 runOnUiThread {
                     binding.altitudeText.text = "${alt}m"
@@ -984,19 +1022,21 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
     override fun onGetAllRedisExerciseSuccess(result: ArrayList<String>) {
         val intent= Intent(this, ClimbingWithResultActivity::class.java)
         intent.putExtra("distance", distance)
-        intent.putExtra("user2Distance",user2distance)
+       // intent.putExtra("user2Distance",user2distance)
         intent.putExtra("user2ExerciseId",user2ExerciseId)
         intent.putExtra("increase",increase)
-        intent.putExtra("user2increase",user2increase)
+       // intent.putExtra("user2increase",user2increase)
         intent.putStringArrayListExtra("locationList",result )
         intent.putExtra("totalTime",totalTime.toString())
         intent.putExtra("peakAlt",peakAlt)
         intent.putExtra("user2peakAlt",user2peakAlt)
-        intent.putExtra("pace",pace)
-        intent.putExtra("user2pace",user2pace)
+        // intent.putExtra("pace",pace)
+        // intent.putExtra("user2pace",user2pace)
         intent.putExtra("myNickName",myNickName)
         intent.putExtra("user2NickName",user2nickName)
         intent.putStringArrayListExtra("user2locationList",locList as ArrayList<String>)
+        intent.putExtra("myProfile",myProfileImage)
+        intent.putExtra("user2Profile",user2img)
         Log.d("USER2LOCLIST",locList.toString())
         Log.d("USER2NAME",user2nickName)
         topic.dispose()

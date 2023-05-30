@@ -52,11 +52,13 @@ class ExerciseResultActivity : AppCompatActivity(), OnMapReadyCallback{
             .findFragmentById(R.id.exercise_result_map) as SupportMapFragment
         mapFragment.onCreate(savedInstanceState)
         mapFragment.getMapAsync(this)
-        val increase:Double= (intent.getDoubleExtra("increaseValue", 0.0))
-        val distanceResult = String.format("%.2f", increase)
+      //  val increase:Double= (intent.getDoubleExtra("increaseValue", 0.0))
+        val distance = intent.getDoubleExtra("distance", 0.0)
+        val distanceResult = String.format("%.2f", distance)
         pace = intent.getStringExtra("pace").toString()
 
         binding.paceText.text = pace
+       // binding.exerciseDistanceText.text = distanceResult
         // 경로 지정
         val locationList = intent.getStringArrayListExtra("locationList")
         if (locationList != null) {

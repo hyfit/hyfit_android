@@ -134,7 +134,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
 
         mLocationListener = object : LocationListener {
             override fun onLocationChanged(location: Location) {
-                Log.d("LOCATION11111",location.toString())
+              //  Log.d("LOCATION11111",location.toString())
                 var latitude = 0.0
                 var longitude = 0.0
                 if (location == null) {
@@ -175,7 +175,7 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
                 runOnUiThread {
                     Toast.makeText(
                         this@StairActivity,
-                        "I'm sorry, there seems to be an error.",
+                        "Korea is not a supported region.",
                         Toast.LENGTH_SHORT
                     ).show()
                 }
@@ -405,34 +405,15 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
                     }
                     // in korea
                     600 -> {
-                        if(isReady == 0) {
-                            isReady = 1
-                            val hae = String.format("%.1f", randomValueAround9())
-                            previousAlt = hae
-                          //  val hat = String.format("%.1f", (randomValueAround9()-2.0))
-                        //    val hatAndHae = "$hae+$hat"
-//                            myHae = 9.0
-//                            myHat =9.0
-                          //  val result = "${sdk.currentLocation.latitude.toString()},${sdk.currentLocation.longitude.toString()},${hatAndHae}"
-                            saveRedisAltExercise(exerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hae,"0")
-                        }
-                        else {
-                            Log.d("KOREACODE", o.statusCode.toString())
-                            val hae = String.format("%.1f",  randomValueAround(previousAlt!!.toDouble()))
-                          //  val hat = String.format("%.1f", (hae.toDouble()-2.0))
-                          //  val hatAndHae = "$hae+$hat"
-//                            myHae = randomValue2(myHae)
-//                            myHat = myHae - 2.0
-//                            val hatAndHae = "$myHae+$myHat"
-//                            myHae =9.0
-//                            myHat = 9.0
-//                            val hatAndHae = "9.0+9.0"
-                          //  val result = "${sdk.currentLocation.latitude.toString()},${sdk.currentLocation.longitude.toString()},${hatAndHae}"
-                            saveRedis(hae.toDouble())
+//                        runOnUiThread {
+//                            Toast.makeText(
+//                                this@StairActivity,
+//                                "Korea is not a supported region.",
+//                                Toast.LENGTH_SHORT
+//                            ).show()
+//                        }
                         }
 
-
-                    }
                     else -> {
                         Log.d("ERRORLOG", o.statusCode.toString())
 //                        runOnUiThread {
@@ -460,6 +441,12 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
             }
         }
     }
+    fun gotoMain(){
+        mLocationListener?.let { mLocationManager?.removeUpdates(it) }
+                        stopCalculate()
+                        val intent= Intent(this, MainActivity::class.java)
+                        startActivity(intent)
+    }
     // random 고도
 //    fun randomValueAround9(): Double {
 //        val randomOffset = Random.nextDouble(-2.5, 2.5)
@@ -479,8 +466,8 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
 //    }
 
     fun randomValueAround(value: Double): Double {
-        val min = value + 0.2
-        val max = value + 1.0
+        val min = value + 0.1
+        val max = value + 0.4
         return Random.nextDouble(min, max)
     }
 

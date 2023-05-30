@@ -76,7 +76,7 @@ class StairResultActivity : AppCompatActivity() {
           barChart.invalidate()
 
           // 상승값
-        val distance:Double= (intent.getDoubleExtra("distance", 0.0))
+        val distance:Double= (intent.getDoubleExtra("increaseValue", 0.0))
         val distanceResult = String.format("%.2f", distance)
         binding.exerciseDistanceText.text= distanceResult+ "m"
 

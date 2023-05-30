@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.drawable.Drawable
@@ -34,6 +35,9 @@ import com.nextnav.nn_app_sdk.notification.AltitudeContextNotification
 import com.nextnav.nn_app_sdk.notification.SdkStatusNotification
 import com.nextnav.zsdkplus.altimeter.Altimeter
 import com.nextnav.zsdkplus.altimeter.NNUser
+import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetExerciseView {
     private lateinit var binding :  ActivityClimbingWithResultBinding
@@ -79,26 +83,28 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
     var myNickName = ""
     var user2nickName = ""
     private var user2ExerciseId = 0
+    private var profile1 = ""
+    private var profile2 = ""
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityClimbingWithResultBinding.inflate(layoutInflater)
         altimeterView = binding.altimeter
-        altimeterView.setMode(Altimeter.AltimeterMode.DELTA)
-        altimeterView.setUnitMode(Altimeter.UnitMode.METER)
-        altimeterView.setAltimeterHeight(500)
+//        altimeterView.setMode(Altimeter.AltimeterMode.DELTA)
+//        altimeterView.setUnitMode(Altimeter.UnitMode.METER)
+//        altimeterView.setAltimeterHeight(500)
 
 
         exerciseId = intent.getLongExtra("exerciseId",0L)
 
         // distance
-        distance = (intent.getDoubleExtra("distance", 0.0))
-        user2distance =  (intent.getDoubleExtra("user2Distance", 0.0))
-        val distanceResult = String.format("%.2f",distance.toFloat())
-        val distanceResult2 = String.format("%.2f", user2distance.toFloat())
+//        distance = (intent.getDoubleExtra("distance", 0.0))
+//        user2distance =  (intent.getDoubleExtra("user2Distance", 0.0))
+//        val distanceResult = String.format("%.2f",distance.toFloat())
+//        val distanceResult2 = String.format("%.2f", user2distance.toFloat())
         // 우선 my distance
-        binding.exerciseDistanceText.text = distanceResult + "km"
+        // binding.exerciseDistanceText.text = distanceResult + "km"
 
         user2ExerciseId = intent.getIntExtra("user2ExerciseId",user2ExerciseId)
         // getExercise()
@@ -143,31 +149,37 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
         // 최고 고도
         peakAlt = intent.getStringExtra("peakAlt").toString()
         user2peakAlt = intent.getStringExtra("user2peakAlt").toString()
-        // 고도계
-        val userList = listOf(
-            NNUser("1", myNickName, "", peakAlt.toDouble()),
-            NNUser("2", user2nickName, "", user2peakAlt?.toDouble()!!),
-        )
-        // 고도bar 바꾸기
-        altimeterView.setUsers(userList)
+        profile1 = intent.getStringExtra("myProfile").toString()
+        profile2 = intent.getStringExtra("user2Profile").toString()
+
         // 상승값
-        increase = intent.getLongExtra("increase",0L)
-        user2increase = intent.getLongExtra("user2increase",0L)
+//        increase = intent.getLongExtra("increase",0L)
+//        user2increase = intent.getLongExtra("user2increase",0L)
 
         // 시간
         totalTime = intent.getStringExtra("totalTime")!!.toLong()
         binding.resultTimeText.text = formatTime(totalTime)
 
         // pace
-        pace = intent.getStringExtra("pace").toString()
-        user2pace  = intent.getStringExtra("pace").toString()
-        binding.paceText.text = pace
+//        pace = intent.getStringExtra("pace").toString()
+//        user2pace  = intent.getStringExtra("pace").toString()
+//        binding.paceText.text = pace
 
         // 닉네임
         myNickName = intent.getStringExtra("myNickName").toString()
         user2nickName = intent.getStringExtra("user2NickName").toString()
         binding.clickMe.text = myNickName
         binding.clickUser2.text = user2nickName
+        // 고도계
+        altimeterView.setMode(Altimeter.AltimeterMode.DELTA)
+        altimeterView.setUnitMode(Altimeter.UnitMode.METER)
+        altimeterView.setAltimeterHeight(500)
+        val userList = listOf(
+            NNUser("1", myNickName, "", peakAlt.toDouble(),urlToBitmap(profile1)),
+            NNUser("2", user2nickName, "", user2peakAlt?.toDouble()!!,urlToBitmap(profile2)),
+        )
+        // 고도bar 바꾸기
+        configAltimeterVisual(userList)
 
         // 지도
         mapFragment = supportFragmentManager
@@ -212,10 +224,10 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
                 val bounds = boundsBuilder.build()
                 mMap!!.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200))
 
-                binding.paceText.text = pace
-                binding.exerciseIncreaseText.text = String.format("%.2f", increase.toFloat()) + "m"
-                //  val distanceResult = String.format("%.2f", distance )
-                binding.exerciseDistanceText.text = distanceResult + "km"
+//                binding.paceText.text = pace
+//                binding.exerciseIncreaseText.text = String.format("%.2f", increase.toFloat()) + "m"
+//                //  val distanceResult = String.format("%.2f", distance )
+//                binding.exerciseDistanceText.text = distanceResult + "km"
             }
         }
 
@@ -258,9 +270,9 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
             }
 
 
-            binding.paceText.text = user2pace
-            binding.exerciseIncreaseText.text = String.format("%.2f", user2increase.toFloat()) + "m"
-            binding.exerciseDistanceText.text = distanceResult2 + "km"
+//            binding.paceText.text = user2pace
+//            binding.exerciseIncreaseText.text = String.format("%.2f", user2increase.toFloat()) + "m"
+//            binding.exerciseDistanceText.text = distanceResult2 + "km"
         }
 
         binding.goToMain.setOnClickListener{
@@ -351,5 +363,25 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
 
     override fun onGetExerciseViewFailure(code: Int, msg: String) {
         TODO("Not yet implemented")
+    }
+    private fun urlToBitmap(imageUrl: String): Bitmap? {
+        var bitmap: Bitmap? = null
+        var inputStream: InputStream? = null
+        try {
+            val url = URL(imageUrl)
+            val connection: HttpURLConnection = url.openConnection() as HttpURLConnection
+            connection.doInput = true
+            connection.connect()
+            inputStream = connection.inputStream
+            bitmap = BitmapFactory.decodeStream(inputStream)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        } finally {
+            inputStream?.close()
+        }
+        return bitmap
+    }
+    private fun configAltimeterVisual(userList : List<NNUser>) {
+        altimeterView.setUsers(userList)
     }
 }

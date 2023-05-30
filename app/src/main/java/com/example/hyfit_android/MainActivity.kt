@@ -175,6 +175,37 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
         topic.dispose()
         stompConnection.dispose()
     }
+    private fun request(type:String, sender : String,receiver:  String, sender_nickName : String,receiver_nickName : String, workoutType : String, goalId : Int , data : Int,lat : String, lon : String){
+        val jsonObject = JSONObject()
+        jsonObject.put("type",type)
+        jsonObject.put("sender",sender)
+        jsonObject.put("receiver",receiver)
+        jsonObject.put("sender_nickName",sender_nickName)
+        jsonObject.put("receiver_nickName",receiver_nickName)
+        jsonObject.put("workoutType",workoutType)
+        jsonObject.put("goalId",goalId)
+        jsonObject.put("data",data)
+        jsonObject.put("lat",lat)
+        jsonObject.put("lon",lon)
+        val jsonString = jsonObject.toString()
+        Log.d("THISISSENDERDATA",jsonString)
+
+        stomp.send("/pub/request", jsonString).subscribe {
+            if(it){ }
+        }
+    }
+    private fun quit(sender : String, receiver: String){
+        val jsonObject = JSONObject()
+        jsonObject.put("type","QUIT")
+        jsonObject.put("sender",sender)
+        jsonObject.put("receiver",receiver)
+        val jsonString = jsonObject.toString()
+
+        stomp.send("/pub/quit", jsonString).subscribe {
+            if(it){   Log.d("QUITDATA!",jsonString)}
+        }
+
+    }
 
     private fun subscribe(email : String) {
         stomp.url =STOMP_URL
@@ -242,6 +273,35 @@ class MainActivity : AppCompatActivity() , Observer, GetUserView, GetMountainVie
                         topic.dispose()
                         startActivity(intent)
 
+                }
+                // main에서 workout 받는경우
+                else if(chatObject.getString("type").equals("WORKOUT")){
+                    Log.d("THISWORKOUTINMAIN!!!",chatObject.toString())
+                    val user2Email = chatObject.getString("sender")
+                    quit(email,user2Email)
+//                    request("REQUEST",myEmail,receiver,myNickName, receiver_nickName,workoutType,goalId,exerciseWithId,lat.toString(), lng.toString())
+//                    val user2Email = chatObject.getString("sender")
+//                    request("REQUEST",email, user2Email, "", "", "", -1, 0,"","")
+//                    val intent = Intent(this@MainActivity, ClimbingWithActivity::class.java)
+//                    // 다른 유저 이메일
+//                    intent.putExtra("user2Email",chatObject.getString("sender"))
+//                    // 내 이메일
+//                    intent.putExtra("myEmail",email)
+//                    // 내 닉네임
+//                    intent.putExtra("myNickName", userNickName)
+//                    // 내 프로필 사진
+//                    intent.putExtra("myProfileImg",myImage)
+//
+//                    // 내 운동 id
+//                    intent.putExtra("myExerciseId",chatObject.getInt("exercise1id"))
+//                    // 상대방 운동 id
+//                    intent.putExtra("user2ExerciseId", chatObject.getInt("exercise2id"))
+//
+//                    // 상대방 위치
+//                    intent.putExtra("user2lat",chatObject.getString("user2lat"))
+//                    intent.putExtra("user2lon",chatObject.getString("user2lon"))
+//                    topic.dispose()
+//                    startActivity(intent)
                 }
 
 
