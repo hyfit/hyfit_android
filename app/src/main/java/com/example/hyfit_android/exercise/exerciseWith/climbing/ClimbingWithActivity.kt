@@ -54,7 +54,6 @@ import io.reactivex.disposables.Disposable
 import okhttp3.OkHttpClient
 import org.json.JSONObject
 import java.io.InputStream
-import java.lang.Math.random
 import java.net.HttpURLConnection
 import java.net.URL
 import java.time.LocalDateTime
@@ -99,6 +98,7 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
     private var timeInSeconds by Delegates.notNull<Long>()
     private var totalTime by Delegates.notNull<Long>()
     private var isReady by Delegates.notNull<Int>()
+    private var isKorea by Delegates.notNull<Int>()
     private var isEnd by Delegates.notNull<Int>()
 
     // distance에 사용
@@ -147,9 +147,9 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
     private var latLngList :  MutableList<LatLng> = mutableListOf()
     private var user2nickName = ""
     private var user2img = ""
-    private var user2previousLat = "0"
-    private var user2previousLong ="0"
-    private var user2previousAlt = "0"
+    private var user2previousLat: String? = null
+    private var user2previousLong: String? = null
+    private var user2previousAlt : String? = null
     private var user2peakAlt = ""
     private var user2increase = 0.0
     private var user2distance = 0.0
@@ -294,7 +294,7 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                     return
                 }
                 val user2Loc = LatLng(user2lat.toDouble(), user2lon.toDouble())
-               //  Log.d("THISISLOC!!!!!","${user2lat.toDouble()} , ${user2lon.toDouble()}, $user2Loc")
+                //  Log.d("THISISLOC!!!!!","${user2lat.toDouble()} , ${user2lon.toDouble()}, $user2Loc")
                 // map2!!.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
                 polyline2 = map2?.addPolyline(PolylineOptions().width(15f).color(Color.BLUE).geodesic(true))!!
                 circle = map2?.addCircle(
@@ -357,15 +357,9 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
         binding.exerciseEndBtn.setOnClickListener{
             if(isReady == 1){
                 stopTimer()
-                pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
-                else calculateAveragePace(timeInSeconds,distance)
-
-                user2pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
-                else calculateAveragePace(timeInSeconds,distance)
-
-//                pace = calculateAveragePace(timeInSeconds,distance)
+                pace = calculateAveragePace(timeInSeconds,distance)
                 val hatAndHae = "${myHae}+$myHat"
-               // val hatAndHae = "${sdk.currentLocation.altitude}+$myHat"
+                // val hatAndHae = "${sdk.currentLocation.altitude}+$myHat"
                 saveRedisAltExercise(myExerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hatAndHae,increase.toString())
                 isEnd = 1
                 // 종료 메세지 보내기
@@ -511,7 +505,7 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
         // peakAlt 저장
         saveExerciseLoc(myExerciseId.toLong(),"0","0",peakAlt)
         exerciseService.setEndExerciseView(this)
-         Log.d("THISISEXERCISE",ExerciseEndReq(myExerciseId.toLong(),timeInSeconds,pace,distance.toString(),increase.toString(),peakAlt,current.toString()).toString())
+        Log.d("THISISEXERCISE",ExerciseEndReq(myExerciseId.toLong(),timeInSeconds,pace,distance.toString(),increase.toString(),peakAlt,current.toString()).toString())
         exerciseService.endExercise(ExerciseEndReq(myExerciseId.toLong(),timeInSeconds,pace,distance.toString(),increase.toString(),peakAlt,current.toString()))
     }
     // location save
@@ -609,31 +603,30 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                     600 -> {
                         if(isReady == 0) {
                             isReady = 1
+                            isKorea = 1
                             val hae = String.format("%.1f", randomValueAround9())
-                            val hat = String.format("%.1f", (randomValueAround9()-2.0))
-                            previousAlt = hae
-                            myHae = hae.toDouble()
+                            val hat = String.format("%.1f", hae.toDouble() - 2.0)
                             myHat = hat.toDouble()
-                            val hatAndHae = "$hae+$hat"
-//                            myHae = 9.0
-//                            myHat =9.0
+                            myHae = hae.toDouble()
+
+                           val hatAndHae = "$myHae+$myHat"
+                          //  myHae = 9.0
+                           // myHat =9.0
                             val result = "${sdk.currentLocation.latitude.toString()},${sdk.currentLocation.longitude.toString()},${hatAndHae}"
                             workout(myEmail,user2Email,result)
                             saveRedisAltExercise(myExerciseId.toLong(), sdk.currentLocation.latitude.toString(), sdk.currentLocation.longitude.toString(), hatAndHae,"0")
                         }
                         else {
-                            Log.d("KOREACODE", o.statusCode.toString())
-                            val hae = String.format("%.1f",  randomValueAround(previousAlt!!.toDouble()))
-                            val hat = String.format("%.1f", (hae.toDouble()-2.0))
-                            myHae = hae.toDouble()
-                            myHat = hat.toDouble()
-                            val hatAndHae = "$hae+$hat"
-//                            myHae = randomValue2(myHae)
-//                            myHat = myHae - 2.0
-//                            val hatAndHae = "$myHae+$myHat"
-//                            myHae =9.0
-//                            myHat = 9.0
-//                            val hatAndHae = "9.0+9.0"
+                         //   if(user2previousAlt == null){
+                                myHae = String.format("%.1f",randomValueAround(myHae)).toDouble()
+                                myHat = String.format("%.1f",randomValueAround(myHae) - 2.0).toDouble()
+                     //       }
+//                            else {
+//                                myHae = String.format("%.1f",randomValueAround(user2previousAlt!!.toDouble())).toDouble()
+//                                myHat = String.format("%.1f",randomValueAround(myHae) - 2.0).toDouble()
+//                            }
+
+                            val hatAndHae = "$myHae+$myHat"
                             val result = "${sdk.currentLocation.latitude.toString()},${sdk.currentLocation.longitude.toString()},${hatAndHae}"
                             workout(myEmail,user2Email,result)
                             saveRedis(hatAndHae)
@@ -666,6 +659,17 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                 }
             }
         }
+    }
+    // random 고도
+    fun randomValueAround9(): Double {
+        val randomOffset = Random.nextDouble(-2.5, 2.5)
+        return 9.0 + randomOffset
+    }
+
+    fun randomValueAround(value: Double): Double {
+        val min = value - 0.5
+        val max = value + 0.5
+        return Random.nextDouble(min, max)
     }
 
 
@@ -772,7 +776,7 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                                 // 계산
                                 val alt = (location.split(",")[2]).split("+")[0]
 
-                                if (user2previousLat.equals(null) && user2previousLong.equals(null) && user2previousAlt.equals(null)) {
+                                if (user2previousLat == null && user2previousLong ==null && user2previousAlt ==null) {
                                     user2previousLat = lat
                                     user2previousLong = long
                                     user2previousAlt = alt
@@ -781,146 +785,121 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
                                     // distance 계산
                                     Log.d("THISISCAL",user2previousLat + user2previousLat + user2previousLat + lat + long+ alt )
                                     val currentDistance =
-                                        calDistance(user2previousLat!!, user2previousLat!!, user2previousLat!!, lat, long, alt)
+                                        calDistance(user2previousLat!!, user2previousLong!!, user2previousAlt!!, lat, long, alt)
                                     user2distance += currentDistance
-                                    user2previousLat = lat
-                                    user2previousLong = long
-                                    user2peakAlt = alt
                                     // increase 계산
                                     if (alt.toDouble() > user2previousAlt!!.toDouble()) user2peakAlt = alt
                                     val currentIncrease = calIncrease(user2previousAlt!!, alt)
                                     user2increase += currentIncrease
-                                    user2previousAlt = alt
+                                    user2distance += currentDistance
+                                    user2previousLat = lat
+                                    user2previousLong = long
+                                    user2peakAlt = alt
 
                                 }
                             }
                         }
                     }
-                    }
+                }
 
-                    else if (chatObject.getString("type").equals("QUIT")) {
-                        if (isReady == 1) {
-                            runOnUiThread {
-                                Toast.makeText(
-                                    this@ClimbingWithActivity,
-                                    "The workout end as the other person has finished their workout.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                else if (chatObject.getString("type").equals("QUIT")) {
+                    if (isReady == 1) {
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@ClimbingWithActivity,
+                                "The workout end as the other person has finished their workout.",
+                                Toast.LENGTH_SHORT
+                            ).show()
 
-                                // 로딩화면 띄우기
-                                // 타이머 종료
-                                stopTimer()
-                                showLoading()
-                            }
-                            pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
-                            else calculateAveragePace(timeInSeconds,distance)
-
-                            user2pace = if(calculateAveragePace(timeInSeconds,distance).length >= 20) "0.0"
-                            else calculateAveragePace(timeInSeconds,distance)
-
-//                            user2pace = calculateAveragePace(timeInSeconds,user2distance)
-//                            pace = calculateAveragePace(timeInSeconds, distance)
-                            val hatAndHae = "${myHae}+$myHat"
-                            // val hatAndHae = "${sdk.currentLocation.altitude}+$myHat"
-                            saveRedisAltExercise(
-                                myExerciseId.toLong(),
-                                sdk.currentLocation.latitude.toString(),
-                                sdk.currentLocation.longitude.toString(),
-                                hatAndHae,
-                                increase.toString()
-                            )
-                            isEnd = 1
-                            endExercise()
-                        } else {
-                            runOnUiThread {
-                                Toast.makeText(
-                                    this@ClimbingWithActivity,
-                                    "I'm sorry, there seems to be an error.",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
-                            inError()
-
+                            // 로딩화면 띄우기
+                            // 타이머 종료
+                            stopTimer()
+                            showLoading()
                         }
+                        user2pace = calculateAveragePace(timeInSeconds,user2distance)
+                        pace = calculateAveragePace(timeInSeconds, distance)
+                        val hatAndHae = "${myHae}+$myHat"
+                        // val hatAndHae = "${sdk.currentLocation.altitude}+$myHat"
+                        saveRedisAltExercise(
+                            myExerciseId.toLong(),
+                            sdk.currentLocation.latitude.toString(),
+                            sdk.currentLocation.longitude.toString(),
+                            hatAndHae,
+                            increase.toString()
+                        )
+                        isEnd = 1
+                        endExercise()
+                    } else {
+                        runOnUiThread {
+                            Toast.makeText(
+                                this@ClimbingWithActivity,
+                                "I'm sorry, there seems to be an error.",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                        inError()
 
                     }
 
-
                 }
+
 
             }
 
-        // calculate
-        fun calculateAveragePace(timeInSeconds: Long, distanceInKm: Double): String {
-            val totalTimeInMinutes = timeInSeconds / 60.0
-            val paceInMinutesPerKm = totalTimeInMinutes / distanceInKm
-            val paceMinutes = paceInMinutesPerKm.toInt()
-            val paceSeconds = ((paceInMinutesPerKm - paceMinutes) * 60).toInt()
-            var result = String.format("%02d'%02d''", paceMinutes, paceSeconds)
-            if (result.length >= 20) result = "0"
-            return result
-        }
+    }
 
-        private fun saveRedis(hat: String) {
-            if (myExerciseId != 0) {
-                val lat = sdk.currentLocation?.latitude.toString()
-                val long = sdk.currentLocation?.longitude.toString()
-                val alt = hat.split("+")[0]
+    // calculate
+    fun calculateAveragePace(timeInSeconds: Long, distanceInKm: Double): String {
+        val totalTimeInMinutes = timeInSeconds / 60.0
+        val paceInMinutesPerKm = totalTimeInMinutes / distanceInKm
+        val paceMinutes = paceInMinutesPerKm.toInt()
+        val paceSeconds = ((paceInMinutesPerKm - paceMinutes) * 60).toInt()
+        var result = String.format("%02d'%02d''", paceMinutes, paceSeconds)
+        if (result.length >= 20) result = "0"
+        return result
+    }
 
-                if (previousLat == null && previousLong == null && previousAlt == null) {
-                    previousLat = lat
-                    previousLong = long
-                    previousAlt = alt
-                    peakAlt = alt
-                } else {
-                    // distance 계산
-                    var currentDistance = calDistance(previousLat!!, previousLong!!, previousAlt!!, lat, long, alt)
-                    distance += currentDistance
-                    previousLat = lat
-                    previousLong = long
-                    previousAlt = alt
-                    // increase 계산
-                    if (alt.toDouble() > previousAlt!!.toDouble()) peakAlt = alt
-                    val currentIncrease = calIncrease(previousAlt!!, alt)
-                    increase += currentIncrease
-                    previousAlt = alt
-                    runOnUiThread {
-                        binding.altitudeText.text = "${alt}m"
-                        binding.totalAltitudeText.text = "${String.format("%.2f", increase)}m"
-                    }
-                }
+    private fun saveRedis(hat: String) {
+        if (myExerciseId != 0) {
+            val lat = sdk.currentLocation?.latitude.toString()
+            val long = sdk.currentLocation?.longitude.toString()
+            val alt = hat.split("+")[0]
 
-                // 30초에 한번씩 저장
-                if (timeInSeconds % 30 == 0L) {
-                    saveRedisAltExercise(myExerciseId.toLong(), lat, long, hat, increase.toString())
+            if (previousLat == null && previousLong == null && previousAlt == null) {
+                previousLat = lat
+                previousLong = long
+                previousAlt = alt
+                peakAlt = alt
+            } else {
+                // distance 계산
+                var currentDistance = calDistance(previousLat!!, previousLong!!, previousAlt!!, lat, long, alt)
+                distance += currentDistance
+                previousLat = lat
+                previousLong = long
+                previousAlt = alt
+                // increase 계산
+                if (alt.toDouble() > previousAlt!!.toDouble()) peakAlt = alt
+                val currentIncrease = calIncrease(previousAlt!!, alt)
+                increase += currentIncrease
+                previousAlt = alt
+                runOnUiThread {
+                    binding.altitudeText.text = "${alt}m"
+                    binding.totalAltitudeText.text = "${String.format("%.2f", increase)}m"
                 }
             }
+
+            // 30초에 한번씩 저장
+            if (timeInSeconds % 30 == 0L) {
+                saveRedisAltExercise(myExerciseId.toLong(), lat, long, hat, increase.toString())
+            }
         }
+    }
     override fun onDestroy() {
         super.onDestroy()
         //  send("QUIT", email,receiver,exerciseWithId)
         topic.dispose()
         stompConnection.dispose()
     }
-    // random 고도
-    fun randomValueAround9(): Double {
-        val randomOffset = Random.nextDouble(-2.5, 2.5)
-        return 9.0 + randomOffset
-    }
-    fun randomValueAround(value: Double): Double {
-        val min = value - 0.5
-        val max = value + 0.5
-        return Random.nextDouble(min, max)
-    }
-
-
-    fun randomValue2(previousValue: Double): Double {
-        val minOffset = previousValue - 8.5
-        val maxOffset = previousValue - 9.5
-        val randomOffset = Random.nextDouble(minOffset, maxOffset)
-        return previousValue + randomOffset
-    }
-
 
 
     fun calDistance(Lat1: String, Lon1: String, Alt1: String, Lat2: String, Lon2: String, Alt2: String): Double{
@@ -987,7 +966,7 @@ class ClimbingWithActivity : AppCompatActivity(), UserGetByEmailView, Observer,B
     override fun onSaveAltRedisLocSuccess(result: String) {
         // user2 에게 지금 내 위치 알려주기
         Log.d("SAVEALTREDIS",result)
-      //  workout(myEmail,user2Email,result)
+        //  workout(myEmail,user2Email,result)
     }
 
     override fun onSaveAltRedisLocFailure(code: Int, msg: String) {

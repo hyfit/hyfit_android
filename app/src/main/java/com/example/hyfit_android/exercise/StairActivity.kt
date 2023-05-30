@@ -461,10 +461,16 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
         }
     }
     // random 고도
+//    fun randomValueAround9(): Double {
+//        val randomOffset = Random.nextDouble(-2.5, 2.5)
+//        return 9.0 + randomOffset
+ //   }
+
     fun randomValueAround9(): Double {
-        val randomOffset = Random.nextDouble(-2.5, 2.5)
-        return 9.0 + randomOffset
+        val randomOffset = Random.nextDouble(-1.0, 1.0)
+        return 104.0 + randomOffset
     }
+
 //    fun randomValue2(previousValue: Double): Double {
 //        val minOffset = previousValue - 8.5
 //        val maxOffset = previousValue - 9.5
@@ -473,8 +479,8 @@ class StairActivity : AppCompatActivity(), Observer, ExerciseStartView,EndExerci
 //    }
 
     fun randomValueAround(value: Double): Double {
-        val min = value - 0.5
-        val max = value + 0.5
+        val min = value + 0.2
+        val max = value + 1.0
         return Random.nextDouble(min, max)
     }
 

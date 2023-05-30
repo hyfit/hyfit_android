@@ -165,8 +165,8 @@
                 app:layout_constraintVertical_bias="0.532" />
 
             <View
-                android:layout_width="350dp"
-                android:layout_height="370dp"
+                android:layout_width="370dp"
+                android:layout_height="390dp"
                 android:background="@drawable/rounded_corner"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -526,6 +526,19 @@
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.798" />
 
+
+            <ImageView
+                android:id="@+id/goaldetail1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/group_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.164"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.877" />
+
             <ImageView
                 android:id="@+id/click1"
                 android:layout_width="wrap_content"
@@ -533,10 +546,23 @@
                 android:src="@drawable/plus"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.249"
+                app:layout_constraintHorizontal_bias="0.119"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.877" />
+
+            <ImageView
+                android:id="@+id/goaldetail2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/group_1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.819"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.877" />
+
             <ImageView
                 android:id="@+id/click2"
                 android:layout_width="wrap_content"
@@ -544,7 +570,7 @@
                 android:src="@drawable/plus"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.749"
+                app:layout_constraintHorizontal_bias="0.596"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.877" />

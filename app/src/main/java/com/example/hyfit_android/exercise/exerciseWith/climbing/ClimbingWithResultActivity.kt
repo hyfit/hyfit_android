@@ -95,8 +95,8 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
         // distance
         distance = (intent.getDoubleExtra("distance", 0.0))
         user2distance =  (intent.getDoubleExtra("user2Distance", 0.0))
-        val distanceResult = String.format("%.2f",distance)
-        val distanceResult2 = String.format("%.2f", user2distance)
+        val distanceResult = String.format("%.2f",distance.toFloat())
+        val distanceResult2 = String.format("%.2f", user2distance.toFloat())
         // 우선 my distance
         binding.exerciseDistanceText.text = distanceResult + "km"
 
@@ -177,7 +177,7 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
 
 
         // 내 결과
-        binding.clickMe.setOnClickListener{
+        binding.clickMe.setOnClickListener {
             mMap!!.clear()
             // 이전 경로 제거
             polyline?.remove()
@@ -211,12 +211,12 @@ class ClimbingWithResultActivity : AppCompatActivity() , OnMapReadyCallback,GetE
                 }
                 val bounds = boundsBuilder.build()
                 mMap!!.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, 200))
-            }
 
-            binding.paceText.text = pace
-            binding.exerciseIncreaseText.text = String.format("%.2f", increase.toFloat()) + "m"
-            val distanceResult = String.format("%.2f", (Math.round(distance * 100000.0) / 100000.0))
-            binding.exerciseDistanceText.text = distanceResult + "km"
+                binding.paceText.text = pace
+                binding.exerciseIncreaseText.text = String.format("%.2f", increase.toFloat()) + "m"
+                //  val distanceResult = String.format("%.2f", distance )
+                binding.exerciseDistanceText.text = distanceResult + "km"
+            }
         }
 
         // 상대방 결과

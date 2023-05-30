@@ -402,13 +402,13 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
                 Log.d("THISISRESUKT",previousLat.toString() + previousLong.toString() + previousAlt.toString()+lat+long+alt)
                 var currentDistance = calDistance(previousLat!!, previousLong!!, previousAlt!!, lat, long, alt)
                 distance += currentDistance
-                previousLat = lat
-                previousLong = long
-                previousAlt = alt
                 // increase 계산
+                Log.d("PREV,ALT", previousAlt + "," + alt)
                 if (alt.toDouble() > previousAlt!!.toDouble()) peakAlt = alt
                 val currentIncrease = calIncrease(previousAlt!!, alt)
                 increase += currentIncrease
+                previousLat = lat
+                previousLong = long
                 previousAlt = alt
                 runOnUiThread {
                     binding.altitudeText.text = "${alt}m"
@@ -508,6 +508,7 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
                         if(isReady == 0) {
                             isReady = 1
                             val hae = String.format("%.1f", randomValueAround9())
+                            peakAlt = hae
                             previousAlt = hae
                             previousLat = sdk.currentLocation.latitude.toString()
                             previousLong= sdk.currentLocation.longitude.toString()
@@ -642,7 +643,7 @@ class ClimbingActivity : AppCompatActivity(), OnMapReadyCallback, Observer, Exer
         Log.d("INTENTTIME",totalTime.toString())
         val intent= Intent(this, ClimbingResultActivity::class.java)
         intent.putExtra("distance", distance)
-        intent.putExtra("increase",increase)
+        intent.putExtra("increase",String.format("%.2f", increase))
         intent.putStringArrayListExtra("locationList",result )
         intent.putExtra("totalTime",totalTime.toString())
         intent.putExtra("peakAlt",peakAlt)

@@ -29,7 +29,7 @@ class ClimbingResultActivity : AppCompatActivity() {
 
         // 최고 고도
         peakAlt = String.format("%.2f", intent.getStringExtra("peakAlt")!!.toFloat())
-        increase =  String.format("%.2f", intent.getLongExtra("increase",0L).toFloat())
+        increase =  intent.getStringExtra("increase").toString()
 
         // pace
         pace = intent.getStringExtra("pace").toString()
