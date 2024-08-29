@@ -1,6 +1,7 @@
 # HY-FIT: 정밀 수직 위치 기반 종합 피트니스 및 건강 관리 애플리케이션
 
-![HY-FIT Logo](app/src/main/res/drawable/splash_logo.png)
+<img src="https://github.com/user-attachments/assets/aecf37ee-a1c5-4e32-b86a-9dcd8bad0a9e"  width="130" height="200"/>
+
 # HyFit - Android Repository
 ### [2023-1] 한양대학교ERICA 컴퓨터캡스톤디자인
 <br/>
@@ -318,4 +319,5 @@
 
 
 ```
+
 
