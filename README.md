@@ -5,7 +5,6 @@
 </p>
 
 # HyFit - Android Repository
-### [2023-1] 한양대학교ERICA 컴퓨터캡스톤디자인
 <br/>
 
 
